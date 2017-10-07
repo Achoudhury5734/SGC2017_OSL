@@ -1,6 +1,7 @@
 ﻿using OSL.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,13 +9,26 @@ namespace OSL.Services
 {
     public class DonationRepository
     {
+        public DonationRepository()
+        {
+            Donations = new List<Donation>();
+        }
+
+        public List<Donation> Donations { get; set; }
+
         public Task<Donation> GetDonationAsync(string donationId)
         {
-            return Task.FromResult(new Donation());
+            return Task.FromResult(Donations.Find(d => d.Id == donationId));
+        }
+
+        public Task<IEnumerable<Donation>> GetDonationsByAccount(string accountId)
+        {
+            return Task.FromResult(Donations.AsEnumerable());
         }
 
         public Task SaveDonationAsync(Donation donation)
         {
+            Donations.Add(donation);
             return Task.CompletedTask;
         }
 
