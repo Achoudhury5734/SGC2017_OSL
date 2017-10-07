@@ -21,7 +21,7 @@ namespace OSL.Services
             return Task.FromResult(Donations.Find(d => d.Id == donationId));
         }
 
-        public Task<IEnumerable<Donation>> GetDonationsByAccount(string accountId)
+        public Task<IEnumerable<Donation>> GetDonationsByAccountAsync(string accountId)
         {
             return Task.FromResult(Donations.AsEnumerable());
         }
