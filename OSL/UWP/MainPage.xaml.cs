@@ -25,7 +25,11 @@ namespace OSL.UWP
         public MainPage()
         {
             this.InitializeComponent();
-            LoadApplication(new OSL.App());
+
+            var app = new OSL.App();
+            App.PCA.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().ToString();
+
+            LoadApplication(app);
 
         }
     }
