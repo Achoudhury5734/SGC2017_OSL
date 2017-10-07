@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,11 +8,17 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
 using OSL.Models;
+using OSL.MobileAppService.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace OSL.MobileAppService
 {
     public class Startup
     {
+        public static string ScopeRead;
+        public static string ScopeWrite;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -32,8 +35,26 @@ namespace OSL.MobileAppService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = string.Format("https://login.microsoftonline.com/tfp/{0}/{1}/v2.0/",
+          Configuration["Authentication:AzureAd:Tenant"], Configuration["Authentication:AzureAd:Policy"]);
+                    options.Audience = Configuration["Authentication:AzureAd:ClientId"];
+                    options.RequireHttpsMetadata = false;
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = AuthenticationFailed
+                    };
+                });
+
             services.AddMvc();
+            services.AddSingleton(Configuration);
             services.AddSingleton<IItemRepository, ItemRepository>();
+            services.AddSingleton<DonationRepository, DonationRepository>();
 
             services.AddSwaggerGen(c =>
             {
@@ -47,6 +68,11 @@ namespace OSL.MobileAppService
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseAuthentication();
+
+            ScopeRead = Configuration["Authentication:AzureAd:ScopeRead"];
+            ScopeWrite = Configuration["Authentication:AzureAd:ScopeWrite"];
+
             app.UseMvc();
 
             app.UseSwagger();
@@ -56,6 +82,15 @@ namespace OSL.MobileAppService
             });
 
             app.Run(async (context) => context.Response.Redirect("/swagger"));
+        }
+
+        private Task AuthenticationFailed(AuthenticationFailedContext arg)
+        {
+            // For debugging purposes only!
+            var s = $"AuthenticationFailed: {arg.Exception.Message}";
+            arg.Response.ContentLength = s.Length;
+            arg.Response.Body.Write(Encoding.UTF8.GetBytes(s), 0, s.Length);
+            return Task.FromResult(0);
         }
     }
 }

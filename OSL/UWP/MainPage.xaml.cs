@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Security.Authentication.Web;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,7 +26,11 @@ namespace OSL.UWP
         public MainPage()
         {
             this.InitializeComponent();
-            LoadApplication(new OSL.App());
+
+            var app = new OSL.App();
+            OSL.App.PCA.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().ToString();
+
+            LoadApplication(app);
 
         }
     }
