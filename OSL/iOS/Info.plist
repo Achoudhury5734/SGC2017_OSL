@@ -12,10 +12,19 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
-	<key>CFBundleURLSchemes</key>
+	<key>CFBundleURLTypes</key>
 	<array>
-		 <string>msal1771869e-f3aa-4d16-bd1a-af2f0e662bcd</string>
-	 </array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.osl.osl</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msal1771869e-f3aa-4d16-bd1a-af2f0e662bcd</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>

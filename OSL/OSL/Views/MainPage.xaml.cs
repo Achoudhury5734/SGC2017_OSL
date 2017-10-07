@@ -66,7 +66,7 @@ namespace OSL
             catch (Exception ex)
             {
                 // Uncomment for debugging purposes
-                await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
 
                 // Doesn't matter, we go in interactive mode
                 UpdateSignInState(false);

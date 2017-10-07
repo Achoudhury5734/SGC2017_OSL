@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using Microsoft.Identity.Client;
 using UIKit;
 

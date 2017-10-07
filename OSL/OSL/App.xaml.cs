@@ -16,14 +16,12 @@ namespace OSL
         public static string Tenant = "secondhelping.onmicrosoft.com";
         public static string ClientID = "1771869e-f3aa-4d16-bd1a-af2f0e662bcd";
         public static string PolicySignUpSignIn = "B2C_1_SignUpSignIn";
-        //public static string PolicyEditProfile = "b2c_1_edit_profile";
         public static string PolicyResetPassword = "B2C_1_ProfileEdit";
 
         public static string[] Scopes = { "https://secondhelping.onmicrosoft.com/shapi/user" };
 
         public static string AuthorityBase = $"https://login.microsoftonline.com/tfp/{Tenant}/";
-        public static string Authority = $"{AuthorityBase}{PolicySignUpSignIn}/v2.0/";
-        //public static string AuthorityEditProfile = $"{AuthorityBase}{PolicyEditProfile}";
+        public static string Authority = $"{AuthorityBase}{PolicySignUpSignIn}";
         public static string AuthorityPasswordReset = $"{AuthorityBase}{PolicyResetPassword}";
 
         public static bool UseMockDataStore = true;
