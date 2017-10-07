@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using OSL.MobileAppService;
 using OSL.Models;
 
 namespace OSL.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ItemController : Controller
     {
@@ -19,7 +22,16 @@ namespace OSL.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            return Ok(ItemRepository.GetAll());
+            var scopes = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/scope")?.Value;
+
+            if (!string.IsNullOrEmpty(Startup.ScopeRead) && scopes != null && scopes.Split(' ').Any(s => s.Equals(Startup.ScopeRead)))
+            {
+                return Ok(ItemRepository.GetAll());
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpGet("{Id}")]
