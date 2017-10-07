@@ -13,7 +13,7 @@ namespace OSL
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    itemsPage = new NavigationPage(new ItemsPage())
+                    itemsPage = new NavigationPage(new PickupItemsPage())
                     {
                         Title = "Browse"
                     };
@@ -26,7 +26,7 @@ namespace OSL
                     aboutPage.Icon = "tab_about.png";
                     break;
                 default:
-                    itemsPage = new ItemsPage()
+                    itemsPage = new PickupItemsPage()
                     {
                         Title = "Browse"
                     };
