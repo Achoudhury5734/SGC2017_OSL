@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
 using OSL.Models;
+using OSL.MobileAppService.Services;
 
 namespace OSL.MobileAppService
 {
@@ -33,7 +34,9 @@ namespace OSL.MobileAppService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton(Configuration);
             services.AddSingleton<IItemRepository, ItemRepository>();
+            services.AddSingleton<DonationRepository, DonationRepository>();
 
             services.AddSwaggerGen(c =>
             {
