@@ -34,8 +34,8 @@ namespace OSL
 
         private void Accept_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("Information", "Thank you for accepting the donation","Accept", "Cancel");
-            this.Navigation.PushAsync(new PickupItemsPage());
+            DisplayAlert("Information", "Thank you for accepting the donation", "OK");
+            this.Navigation.PushModalAsync(new PickupItemsPage());
         }
     }
 }
