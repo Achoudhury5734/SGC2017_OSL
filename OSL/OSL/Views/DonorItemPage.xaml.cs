@@ -1,6 +1,7 @@
 ﻿using System;
 using Plugin.Media;
 using Xamarin.Forms;
+using OSL.ViewModels;
 
 namespace OSL.Views
 {
@@ -9,6 +10,10 @@ namespace OSL.Views
         public DonorItemPage()
         {
             InitializeComponent();
+            this.BindingContext = new DonorViewModel
+            {
+                Page = this
+            };
         }
     }
 }
