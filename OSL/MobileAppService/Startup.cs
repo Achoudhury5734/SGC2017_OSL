@@ -86,7 +86,7 @@ namespace OSL.MobileAppService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.Run(async (context) => context.Response.Redirect("/swagger"));
+            app.Run(context => context.Response.Redirect("/users"));
         }
     }
 }
