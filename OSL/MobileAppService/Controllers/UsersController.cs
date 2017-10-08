@@ -41,9 +41,9 @@ namespace OSL.MobileAppService.Controllers
         {
             var oid = HttpContext.User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
             var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
-            var isNew = HttpContext.User.Claims.First(c => c.Type == "newUser")?.Value;
 
-            if (isNew != "true")
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (user != null)
             {
                 return new BadRequestResult();
             }
