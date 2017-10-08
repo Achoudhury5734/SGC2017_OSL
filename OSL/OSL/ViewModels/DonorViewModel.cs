@@ -17,6 +17,12 @@ namespace OSL.ViewModels
             SaveCommand = new Command(async () => await SaveDonationAsync());
             TakePictureCommand = new Command(async () => await TakePictureAsync());
 
+            ExpirationDate = DateTime.Now;
+
+            //Default to 2 hour expiration
+            var expiration = DateTime.Now.AddHours(2);
+            ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
+
             donationRepository = new DonationRepository();
         }
 
@@ -49,6 +55,20 @@ namespace OSL.ViewModels
             set { SetProperty(ref donationType, value); }
         }
 
+        private DateTime dateTime;
+        public DateTime ExpirationDate
+        {
+            get { return dateTime; }
+            set { SetProperty(ref dateTime, value); }
+        }
+
+        private TimeSpan expirationTime;
+
+        public TimeSpan ExpirationTime
+        {
+            get { return expirationTime; }
+            set { SetProperty(ref expirationTime, value); }
+        }
 
         public ICommand SaveCommand { get; }
         public ICommand TakePictureCommand { get; }
@@ -58,7 +78,7 @@ namespace OSL.ViewModels
             var donationCapture = new DonationCapture
             {
                 Quantity = Quantity,
-                Expiration = new DateTime(),
+                Expiration = ExpirationDate.Add(ExpirationTime),
                 Title = DonationTitle,
                 ImageSource = ImageSource,
                 Type = (DonationType)Enum.Parse(typeof(DonationType), DonationType)
