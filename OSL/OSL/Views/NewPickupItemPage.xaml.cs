@@ -4,15 +4,15 @@ using Xamarin.Forms;
 
 namespace OSL
 {
-    public partial class NewItemPage : ContentPage
+    public partial class NewPickupItemPage : ContentPage
     {
-        public Item Item { get; set; }
+        public PickupItem Item { get; set; }
 
-        public NewItemPage()
+        public NewPickupItemPage()
         {
             InitializeComponent();
 
-            Item = new Item
+            Item = new PickupItem
             {
                 Text = "Item name",
                 Description = "This is an item description."
