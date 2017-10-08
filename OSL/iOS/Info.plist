@@ -59,5 +59,8 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+
+	<string>This app needs access to the camera to take photos.</string>
 </dict>
 </plist>
