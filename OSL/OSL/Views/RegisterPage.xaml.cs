@@ -15,13 +15,17 @@ namespace OSL.Views
 
         public RegisterPage()
         {
+            User = new Models.User();
             InitializeComponent();
             registerButton.Clicked += Handle_Registration;
         }
 
         private async void Handle_Registration(object sender, EventArgs e)
         {
-            DisplayAlert(User.ToString(), "q", "l");
+            User.Organization_Country = "USA";
+            User.Organization_Name = orgName.Value;
+            await DisplayAlert(User.Organization_Country, "a", "b");
+            //await DisplayAlert(User.Organization_Name, User.Person_Name, User.Organization_City);
             /*string url = "http://secondhelpingweb.azurewebsites.net/api/users";
             var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
             request.Method = "POST";*/

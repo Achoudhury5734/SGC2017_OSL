@@ -119,12 +119,6 @@ namespace OSL.Views
                 return null;
             }
 
-<<<<<<< HEAD
-             var json = await App.ApiClient.GetStringAsync($"api/users/me");
-             var user = JsonConvert.DeserializeObject<User>(json);
-
-             return user;
-=======
             try
             {
                 var json = await App.ApiClient.GetStringAsync($"api/users/me");
@@ -134,7 +128,6 @@ namespace OSL.Views
                 Console.WriteLine("Error fetching user: " + ex.StackTrace);
                 return null;
             }
->>>>>>> master
         }
 
         JObject ParseIdToken(string idToken)
