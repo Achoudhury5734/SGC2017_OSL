@@ -37,12 +37,7 @@ namespace OSL.Views
             var res = await userRep.Create(User);
             if (res == null)
                 await DisplayAlert("Oops", "Something went wrong", "Ok");
-            /*string url = "http://secondhelpingweb.azurewebsites.net/api/users";
-            var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
-            request.Method = "POST";*/
-
-            //var json = JsonConvert.SerializeObject(User);
-            //var content = new StringContent(json, Encoding.UTF8, "application/json");
+            
 
 		}
     }
