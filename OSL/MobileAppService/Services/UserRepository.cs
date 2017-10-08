@@ -73,6 +73,15 @@ namespace OSL.MobileAppService.Services
             }
         }
 
+        public bool IsActiveUser(User user)
+        {
+            if (user != null && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public bool Create(User user)
         {
             var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +

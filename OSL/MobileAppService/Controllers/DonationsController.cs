@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using OSL.MobileAppService.Models;
 using OSL.MobileAppService.Services;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,14 +25,22 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // GET: api/values
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user)) {
+                return new UnauthorizedResult();
+            }
+
             var donations = donationRepository.Get();
             foreach (var donation in donations) 
             {
                 donation.Donor = userRepository.GetById(donation.DonorId);
-                donation.Recipient = userRepository.GetById(donation.RecipientId);
+                if (donation.RecipientId.HasValue) {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
             }
             return Ok(donations);
         }
@@ -39,11 +49,17 @@ namespace OSL.MobileAppService.Controllers
         [HttpGet("{Id}")]
         public IActionResult Get(int Id)
         {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user)) {
+                return new UnauthorizedResult();
+            }
             var donation = donationRepository.GetById(Id);
 
             if (donation != null) {
                 donation.Donor = userRepository.GetById(donation.DonorId);
-                donation.Recipient = userRepository.GetById(donation.RecipientId);
+                if (donation.RecipientId.HasValue) {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
                 return Ok(donation);
             } else {
                 return new NotFoundResult();
@@ -51,9 +67,29 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // POST api/values
+        [Authorize]
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]Donation donation)
         {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user)) {
+                return new UnauthorizedResult();
+            } else {
+                donation.DonorId = user.Id;
+                donation.Created = DateTime.Now;
+                donation.Updated = DateTime.Now;
+                donation.StatusUpdated = DateTime.Now;
+                if (donation.Expiration == null) {
+                    var expires = DateTime.Now;
+                    donation.Expiration = expires.AddHours(12);
+                }
+                var insertedDonation = donationRepository.Create(donation);
+                if (insertedDonation != null) {
+                    return Ok(insertedDonation);
+                } else {
+                    return BadRequest("Invalid donation data.");
+                }
+            }
         }
 
         // PUT api/values/5

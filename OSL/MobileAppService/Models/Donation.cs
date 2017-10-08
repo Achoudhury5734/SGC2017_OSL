@@ -6,32 +6,33 @@ namespace OSL.MobileAppService.Models
 {
     public class Donation
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int DonorId { get; set; }
         public User Donor { get; set; }
-        public int RecipientId { get; set; }
+        public int? RecipientId { get; set; }
         public User Recipient { get; set; }
         public string Title { get; set; }
         public DonationType Type { get; set; }
         public DonationStatus Status { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
-        public DateTime StatusUpdated { get; set; }
-        public DateTime Expiration { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Updated { get; set; }
+        public DateTime? StatusUpdated { get; set; }
+        public DateTime? Expiration { get; set; }
         public int Amount { get; set; }
-        public string Picture { get; set; }
+        public string PictureUrl { get; set; }
 
+        public Donation() {}
 
         public Donation(SqlDataReader reader)
         {
             Id = int.Parse(reader["Id"].ToString());
             // User Model Id
-            if (reader["Donor"].ToString() != "") {
-                DonorId = int.Parse((reader["Donor"].ToString()));
+            if (reader["DonorId"].ToString() != "") {
+                DonorId = int.Parse((reader["DonorId"].ToString()));
             }
             // User Model Id
-            if (reader["Recipient"].ToString() != "") {
-                RecipientId = int.Parse((reader["Recipient"].ToString()));
+            if (reader["RecipientId"].ToString() != "") {
+                RecipientId = int.Parse((reader["RecipientId"].ToString()));
             }
             Title = reader["Title"].ToString();
             if (reader["Type"].ToString() != "") {
@@ -45,7 +46,7 @@ namespace OSL.MobileAppService.Models
                 Expiration = DateTime.Parse(reader["Expiration"].ToString());
             }
             Amount = int.Parse(reader["Amount"].ToString());
-            Picture = reader["Picture"].ToString();
+            PictureUrl = reader["PictureUrl"].ToString();
         }
     }
 }

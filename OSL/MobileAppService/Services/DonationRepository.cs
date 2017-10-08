@@ -22,9 +22,9 @@ namespace OSL.MobileAppService.Services
                 builder.Password = configuration["Database:Password"];
                 builder.InitialCatalog = configuration["Database:InitialCatalog"];
             }
-            catch (SqlException e)
+            catch (SqlException error)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(error);
             }
         }
 
@@ -36,7 +36,7 @@ namespace OSL.MobileAppService.Services
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
-            
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     SqlDataReader reader = command.ExecuteReader();
@@ -61,10 +61,64 @@ namespace OSL.MobileAppService.Services
                 {
                     command.Parameters.AddWithValue("@Id", Id);
                     SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
                     while (reader.Read())
                     {
                         return new Donation(reader);
                     }
+                }
+            }
+            return null;
+        }
+
+        public Donation Create(Donation donation)
+        {
+            var query = "INSERT INTO [Donation] (DonorId, Title, Type, Status, " +
+                        "Created, Updated, StatusUpdated, Expiration, Amount, " +
+                        "PictureUrl) OUTPUT INSERTED.Id VALUES ( " +
+                            "@DonorId, " +
+                            "@Title, " +
+                            "@Type, " +
+                            "@Status, " +
+                            "@Created, " +
+                            "@Updated, " +
+                            "@StatusUpdated, " +
+                            "@Expiration, " +
+                            "@Amount, " +
+                            "@PictureUrl" + 
+                        ")";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DonorId", donation.DonorId);
+                    command.Parameters.AddWithValue("@Title", donation.Title);
+                    command.Parameters.AddWithValue("@Type", donation.Type);
+                    command.Parameters.AddWithValue("@Status", donation.Status);
+                    command.Parameters.AddWithValue("@Created", donation.Created);
+                    command.Parameters.AddWithValue("@Updated", donation.Updated);
+                    command.Parameters.AddWithValue("@StatusUpdated", donation.StatusUpdated);
+                    command.Parameters.AddWithValue("@Expiration", donation.Expiration);
+                    command.Parameters.AddWithValue("@Amount", donation.Amount);
+                    command.Parameters.AddWithValue("@PictureUrl", donation.PictureUrl);
+
+                    try
+                    {
+                        var Id = int.Parse(command.ExecuteScalar().ToString());
+                        command.Parameters.Clear();
+                        if (Id > 0) {
+                            return GetById(Id);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return null;
+                    }
+
+
                 }
             }
             return null;
