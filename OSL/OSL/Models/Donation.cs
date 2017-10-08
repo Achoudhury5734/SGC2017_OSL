@@ -4,15 +4,16 @@ namespace OSL.Models
 {
     public class Donation
     {
-        public string Id { get; set; }
-        public string DonorId { get; set; }
-        public string RecipientId { get; set; }
+        public int Id { get; set; }
+        public int DonorId { get; set; }
+        public int? RecipientId { get; set; }
         public string Title { get; set; }
-        public DonationType DonationType { get; set; }
-        public DateTime Expiration { get; set; }
-        public DateTime Updated { get; set; }
-        public DateTime Created { get; set; }
-        public DonationStatus DonationStatus { get; set; }
+        public DonationType Type { get; set; }
+        public DonationStatus Status { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Updated { get; set; }
+        public DateTime? StatusUpdated { get; set; }
+        public DateTime? Expiration { get; set; }
         public int Amount { get; set; }
         public string PictureUrl { get; set; }
     }

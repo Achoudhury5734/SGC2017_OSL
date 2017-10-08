@@ -64,6 +64,24 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
+        public bool IsActiveAdmin(User user)
+        {
+            if (user != null && user.Admin && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool IsActiveUser(User user)
+        {
+            if (user != null && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public bool Create(User user)
         {
             var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +
