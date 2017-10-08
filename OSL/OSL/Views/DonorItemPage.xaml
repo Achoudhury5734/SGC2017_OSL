@@ -15,9 +15,9 @@
                 <Image x:Name="image" Source="{Binding ImageSource}" HeightRequest="200" />
                 <Button Text="Take a picture" x:Name="takePicture" Command="{Binding TakePictureCommand}" />
                 <Label Text="Title" FontSize="Medium" />
-                <Entry Text="{Binding DonationTitle}" FontSize="Small" />
+                <Entry Text="{Binding DonationTitle}"/>
                 <Label Text="Quantity (lbs)" FontSize="Medium" />
-                <Entry Text="{Binding Quantity}" Keyboard="Numeric" FontSize="Small" Margin="0" />
+                <Entry Text="{Binding Quantity}" Keyboard="Numeric" Margin="0" />
                 <Label Text="Type" FontSize="Medium" />
                 <Picker SelectedItem="{Binding DonationType}">
                     <Picker.Items>

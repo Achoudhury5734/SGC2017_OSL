@@ -37,8 +37,13 @@ namespace OSL.Views
             var res = await userRep.Create(User);
             if (res == null)
                 await DisplayAlert("Oops", "Something went wrong", "Ok");
-            
-
+            else
+                await Navigation.PushAsync(new RootPage());
 		}
+
+        private void BadFormAlert(string field)
+        {
+            DisplayAlert("Unable to register", "Please give a " + field, "Ok");
+        }
     }
 }
