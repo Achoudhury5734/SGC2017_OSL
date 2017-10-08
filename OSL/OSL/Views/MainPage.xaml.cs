@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 
-namespace OSL
+namespace OSL.Views
 {
     public partial class MainPage : ContentPage
     {
@@ -16,40 +16,41 @@ namespace OSL
         {
             InitializeComponent();
 
-            //Page itemsPage, aboutPage = null;
+            //Navigation.PushModalAsync(new NewItemPage());
+            /*Page itemsPage, aboutPage = null;
 
-            //switch (Device.RuntimePlatform)
-            //{
-            //    case Device.iOS:
-            //        itemsPage = new NavigationPage(new ItemsPage())
-            //        {
-            //            Title = "Browse"
-            //        };
+            switch (Device.RuntimePlatform)
+            {
+                case Device.iOS:
+                    itemsPage = new NavigationPage(new ItemsPage())
+                    {
+                        Title = "Browse"
+                    };
 
-            //        aboutPage = new NavigationPage(new AboutPage())
-            //        {
-            //            Title = "About"
-            //        };
-            //        itemsPage.Icon = "tab_feed.png";
-            //        aboutPage.Icon = "tab_about.png";
-            //        break;
-            //    default:
-            //        itemsPage = new ItemsPage()
-            //        {
-            //            Title = "Browse"
-            //        };
+                    aboutPage = new NavigationPage(new AboutPage())
+                    {
+                        Title = "About"
+                    };
+                    itemsPage.Icon = "tab_feed.png";
+                    aboutPage.Icon = "tab_about.png";
+                    break;
+                default:
+                    itemsPage = new ItemsPage()
+                    {
+                        Title = "Browse"
+                    };
 
-            //        aboutPage = new AboutPage()
-            //        {
-            //            Title = "About"
-            //        };
-            //        break;
-            //}
+                    aboutPage = new AboutPage()
+                    {
+                        Title = "About"
+                    };
+                    break;
+            }
 
-            //Children.Add(itemsPage);
-            //Children.Add(aboutPage);
+            Children.Add(itemsPage);
+            Children.Add(aboutPage);
 
-            //Title = Children[0].Title;
+            Title = Children[0].Title;*/
         }
 
         protected override async void OnAppearing()
@@ -70,8 +71,13 @@ namespace OSL
                 //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
 
                 // Doesn't matter, we go in interactive mode
-                UpdateSignInStateAsync(false);
+                UpdateSignInStateAsync(false).Wait();
             }
+        }
+
+        void OnClickRegister(object sender, EventArgs e)
+        {
+            DisplayAlert("1","2","3").Wait();
         }
 
         async void OnSignInSignOut(object sender, EventArgs e)
@@ -82,7 +88,7 @@ namespace OSL
                 {
                     AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
                     UpdateUserInfo(ar);
-                    UpdateSignInStateAsync(true);
+                    await UpdateSignInStateAsync(true);
                 }
                 else
                 {
@@ -90,7 +96,7 @@ namespace OSL
                     {
                         App.PCA.Remove(user);
                     }
-                    UpdateSignInStateAsync(false);
+                    await UpdateSignInStateAsync(false);
                 }
             }
             catch (Exception ex)
@@ -197,7 +203,7 @@ namespace OSL
             btnCallApi.IsVisible = isSignedIn;
             slUser.IsVisible = isSignedIn;
             lblApi.Text = "";
-            await this.Navigation.PushAsync(new PickupItemsPage());
+            await App.NavigationPage.Navigation.PushAsync(new PickupItemsPage());
         }
     }
 }

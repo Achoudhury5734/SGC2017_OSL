@@ -23,7 +23,7 @@ namespace OSL
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new PickupItemDetailPage(new PickupItemDetailViewModel(item)));
+            await Navigation.PushModalAsync(new PickupItemDetailPage(new PickupItemDetailViewModel(item)));
 
             // Manually deselect item
             PickupItemsListView.SelectedItem = null;
@@ -31,7 +31,7 @@ namespace OSL
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new NewPickupItemPage());
+            await Navigation.PushModalAsync(new NewPickupItemPage());
         }
 
         protected override void OnAppearing()

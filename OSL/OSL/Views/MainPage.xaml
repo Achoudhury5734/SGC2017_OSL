@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OSL.MainPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OSL.Views.MainPage">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="MSAL Xamarin Forms Sample" VerticalOptions="Start" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" />
@@ -20,6 +20,7 @@
             </StackLayout>
             <BoxView Color="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 <!--            <Button x:Name="btnPasswordReset" Text="Reset Password" Clicked="OnPasswordReset" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>-->
+            <Button x:Name="register" Text="Register" Clicked="OnClickRegister" VerticalOptions="End" HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnCallApi" Text="Call API" Clicked="OnCallApi" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnSignInSignOut" Text="Sign in" Clicked="OnSignInSignOut" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
         </StackLayout>
