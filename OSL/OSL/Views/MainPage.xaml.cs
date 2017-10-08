@@ -118,10 +118,10 @@ namespace OSL.Views
                 return null;
             }
 
-            var json = await App.ApiClient.GetStringAsync($"api/users/me");
-            var user = JsonConvert.DeserializeObject<User>(json);
+             var json = await App.ApiClient.GetStringAsync($"api/users/me");
+             var user = JsonConvert.DeserializeObject<User>(json);
 
-            return user;
+             return user;
         }
 
         JObject ParseIdToken(string idToken)

@@ -21,8 +21,8 @@ namespace OSL.Views
 
         private async void Handle_Registration(object sender, EventArgs e)
         {
-            /*DisplayAlert(User.ToString(), "q", "l");
-            string url = "http://secondhelpingweb.azurewebsites.net/api/users";
+            DisplayAlert(User.ToString(), "q", "l");
+            /*string url = "http://secondhelpingweb.azurewebsites.net/api/users";
             var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
             request.Method = "POST";*/
 
