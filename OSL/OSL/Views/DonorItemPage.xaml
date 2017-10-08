@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OSL.DonorItemPage" Title="New Item">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="Save" Clicked="Save_Clicked" />
+	</ContentPage.ToolbarItems>
+	<ContentPage.Content>
+		<StackLayout Spacing="20" Padding="15">
+			<Label Text="Title" FontSize="Medium" />
+			<Entry Text="{Binding Item.Text}" FontSize="Small" />
+            <Button Text="Take a picture" x:Name="takePicture" />
+            <Label Text="Quantity (lbs)" FontSize="Medium" />
+            <Entry Text="{Binding Item.Quantity}" Keyboard="Numeric" FontSize="Small" Margin="0" />
+            <Label Text="Type" FontSize="Medium" />
+            <Picker x:Name="foodType">
+                <Picker.Items>
+                    <x:String>Frozen</x:String>
+                    <x:String>Cold</x:String>
+                    <x:String>Prepped</x:String>
+                    <x:String>Dry</x:String>
+                </Picker.Items>
+            </Picker>
+            <Label Text="Deadline" FontSize="Medium" Margin="0" />
+            <StackLayout Orientation="Horizontal">
+                <DatePicker x:Name="expirationDate" />
+                <TimePicker x:Name="expirationTime" />
+            </StackLayout>
+            <Button Title="Post" x:Name="postButton" />
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>
