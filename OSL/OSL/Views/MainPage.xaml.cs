@@ -39,7 +39,14 @@ namespace OSL.Views
                 App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
                 App.User = await userRepository.GetUserFromIdentityToken(ar.IdToken);
 
-                Application.Current.MainPage = new RootPage();
+                if (App.User == null)
+                {
+                    Application.Current.MainPage = new RegisterPage();
+                }
+                else
+                {
+                    Application.Current.MainPage = new RootPage();
+                }
             }
             catch (Exception ex)
             {
@@ -58,12 +65,12 @@ namespace OSL.Views
         {
             try
             {
+                UpdateButtonState(true);
+
                 AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
                 App.AccessToken = ar.AccessToken;
                 App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
                 App.User = await userRepository.GetUserFromIdentityToken(ar.IdToken);
-
-                UpdateButtonState(true);
 
                 if (App.User == null) {
                     Application.Current.MainPage = new RegisterPage();
@@ -73,6 +80,7 @@ namespace OSL.Views
             }
             catch (Exception ex)
             {
+                UpdateButtonState(false);
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
                 {
                     // Alert if any exception excludig user cancelling sign-in dialog

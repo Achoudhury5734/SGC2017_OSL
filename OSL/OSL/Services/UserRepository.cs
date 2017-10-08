@@ -14,10 +14,6 @@ namespace OSL.Services
     {
         public async Task<User> GetUserFromIdentityToken(string identityToken) {
             JObject arUser = ParseIdToken(identityToken);
-            if (arUser["newUser"] != null && arUser["newUser"].ToString() == "True")
-            {
-                return null;
-            }
 
             try
             {
