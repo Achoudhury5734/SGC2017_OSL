@@ -41,10 +41,12 @@ namespace OSL
             PCA = new PublicClientApplication(ClientID, Authority);
             PCA.RedirectUri = $"msal{ClientID}://auth";
 
+#if !DEBUG
             MobileCenter.Start($"android={Constants.MobileCenterAndroid};" +
                    $"uwp={Constants.MobileCenterUWP};" +
                    $"ios={Constants.MobileCenteriOS}",
                    typeof(Analytics), typeof(Crashes));
+#endif
 
             if (UseMockDataStore)
                 DependencyService.Register<MockDataStore>();
