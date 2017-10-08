@@ -21,12 +21,13 @@ namespace OSL.Views
 
         private async void Handle_Registration(object sender, EventArgs e)
         {
+            DisplayAlert(User.ToString(), "q", "l");
             string url = "http://secondhelpingweb.azurewebsites.net/api/users";
             var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
             request.Method = "POST";
 
-            var json = JsonConvert.SerializeObject(sender);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //var json = JsonConvert.SerializeObject(User);
+            //var content = new StringContent(json, Encoding.UTF8, "application/json");
 
 		}
     }
