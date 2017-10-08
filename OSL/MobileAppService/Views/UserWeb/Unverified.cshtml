@@ -1,0 +1,64 @@
+﻿@using OSL.MobileAppService.Models
+@model IEnumerable<OSL.MobileAppService.Models.User>
+
+@{
+    ViewBag.Title = "Unverified Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Unverified Users</h1>
+
+<table name="db_book" border=" 1 | 0">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id) <br />
+                    </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Person_Name) <br />
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Verified)<br />
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Admin)<br />
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)<br />
+                </th>
+    </tr>
+    </thead>
+
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+          
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Verified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Admin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) | |
+                @Html.ActionLink("Verify", "Verify", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    <a href="/users">Back to All Users</a><br />
+    <a href="/users/unverified">Back to Unverified Users</a>
+</div>

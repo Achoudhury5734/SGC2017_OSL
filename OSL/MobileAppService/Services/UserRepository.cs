@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Geocoding.Google;
 using Microsoft.Extensions.Configuration;
 
 using OSL.MobileAppService.Models;
@@ -12,9 +14,12 @@ namespace OSL.MobileAppService.Services
     public class UserRepository
     {
         private readonly SqlConnectionStringBuilder builder;
+        private readonly IConfigurationRoot configuration;
 
         public UserRepository(IConfigurationRoot configuration)
         {
+            this.configuration = configuration;
+
             try
             {
                 builder = new SqlConnectionStringBuilder()
@@ -38,7 +43,7 @@ namespace OSL.MobileAppService.Services
                 return null;
             }
 
-            var query = $"SELECT * FROM [User] WHERE [Oid] = '{oid}' AND [Status] = 'Active'";
+            var query = "SELECT * FROM [User] WHERE [Oid] = @Oid AND [Status] = 'Active'";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -48,7 +53,10 @@ namespace OSL.MobileAppService.Services
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
+                        command.Parameters.AddWithValue("@Oid", oid);
                         SqlDataReader reader = command.ExecuteReader();
+                        command.Parameters.Clear();
+
                         while (reader.Read())
                         {
                             return new User(reader);
@@ -64,24 +72,47 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public bool Create(User user)
+        public bool IsActiveAdmin(User user)
         {
-            var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +
-                "Organization_Address_Line1, Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country) VALUES " +
-                    $"('{user.Oid}', " +
-                    $"'{user.Email}', " +
-                    $"'{user.Person_Name}', " +
+            if (user != null && user.Admin && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool IsActiveUser(User user)
+        {
+            if (user != null && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public async Task<bool> Create(User user)
+        {
+            var geocoder = new GoogleGeocoder();
+            var addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+
+            var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, Organization_Address_Line1, " +
+                "Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country, Lat, Long) VALUES " +
+                    $"(@Oid, " +
+                    $"@Email, " +
+                    $"@Person_Name, " +
                     "0, " +
                     "0, " +
-                    "'Inactive', " +
-                    $"'{user.Phone_Number}', " +
-                    $"'{user.Organization_Name}', " +
-                    $"'{user.Organization_Address_Line1}', " +
-                    $"'{user.Organization_Address_Line2}', " +
-                    $"'{user.Organization_City}', " +
-                    $"'{user.Organization_State}', " +
-                    $"'{user.Organization_PostalCode}', " +
-                    $"'{user.Organization_Country}')";
+                    $"{UserStatus.Active.ToString()}, " +
+                    $"@Phone_Number, " +
+                    $"@Organization_Name, " +
+                    $"@Organization_Address_Line1, " +
+                    $"@Organization_Address_Line2', " +
+                    $"@Organization_City, " +
+                    $"@Organization_State, " +
+                    $"@Organization_PostalCode, " +
+                    $"@Organization_Country, " +
+                    $"@Lat, " +
+                    $"@Long)";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -89,7 +120,24 @@ namespace OSL.MobileAppService.Services
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    return command.ExecuteNonQuery() == 1;
+                    command.Parameters.AddWithValue("@Oid", user.Oid);
+                    command.Parameters.AddWithValue("@Email", user.Email);
+                    command.Parameters.AddWithValue("@Person_Name", user.Person_Name ?? "");
+                    command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number ?? "");
+                    command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line1", user.Organization_Address_Line1 ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line2", user.Organization_Address_Line2 ?? "");
+                    command.Parameters.AddWithValue("@Organization_City", user.Organization_City ?? "");
+                    command.Parameters.AddWithValue("@Organization_State", user.Organization_State ?? "");
+                    command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode ?? "");
+                    command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country ?? "");
+                    command.Parameters.AddWithValue("@Lat", addresses.First().Coordinates.Latitude);
+                    command.Parameters.AddWithValue("@Long", addresses.First().Coordinates.Longitude);
+
+                    var res = command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+
+                    return res == 1;
                 }
             }
         }
@@ -118,9 +166,10 @@ namespace OSL.MobileAppService.Services
             return users;
         }
 
-        public User GetById(int id)
+        public IEnumerable<User> GetUnverified()
         {
-            var query = $"SELECT * FROM [User] WHERE [Id] = '{id}'";
+            var query = "SELECT * FROM [User] WHERE [Verified] = 0";
+            var users = new List<User>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -131,6 +180,32 @@ namespace OSL.MobileAppService.Services
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
+                        var user = new User(reader);
+
+                        users.Add(user);
+                    }
+                }
+            }
+
+            return users;
+        }
+
+        public User GetById(int id)
+        {
+            var query = "SELECT * FROM [User] WHERE [Id] = @Id";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
+
+                    while (reader.Read())
+                    {
                         return new User(reader);
                     }
                 }
@@ -139,26 +214,30 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public bool UpdateUser(int id, User user)
+        public async Task<bool> UpdateUser(int id, User user)
         {
             var admin = user.Admin ? 1 : 0;
             var verified = user.Verified ? 1 : 0;
 
+            var geocoder = new GoogleGeocoder();
+            var addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+
             var query = $"UPDATE [User] SET " +
-                    $"[Person_Name] = '{user.Person_Name}', " +
-                    $"[Verified] = {verified}, " +
-                    $"[Admin] = {admin}, " +
-                    $"[Status] = '{user.Status.ToString("F")}', " +
-                    $"[Phone_GUID] = '{user.Phone_GUID}', " +
-                    $"[Phone_Number] = '{user.Phone_Number}', " +
-                    $"[Organization_Name] = '{user.Organization_Name}', " +
-                    $"[Organization_Address_Line1] = '{user.Organization_Address_Line1}', " +
-                    $"[Organization_Address_Line2] = '{user.Organization_Address_Line2}', " +
-                    $"[Organization_City] = '{user.Organization_City}', " +
-                    $"[Organization_State] = '{user.Organization_State}', " +
-                    $"[Organization_PostalCode] = '{user.Organization_PostalCode}', " +
-                    $"[Organization_Country] = '{user.Organization_Country}' " +
-                $"WHERE [Id] = {id}";
+                    $"[Person_Name] = @Person_Name, " +
+                    $"[Verified] = @Verified, " +
+                    $"[Admin] = @Admin, " +
+                    $"[Status] = @Status, " +
+                    $"[Phone_Number] = @Phone_Number, " +
+                    $"[Organization_Name] = @Organization_Name, " +
+                    $"[Organization_Address_Line1] = @Organization_Address_Line1, " +
+                    $"[Organization_Address_Line2] = @Organization_Address_Line2, " +
+                    $"[Organization_City] = @Organization_City, " +
+                    $"[Organization_State] = @Organization_State, " +
+                    $"[Organization_PostalCode] = @Organization_PostalCode, " +
+                    $"[Organization_Country] = @Organization_Country, " +
+                    $"[Lat] = @Lat, " +
+                    $"[Long] = @Long " +
+                $"WHERE [Id] = @Id";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -166,16 +245,33 @@ namespace OSL.MobileAppService.Services
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@Person_Name", user.Person_Name ?? "");
+                    command.Parameters.AddWithValue("@Verified", verified);
+                    command.Parameters.AddWithValue("@Admin", admin);
+                    command.Parameters.AddWithValue("@Status", user.Status.ToString("F"));
+                    command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number ?? "");
+                    command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line1", user.Organization_Address_Line1 ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line2", user.Organization_Address_Line2 ?? "");
+                    command.Parameters.AddWithValue("@Organization_City", user.Organization_City ?? "");
+                    command.Parameters.AddWithValue("@Organization_State", user.Organization_State ?? "");
+                    command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode ?? "");
+                    command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country ?? "");
+                    command.Parameters.AddWithValue("@Lat", addresses.First().Coordinates.Latitude);
+                    command.Parameters.AddWithValue("@Long", addresses.First().Coordinates.Longitude);
+                    command.Parameters.AddWithValue("@Id", id);
+
                     var res = command.ExecuteNonQuery();
+                    command.Parameters.Clear();
 
                     return res == 1;
                 }
             }
         }
 
-        public void DeleteById(int id)
+        public void ActivateById(int id)
         {
-            var query = $"UPDATE [User] SET [Status] = '{UserStatus.Inactive.ToString("F")}' WHERE [Id] = {id}";
+            var query = $"UPDATE [User] SET [Status] = '{UserStatus.Active.ToString("F")}' WHERE [Id] = @Id";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -183,7 +279,43 @@ namespace OSL.MobileAppService.Services
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@Id", id);
                     command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
+            }
+        }
+
+        public void DeactivateById(int id)
+        {
+            var query = $"UPDATE [User] SET [Status] = '{UserStatus.Inactive.ToString("F")}' WHERE [Id] = @Id";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
+            }
+        }
+
+        public void VerifyById(int id)
+        {
+            var query = $"UPDATE [User] SET [Verified] = 1 WHERE [Id] = @Id";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
                 }
             }
         }
