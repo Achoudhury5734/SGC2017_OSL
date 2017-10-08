@@ -15,7 +15,7 @@ namespace OSL
         {
             InitializeComponent();
 
-
+            Navigation.PushModalAsync(new NewItemPage());
             /*Page itemsPage, aboutPage = null;
 
             switch (Device.RuntimePlatform)
