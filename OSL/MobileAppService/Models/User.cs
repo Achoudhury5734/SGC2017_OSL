@@ -50,8 +50,14 @@ namespace OSL.MobileAppService.Models
             Organization_State = reader["Organization_State"].ToString();
             Organization_PostalCode = reader["Organization_PostalCode"].ToString();
             Organization_Country = reader["Organization_Country"].ToString();
-            //Lat = double.Parse(reader["Lat"]?.ToString());
-            //Long = double.Parse(reader["Long"]?.ToString());
+
+            if (reader["Lat"].ToString() != "") {
+                Lat = double.Parse(reader["Lat"].ToString());
+            }
+            if (reader["Long"].ToString() != "")
+            {
+                Long = double.Parse(reader["Long"].ToString());
+            }
         }
     }
 }

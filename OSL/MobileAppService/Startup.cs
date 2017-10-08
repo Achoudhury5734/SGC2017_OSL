@@ -7,10 +7,10 @@ using Microsoft.Extensions.Logging;
 
 using Swashbuckle.AspNetCore.Swagger;
 
-using OSL.Models;
 using OSL.MobileAppService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using System;
 
 namespace OSL.MobileAppService
 {
@@ -45,15 +45,19 @@ namespace OSL.MobileAppService
           Configuration["Authentication:AzureAd:Tenant"], Configuration["Authentication:AzureAd:Policy"]);
                     options.Audience = Configuration["Authentication:AzureAd:ClientId"];
                     options.RequireHttpsMetadata = false;
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = AuthenticationFailed
-                    };
+                })
+                .AddCookie("CookieScheme", options => {
+                    options.AccessDeniedPath = "/login";
+                    options.LoginPath = "/login";
+                    options.Cookie.HttpOnly = false;
+                    options.Cookie.Name = "auth";
+                    options.Cookie.Path = "/";
+                    options.Cookie.Expiration = TimeSpan.FromDays(14);
+                    options.SlidingExpiration = true;
                 });
 
             services.AddMvc();
             services.AddSingleton(Configuration);
-            services.AddSingleton<IItemRepository, ItemRepository>();
             services.AddSingleton<DonationRepository, DonationRepository>();
             services.AddSingleton<UserRepository, UserRepository>();
 
@@ -82,16 +86,7 @@ namespace OSL.MobileAppService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.Run(async (context) => context.Response.Redirect("/swagger"));
-        }
-
-        private Task AuthenticationFailed(AuthenticationFailedContext arg)
-        {
-            // For debugging purposes only!
-            var s = $"AuthenticationFailed: {arg.Exception.Message}";
-            arg.Response.ContentLength = s.Length;
-            arg.Response.Body.Write(Encoding.UTF8.GetBytes(s), 0, s.Length);
-            return Task.FromResult(0);
+            app.Run(context => context.Response.Redirect("/users"));
         }
     }
 }

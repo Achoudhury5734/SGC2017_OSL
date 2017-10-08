@@ -1,0 +1,165 @@
+﻿@model OSL.MobileAppService.Models.User
+@{
+    ViewBag.Title = "Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<img src="http://i1378.photobucket.com/albums/ah104/christinedestiny/sackLunch_icon_zpssdqik6ew.png" height="250" width="250"align="middle">
+
+<div class="container">
+    <form action="/users/@Model.Id/edit" method="post">
+        <ul class="flex-outer">
+            <li>
+
+            </li>
+            <li>
+                <label for="Person_Name"> Name</label>
+                <input value="@Model.Person_Name" type="text" id="Person_Name" name="Person_Name" placeholder="Enter your Name">
+            </li>
+            <li>
+                <label for="Email">Email</label>
+                <input value="@Model.Email" type="text" id="Email" name="Email" placeholder="Enter your Email">
+            </li>
+            <li>
+                <label for="Phone_Number">Phone Number</label>
+                <input value="@Model.Phone_Number" type="text" id="Phone_Number" name="Phone_Number" placeholder="Enter your Phone Number">
+            </li>
+            <li>
+                <label for="Organization_Name">Organization Name</label>
+                <input value="@Model.Organization_Name" type="text" id="Organization_Name" name="Organization_Name" placeholder="Enter your Organization Name">
+            </li>
+            <li>
+                <label for="Organization_Address_Line1">Organization Address Line1</label>
+                <input value="@Model.Organization_Address_Line1" type="text" id="Organization_Address_Line1" name="Organization_Address_Line1" placeholder="Enter your Org Address">
+            </li>
+            <li>
+                <label for="Organization_Address_Line2">Organization Address Line2</label>
+                <input value="@Model.Organization_Address_Line2" type="text" id="Organization_Address_Line2" name="Organization_Address_Line2" placeholder="Enter your Org Address">
+            </li>
+            <li>
+                <label for="Organization_City">Organization City</label>
+                <input value="@Model.Organization_City" type="text" id="Organization_City" name="Organization_City" placeholder="Enter your Org City">
+            </li>
+            <li>
+                <label for="Organization_State">Organization State</label>
+                <input value="@Model.Organization_State" type="text" id="Organization_State" name="Organization_State" placeholder="Enter your Org State">
+            </li>
+            <li>
+                <label for="Organization_PostalCode">Organization Postal Code</label>
+                <input value="@Model.Organization_PostalCode" type="text" id="Organization_PostalCode" name="Organization_PostalCode" placeholder="Enter your Org Postal Code">
+            </li>
+            <li>
+                <label for="Organization_Country">Organization Country</label>
+                <input value="@Model.Organization_Country" type="text" id="Organization_Country" name="Organization_Country" placeholder="Enter your Org Country">
+            </li>
+            <li>
+                <label for="Verified">Verified</label>
+				@Html.CheckBoxFor(model => model.Verified)
+            </li>
+            <li>
+                <label for="Admin">Admin</label>
+                @Html.CheckBoxFor(model => model.Admin)
+            </li>
+            <li>
+                <label for="Status">Status</label>
+                @Html.DropDownListFor(model => model.Status, new SelectList(Enum.GetValues(typeof(OSL.MobileAppService.Models.UserStatus))))
+            </li>
+		</ul>
+
+		<button class="update" type="submit">
+            Update User
+        </button>
+	</form>
+</div>
+<div>
+    <a href="/users">Back to List</a>
+</div>
+<style>
+    body {
+        font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif;
+        background: #3AAFAB;
+        color: #fff;
+        padding: 50px 0;
+    }
+
+    .container {
+        width: 80%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+        .container * {
+            box-sizing: border-box;
+        }
+
+    .flex-outer,
+    .flex-inner {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .flex-outer {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+        .flex-outer li,
+        .flex-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+    .flex-inner {
+        padding: 0 8px;
+        justify-content: space-between;
+    }
+
+    .flex-outer > li:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .flex-outer li label,
+    .flex-outer li p {
+        padding: 8px;
+        font-weight: 300;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+    }
+
+    .flex-outer > li > label,
+    .flex-outer li p {
+        flex: 1 0 120px;
+        max-width: 220px;
+    }
+
+        .flex-outer > li > label + *,
+        .flex-inner {
+            flex: 1 0 220px;
+        }
+
+    .flex-outer li p {
+        margin: 0;
+    }
+
+    .flex-outer li input:not([type='checkbox']),
+    .flex-outer li textarea {
+        padding: 15px;
+        border: none;
+    }
+
+    .flex-outer li button {
+        margin-left: auto;
+        padding: 8px 16px;
+        border: none;
+        background: #333;
+        color: #f2f2f2;
+        text-transform: uppercase;
+        letter-spacing: .09em;
+        border-radius: 2px;
+    }
+
+    .flex-inner li {
+        width: 100px;
+    }
+</style>
