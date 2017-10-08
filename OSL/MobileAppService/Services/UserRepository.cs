@@ -109,11 +109,11 @@ namespace OSL.MobileAppService.Services
                     $"@Person_Name, " +
                     "0, " +
                     "0, " +
-                    $"{UserStatus.Active.ToString()}, " +
+                    $"'{UserStatus.Active.ToString()}', " +
                     $"@Phone_Number, " +
                     $"@Organization_Name, " +
                     $"@Organization_Address_Line1, " +
-                    $"@Organization_Address_Line2', " +
+                    $"@Organization_Address_Line2, " +
                     $"@Organization_City, " +
                     $"@Organization_State, " +
                     $"@Organization_PostalCode, " +
