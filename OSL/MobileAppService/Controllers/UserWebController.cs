@@ -1,26 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using OSL.MobileAppService.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using OSL.MobileAppService.Services;
 
 namespace OSL.MobileAppService.Controllers
 {
-    [Route("[controller]")]
+    [Route("users")]
     public class UserWebController : Controller
     {
-        public IActionResult Index()
+        private readonly UserRepository userRepository;
+
+        public UserWebController(UserRepository userRepository)
         {
-            return View();
+            this.userRepository = userRepository;
         }
 
-        [Route("details/{id}")]
-        public IActionResult Details(string id)
+        [HttpGet]
+        public IActionResult Index()
         {
-            var user = new User();
-            user.Email = "asdf";
-            return View(user);
+            return View("Index", userRepository.Get());
+        }
+
+        [HttpGet("edit/{id}")]
+        public IActionResult Edit(int id)
+        {
+            var user = userRepository.GetById(id);
+
+            if (user != null)
+            {
+                return View("Edit", user);
+            }
+
+            return new NotFoundResult();
         }
 
     }

@@ -9,11 +9,11 @@ namespace OSL.MobileAppService.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private readonly UserRepository Users;
+        private readonly UserRepository userRepository;
 
         public UsersController(UserRepository userRepository)
         {
-            Users = userRepository;
+            this.userRepository = userRepository;
         }
 
         // GET: api/values
@@ -21,12 +21,12 @@ namespace OSL.MobileAppService.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var user = Users.GetUserFromPrincipal(HttpContext.User);
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (user != null && (!user.Admin || user.Status != UserStatus.Active)) {
                 return new UnauthorizedResult();
             }
 
-            return Ok(Users.Get());
+            return Ok(userRepository.Get());
         }
 
         // GET api/values/5
@@ -34,12 +34,12 @@ namespace OSL.MobileAppService.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var user = Users.GetUserFromPrincipal(HttpContext.User);
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (user != null && (!user.Admin || user.Status != UserStatus.Active)) {
                 return new UnauthorizedResult();
             }
 
-            var u = Users.GetById(id);
+            var u = userRepository.GetById(id);
 
             if (u != null) {
                 return Ok(u);
@@ -64,7 +64,7 @@ namespace OSL.MobileAppService.Controllers
             value.Oid = oid;
             value.Email = email;
 
-            return Ok(Users.Create(value));
+            return Ok(userRepository.Create(value));
         }
 
         // PUT api/values/5
@@ -72,17 +72,17 @@ namespace OSL.MobileAppService.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]User value)
         {
-            var user = Users.GetUserFromPrincipal(HttpContext.User);
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (user != null && (!user.Admin || user.Status != UserStatus.Active))
             {
                 return new UnauthorizedResult();
             }
 
-            var u = Users.GetById(id);
+            var u = userRepository.GetById(id);
 
             if (u != null)
             {
-                return Ok(Users.UpdateUser(id, value));
+                return Ok(userRepository.UpdateUser(id, value));
             }
             else
             {
@@ -95,17 +95,17 @@ namespace OSL.MobileAppService.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var user = Users.GetUserFromPrincipal(HttpContext.User);
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (user != null && (!user.Admin || user.Status != UserStatus.Active))
             {
                 return new UnauthorizedResult();
             }
 
-            var u = Users.GetById(id);
+            var u = userRepository.GetById(id);
 
             if (u != null)
             {
-                Users.DeleteById(id);
+                userRepository.DeleteById(id);
                 return StatusCode(204);
             }
             else
