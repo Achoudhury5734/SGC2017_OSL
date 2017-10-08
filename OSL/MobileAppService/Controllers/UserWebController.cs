@@ -23,6 +23,12 @@ namespace OSL.MobileAppService.Controllers
             return View("Index", userRepository.Get());
         }
 
+        [HttpGet("unverified")]
+        public IActionResult Unverified()
+        {
+            return View("Unverified", userRepository.GetUnverified());
+        }
+
         [HttpGet("{id}/edit")]
         public IActionResult Edit(int id)
         {
@@ -73,6 +79,20 @@ namespace OSL.MobileAppService.Controllers
             {
                 userRepository.ActivateById(id);
                 return RedirectToAction("Index");
+            }
+
+            return new NotFoundResult();
+        }
+
+        [HttpGet("{id}/verify")]
+        public IActionResult Verify(int id)
+        {
+            var user = userRepository.GetById(id);
+
+            if (user != null)
+            {
+                userRepository.VerifyById(id);
+                return RedirectToAction("Unverified");
             }
 
             return new NotFoundResult();

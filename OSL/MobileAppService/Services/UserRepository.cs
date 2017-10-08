@@ -122,15 +122,15 @@ namespace OSL.MobileAppService.Services
                 {
                     command.Parameters.AddWithValue("@Oid", user.Oid);
                     command.Parameters.AddWithValue("@Email", user.Email);
-                    command.Parameters.AddWithValue("@Person_Name", user.Person_Name);
-                    command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number);
-                    command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name);
-                    command.Parameters.AddWithValue("@Organization_Address_Line1", user.Organization_Address_Line1);
-                    command.Parameters.AddWithValue("@Organization_Address_Line2", user.Organization_Address_Line2);
-                    command.Parameters.AddWithValue("@Organization_City", user.Organization_City);
-                    command.Parameters.AddWithValue("@Organization_State", user.Organization_State);
-                    command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode);
-                    command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country);
+                    command.Parameters.AddWithValue("@Person_Name", user.Person_Name ?? "");
+                    command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number ?? "");
+                    command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line1", user.Organization_Address_Line1 ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line2", user.Organization_Address_Line2 ?? "");
+                    command.Parameters.AddWithValue("@Organization_City", user.Organization_City ?? "");
+                    command.Parameters.AddWithValue("@Organization_State", user.Organization_State ?? "");
+                    command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode ?? "");
+                    command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country ?? "");
                     command.Parameters.AddWithValue("@Lat", addresses.First().Coordinates.Latitude);
                     command.Parameters.AddWithValue("@Long", addresses.First().Coordinates.Longitude);
 
@@ -151,6 +151,30 @@ namespace OSL.MobileAppService.Services
             {
                 connection.Open();
             
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var user = new User(reader);
+
+                        users.Add(user);
+                    }
+                }
+            }
+
+            return users;
+        }
+
+        public IEnumerable<User> GetUnverified()
+        {
+            var query = "SELECT * FROM [User] WHERE [Verified] = 0";
+            var users = new List<User>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     SqlDataReader reader = command.ExecuteReader();
@@ -200,8 +224,8 @@ namespace OSL.MobileAppService.Services
 
             var query = $"UPDATE [User] SET " +
                     $"[Person_Name] = @Person_Name, " +
-                    $"[Verified] = {verified}, " +
-                    $"[Admin] = {admin}, " +
+                    $"[Verified] = @Verified, " +
+                    $"[Admin] = @Admin, " +
                     $"[Status] = @Status, " +
                     $"[Phone_Number] = @Phone_Number, " +
                     $"[Organization_Name] = @Organization_Name, " +
@@ -221,16 +245,18 @@ namespace OSL.MobileAppService.Services
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Person_Name", user.Person_Name);
+                    command.Parameters.AddWithValue("@Person_Name", user.Person_Name ?? "");
+                    command.Parameters.AddWithValue("@Verified", verified);
+                    command.Parameters.AddWithValue("@Admin", admin);
                     command.Parameters.AddWithValue("@Status", user.Status.ToString("F"));
-                    command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number);
-                    command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name);
-                    command.Parameters.AddWithValue("@Organization_Address_Line1", user.Organization_Address_Line1);
-                    command.Parameters.AddWithValue("@Organization_Address_Line2", user.Organization_Address_Line2);
-                    command.Parameters.AddWithValue("@Organization_City", user.Organization_City);
-                    command.Parameters.AddWithValue("@Organization_State", user.Organization_State);
-                    command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode);
-                    command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country);
+                    command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number ?? "");
+                    command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line1", user.Organization_Address_Line1 ?? "");
+                    command.Parameters.AddWithValue("@Organization_Address_Line2", user.Organization_Address_Line2 ?? "");
+                    command.Parameters.AddWithValue("@Organization_City", user.Organization_City ?? "");
+                    command.Parameters.AddWithValue("@Organization_State", user.Organization_State ?? "");
+                    command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode ?? "");
+                    command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country ?? "");
                     command.Parameters.AddWithValue("@Lat", addresses.First().Coordinates.Latitude);
                     command.Parameters.AddWithValue("@Long", addresses.First().Coordinates.Longitude);
                     command.Parameters.AddWithValue("@Id", id);
@@ -263,6 +289,23 @@ namespace OSL.MobileAppService.Services
         public void DeactivateById(int id)
         {
             var query = $"UPDATE [User] SET [Status] = '{UserStatus.Inactive.ToString("F")}' WHERE [Id] = @Id";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
+            }
+        }
+
+        public void VerifyById(int id)
+        {
+            var query = $"UPDATE [User] SET [Verified] = 1 WHERE [Id] = @Id";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
