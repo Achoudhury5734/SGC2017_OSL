@@ -38,7 +38,7 @@ namespace OSL.Views
             if (res == null)
                 await DisplayAlert("Oops", "Something went wrong", "Ok");
             else
-                await Navigation.PushAsync(new RootPage());
+                Application.Current.MainPage = new RootPage();
 		}
 
         private void BadFormAlert(string field)
