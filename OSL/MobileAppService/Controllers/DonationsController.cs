@@ -77,7 +77,11 @@ namespace OSL.MobileAppService.Controllers
             } else {
                 donation.DonorId = user.Id;
                 donation.Created = DateTime.Now;
+                donation.Updated = DateTime.Now;
                 donation.StatusUpdated = DateTime.Now;
+                if (donation.PictureUrl == null) {
+                    donation.PictureUrl = "Empty";
+                }
                 if (donation.Expiration == null) {
                     var expires = DateTime.Now;
                     donation.Expiration = expires.AddHours(2);

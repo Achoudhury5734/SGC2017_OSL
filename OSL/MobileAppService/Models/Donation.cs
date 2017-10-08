@@ -21,9 +21,7 @@ namespace OSL.MobileAppService.Models
         public int Amount { get; set; }
         public string PictureUrl { get; set; }
 
-        public Donation() {
-            
-        }
+        public Donation() {}
 
         public Donation(SqlDataReader reader)
         {
