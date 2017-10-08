@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace OSL
 {
@@ -53,7 +54,7 @@ namespace OSL
 
         protected override async void OnAppearing()
         {
-            UpdateSignInState(false);
+            await UpdateSignInStateAsync(false);
 
             // Check to see if we have a User
             // in the cache already.
@@ -61,7 +62,7 @@ namespace OSL
             {
                 AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
                 UpdateUserInfo(ar);
-                UpdateSignInState(true);
+                await UpdateSignInStateAsync(true);
             }
             catch (Exception ex)
             {
@@ -69,7 +70,7 @@ namespace OSL
                 //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
 
                 // Doesn't matter, we go in interactive mode
-                UpdateSignInState(false);
+                UpdateSignInStateAsync(false);
             }
         }
 
@@ -81,7 +82,7 @@ namespace OSL
                 {
                     AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
                     UpdateUserInfo(ar);
-                    UpdateSignInState(true);
+                    UpdateSignInStateAsync(true);
                 }
                 else
                 {
@@ -89,7 +90,7 @@ namespace OSL
                     {
                         App.PCA.Remove(user);
                     }
-                    UpdateSignInState(false);
+                    UpdateSignInStateAsync(false);
                 }
             }
             catch (Exception ex)
@@ -189,13 +190,14 @@ namespace OSL
             }
         }
 
-        void UpdateSignInState(bool isSignedIn)
+        async Task UpdateSignInStateAsync(bool isSignedIn)
         {
             btnSignInSignOut.Text = isSignedIn ? "Sign out" : "Sign in";
             //btnPasswordReset.IsVisible = isSignedIn;
             btnCallApi.IsVisible = isSignedIn;
             slUser.IsVisible = isSignedIn;
             lblApi.Text = "";
+            await this.Navigation.PushAsync(new PickupItemsPage());
         }
     }
 }
