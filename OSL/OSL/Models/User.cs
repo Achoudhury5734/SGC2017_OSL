@@ -3,7 +3,6 @@ namespace OSL.Models
 {
     public class User
     {
-        public string Id { get; set; }
         public string Email { get; set; }
         // From auth AccessToken
         public string OId { get; set; }
