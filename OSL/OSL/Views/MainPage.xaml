@@ -20,6 +20,7 @@
             </StackLayout>
             <BoxView Color="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 <!--            <Button x:Name="btnPasswordReset" Text="Reset Password" Clicked="OnPasswordReset" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>-->
+            <Button x:Name="register" Text="Register" Clicked="OnClickRegister" VerticalOptions="End" HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnCallApi" Text="Call API" Clicked="OnCallApi" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnSignInSignOut" Text="Sign in" Clicked="OnSignInSignOut" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
         </StackLayout>
