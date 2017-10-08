@@ -10,7 +10,7 @@ namespace OSL
 {
     public class ViewModelBase : BaseViewModel
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+        public IDataStore<PickupItem> DataStore => DependencyService.Get<IDataStore<PickupItem>>() ?? new MockDataStore();
 
     }
 }

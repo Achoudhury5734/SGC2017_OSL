@@ -6,32 +6,32 @@ using Xamarin.Forms;
 
 namespace OSL
 {
-    public partial class ItemsPage : ContentPage
+    public partial class PickupItemsPage : ContentPage
     {
-        ItemsViewModel viewModel;
+        PickupItemsViewModel viewModel;
 
-        public ItemsPage()
+        public PickupItemsPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = viewModel = new PickupItemsViewModel();
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Item;
+            var item = args.SelectedItem as PickupItem;
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
+            await Navigation.PushModalAsync(new PickupItemDetailPage(new PickupItemDetailViewModel(item)));
 
             // Manually deselect item
-            ItemsListView.SelectedItem = null;
+            PickupItemsListView.SelectedItem = null;
         }
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new NewItemPage());
+            await Navigation.PushModalAsync(new NewPickupItemPage());
         }
 
         protected override void OnAppearing()

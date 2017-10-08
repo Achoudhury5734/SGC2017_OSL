@@ -13,7 +13,6 @@ namespace OSL
         {
             InitializeComponent();
             takePicture.Clicked += Take_Picture;
-            postButton.Clicked += Post_Clicked;
             image = new Image();
             Item = new Models.Donation()
             {
@@ -23,12 +22,6 @@ namespace OSL
             };
 
             BindingContext = this;
-        }
-
-       async void Post_Clicked(object sender, EventArgs e)
-        {
-            
-            await Navigation.PopToRootAsync();
         }
 
         async void Save_Clicked(object sender, EventArgs e)
