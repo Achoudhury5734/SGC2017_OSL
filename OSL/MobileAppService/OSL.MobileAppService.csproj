@@ -27,5 +27,8 @@
     <Folder Include="Services\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Views\Auth\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 </Project>

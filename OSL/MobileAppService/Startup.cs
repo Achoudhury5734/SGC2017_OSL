@@ -73,6 +73,8 @@ namespace OSL.MobileAppService
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
 
             ScopeRead = Configuration["Authentication:AzureAd:ScopeRead"];
@@ -86,7 +88,7 @@ namespace OSL.MobileAppService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.Run(context => context.Response.Redirect("/users"));
+            app.Run(async context => context.Response.Redirect("/users"));
         }
     }
 }
