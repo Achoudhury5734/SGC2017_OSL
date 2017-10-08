@@ -2,6 +2,22 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OSL.Views.RegisterPage">
 	<ContentPage.Content>
         <Label Text="Organization Name" />
-        <Entry />
+        <Entry Text="{Binding User.OrgName}"/>
+        <Label Text="Email" />
+        <Entry Text="{Binding User.Email}" Keyboard="Email"/>
+        <Label Text="Password" />
+        <Entry Text="{Binding User.Password}" isPassword="true" />
+        <Label Text="Address"/>
+        <Entry Text="{Binding User.AddressLine1}"/>
+        <Entry Text="{Binding User.AddressLine2}"/>
+        <Label Text="Zip"/>
+        <Entry Text="{Binding User.PostalCode}" Keyboard="Numeric"/>
+        <Label Text="State" />
+        <Entry Text="{Binding User.State}" />
+        <Label Text="Phone Number" />
+        <Entry Text="{Binding User.PhoneNumber}" Keyboard="Telephone" />
+        <Label Text="Contact Name" />
+        <Entry Text="{Binding User.PersonName}" />
+        <Button Text="Register" x:Name="registerButton" />
 	</ContentPage.Content>
 </ContentPage>
