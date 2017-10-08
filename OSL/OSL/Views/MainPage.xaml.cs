@@ -9,7 +9,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using OSL.Views;
 
-namespace OSL
+namespace OSL.Views
 {
     public partial class MainPage : ContentPage
     {
@@ -72,11 +72,11 @@ namespace OSL
                 //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
 
                 // Doesn't matter, we go in interactive mode
-                UpdateSignInStateAsync(false);
+                UpdateSignInStateAsync(false).Wait();
             }
         }
 
-        async void OnClickRegister(object sender, EventArgs e)
+        void OnClickRegister(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new RegisterPage());
         }
@@ -89,7 +89,7 @@ namespace OSL
                 {
                     AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
                     UpdateUserInfo(ar);
-                    UpdateSignInStateAsync(true);
+                    await UpdateSignInStateAsync(true);
                 }
                 else
                 {
@@ -97,12 +97,12 @@ namespace OSL
                     {
                         App.PCA.Remove(user);
                     }
-                    UpdateSignInStateAsync(false);
+                    await UpdateSignInStateAsync(false);
                 }
             }
             catch (Exception ex)
             {
-                // Checking the exception message 
+                // Checking the exception message
                 // should ONLY be done for B2C
                 // reset and not any other error.
                 if (ex.Message.Contains("AADB2C90118"))
@@ -204,7 +204,7 @@ namespace OSL
             btnCallApi.IsVisible = isSignedIn;
             slUser.IsVisible = isSignedIn;
             lblApi.Text = "";
-            await this.Navigation.PushModalAsync(new PickupItemsPage());
+            await App.NavigationPage.Navigation.PushAsync(new PickupItemsPage());
         }
     }
 }

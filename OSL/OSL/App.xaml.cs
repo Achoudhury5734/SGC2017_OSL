@@ -5,6 +5,7 @@ using OSL.Helpers;
 
 using Xamarin.Forms;
 using Microsoft.Identity.Client;
+using OSL.Views;
 
 namespace OSL
 {
@@ -29,6 +30,8 @@ namespace OSL
 
         public static UIParent UiParent = null;
 
+        public static NavigationPage NavigationPage { get; private set; }
+
         public App()
         {
             InitializeComponent();
@@ -46,10 +49,13 @@ namespace OSL
             else
                 DependencyService.Register<CloudDataStore>();
 
-            if (Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.iOS)
-                MainPage = new MainPage();
-            else
-                MainPage = new NavigationPage(new MainPage());
+            //if (Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.iOS)
+            //    MainPage = new MainPage();
+            //else
+            //    MainPage = new NavigationPage(new MainPage());
+
+            NavigationPage = new NavigationPage(new MainPage());
+            MainPage = new RootPage();
         }
     }
 }
