@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -51,7 +52,14 @@ namespace OSL.MobileAppService.Controllers
             value.Oid = oid;
             value.Email = email;
 
-            return Ok(await userRepository.Create(value));
+            try
+            {
+                var res = await userRepository.Create(value);
+                return Ok(res);
+            } catch (Exception ex) {
+                Response.StatusCode = 500;
+                return new JsonResult(ex);
+            }
         }
 
         // PUT api/users/me
