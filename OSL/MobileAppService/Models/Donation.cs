@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Data.SqlClient;
+using OSL.MobileAppService.Services;
 
 namespace OSL.MobileAppService.Models
 {
     public class Donation
     {
         public int Id { get; set; }
-        // User Model
-        public string Donor { get; set; }
-        // User Model
-        public string Recipient { get; set; }
+        public int DonorId { get; set; }
+        public User Donor { get; set; }
+        public int RecipientId { get; set; }
+        public User Recipient { get; set; }
         public string Title { get; set; }
         public DonationType Type { get; set; }
         public DonationStatus Status { get; set; }
@@ -20,13 +21,18 @@ namespace OSL.MobileAppService.Models
         public int Amount { get; set; }
         public string Picture { get; set; }
 
+
         public Donation(SqlDataReader reader)
         {
             Id = int.Parse(reader["Id"].ToString());
-            // User Model
-            Donor = reader["Donor"].ToString();
-            // User Model
-            Recipient = reader["Recipient"].ToString();
+            // User Model Id
+            if (reader["Donor"].ToString() != "") {
+                DonorId = int.Parse((reader["Donor"].ToString()));
+            }
+            // User Model Id
+            if (reader["Recipient"].ToString() != "") {
+                RecipientId = int.Parse((reader["Recipient"].ToString()));
+            }
             Title = reader["Title"].ToString();
             if (reader["Type"].ToString() != "") {
                 Type = Enum.Parse<DonationType>(reader["Type"].ToString());

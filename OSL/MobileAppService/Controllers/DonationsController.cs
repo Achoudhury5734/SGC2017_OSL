@@ -13,25 +13,44 @@ namespace OSL.MobileAppService.Controllers
     [Route("api/[controller]")]
     public class DonationsController : Controller
     {
-        private readonly DonationRepository Donations;
+        private readonly DonationRepository donationRepository;
+        private readonly UserRepository userRepository;
 
-        public DonationsController(DonationRepository donationRepository)
+        public DonationsController(DonationRepository donationRepository, UserRepository userRepository)
         {
-            Donations = donationRepository;
+            this.donationRepository = donationRepository;
+            this.userRepository = userRepository;
         }
 
         // GET: api/values
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Donations.Get());
+            var donations = donationRepository.Get();
+            foreach (var donation in donations) 
+            {
+                try {
+                    donation.Donor = userRepository.GetById(donation.DonorId);
+                    if (donation.RecipientId > 0)
+                    {
+                        donation.Recipient = userRepository.GetById(donation.RecipientId);
+
+                    }
+                }
+                catch (Exception eerror)
+                {
+                    Console.WriteLine(eerror);
+                }
+
+            }
+            return Ok(donations);
         }
 
         // GET api/values/5
         [HttpGet("{Id}")]
         public IActionResult Get(int Id)
         {
-            return Ok(Donations.Get(Id));
+            return Ok(donationRepository.Get(Id));
         }
 
         // POST api/values
