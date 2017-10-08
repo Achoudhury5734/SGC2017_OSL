@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OSL.MobileAppService.Models;
 using OSL.MobileAppService.Services;
 
 namespace OSL.MobileAppService.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
@@ -16,6 +17,7 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // GET: api/values
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
@@ -28,6 +30,7 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // GET api/values/5
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -47,21 +50,20 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // POST api/values
+        [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]string value)
+        public IActionResult Post([FromBody]User value)
         {
-            var user = Users.GetUserFromPrincipal(HttpContext.User);
-            if (!user.Admin)
-            {
-                return new UnauthorizedResult();
-            }
+            var oid = HttpContext.User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+            var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
 
-            return Ok();
+            return Ok(Users.Create(value));
         }
 
         // PUT api/values/5
+        [Authorize]
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]User value)
         {
             var user = Users.GetUserFromPrincipal(HttpContext.User);
             if (!user.Admin)
@@ -73,7 +75,7 @@ namespace OSL.MobileAppService.Controllers
 
             if (u != null)
             {
-                return Ok(u);
+                return Ok(Users.UpdateUser(value));
             }
             else
             {
@@ -82,6 +84,7 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // DELETE api/values/5
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

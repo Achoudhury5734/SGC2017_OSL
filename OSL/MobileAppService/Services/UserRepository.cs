@@ -55,25 +55,35 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public User Create(User user)
+        public bool Create(User user)
         {
-            var query = $"SELECT * FROM User WHERE Oid == {oid}";
+            var query = $"INSERT INTO User (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +
+                "Organization_Address_Line1, Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country) " +
+                    $"Oid = '{user.Oid}'" +
+                    $"Email = '{user.Email}'" +
+                    $"Person_Name = '{user.Person_Name}'," +
+                    "Verified = 0, " +
+                    "Admin = 0, " +
+                    "Status = 'Inactive', " +
+                    $"Phone_Number = '{user.Phone_Number}', " +
+                    $"Organization_Name = '{user.Organization_Name}', " +
+                    $"Organization_Address_Line1 = '{user.Organization_Address_Line1}', " +
+                    $"Organization_Address_Line2 = '{user.Organization_Address_Line2}', " +
+                    $"Organization_City = '{user.Organization_City}', " +
+                    $"Organization_State = '{user.Organization_State}', " +
+                    $"Organization_PostalCode = '{user.Organization_PostalCode}', " +
+                    $"Organization_Country = '{user.Organization_Country}' " +
+                $"WHERE Id = '{user.Id}'";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand($"SELECT * FROM User WHERE Oid == {oid}", connection))
+                using (SqlCommand command = new SqlCommand(query))
                 {
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        return new User(reader);
-                    }
+                    return command.ExecuteNonQuery() == 1;
                 }
             }
-
-            return null;
         }
 
         public IEnumerable<User> Get()
@@ -121,9 +131,23 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public void UpdateUser(User user)
+        public bool UpdateUser(User user)
         {
-            var query = $"UPDATE User SET Person_Name = '{user.Person_Name}', Verified = {user.Verified}, Admin = {user.Admin}, Status = '{user.Status.ToString()}', Phone_GUID = '{user.Phone_GUID}', Phone_Number = '{user.Phone_Number}', Organization_Name = '{user.Organization_Name}', Organization_Address_Line1 = '{user.Organization_Address_Line1}', Organization_Address_Line2 = '{user.Organization_Address_Line2}', Organization_City = '{user.Organization_City}', Organization_State = '{user.Organization_State}', Organization_PostalCode = '{user.Organization_PostalCode}', Organization_Country = '{user.Organization_Country}' WHERE Id = '{user.Id}'";
+            var query = $"UPDATE User SET " +
+                    $"Person_Name = '{user.Person_Name}'," +
+                    $"Verified = {user.Verified}, " +
+                    $"Admin = {user.Admin}, " +
+                    $"Status = '{user.Status.ToString()}', " +
+                    $"Phone_GUID = '{user.Phone_GUID}', " +
+                    $"Phone_Number = '{user.Phone_Number}', " +
+                    $"Organization_Name = '{user.Organization_Name}', " +
+                    $"Organization_Address_Line1 = '{user.Organization_Address_Line1}', " +
+                    $"Organization_Address_Line2 = '{user.Organization_Address_Line2}', " +
+                    $"Organization_City = '{user.Organization_City}', " +
+                    $"Organization_State = '{user.Organization_State}', " +
+                    $"Organization_PostalCode = '{user.Organization_PostalCode}', " +
+                    $"Organization_Country = '{user.Organization_Country}' " +
+                $"WHERE Id = '{user.Id}'";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -131,11 +155,7 @@ namespace OSL.MobileAppService.Services
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        return new User(reader);
-                    }
+                    return command.ExecuteNonQuery() == 1;
                 }
             }
         }

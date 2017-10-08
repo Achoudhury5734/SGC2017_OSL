@@ -8,6 +8,7 @@ namespace OSL.MobileAppService.Models
     {
         public int Id { get; set; }
         public string Oid { get; set; }
+        public string Email { get; set; }
         public string Person_Name { get; set; }
         public bool Verified { get; set; }
         public bool Admin { get; set; }
@@ -28,6 +29,7 @@ namespace OSL.MobileAppService.Models
         {
             Id = int.Parse(reader["Id"].ToString());
             Oid = reader["Oid"].ToString();
+            Email = reader["Email"].ToString();
             Person_Name = reader["Person_Name"].ToString();
             Verified = reader["Verified"].ToString() != "0";
             Admin = reader["Admin"].ToString() != "0";
