@@ -76,7 +76,7 @@ namespace OSL.Views
             }
         }
 
-        void OnClickRegister(object sender, EventArgs e)
+        async void OnClickRegister(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new RegisterPage());
         }

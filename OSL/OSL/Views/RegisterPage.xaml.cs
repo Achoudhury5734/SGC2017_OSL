@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Xamarin.Forms;
 
 namespace OSL.Views
@@ -12,12 +16,18 @@ namespace OSL.Views
         public RegisterPage()
         {
             InitializeComponent();
-            registerButton.Clicked += handle_Registration;
+            registerButton.Clicked += Handle_Registration;
         }
 
-        private void handle_Registration(object sender, EventArgs e)
+        private async void Handle_Registration(object sender, EventArgs e)
         {
-            
-        }
+            string url = "http://secondhelpingweb.azurewebsites.net/api/users";
+            var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
+            request.Method = "POST";
+
+            var json = JsonConvert.SerializeObject(sender);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+		}
     }
 }
