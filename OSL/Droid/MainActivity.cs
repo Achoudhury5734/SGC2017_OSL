@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Microsoft.Identity.Client;
+using Plugin.Permissions;
 
 namespace OSL.Droid
 {
