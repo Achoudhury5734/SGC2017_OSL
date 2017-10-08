@@ -29,19 +29,8 @@ namespace OSL.MobileAppService.Controllers
             var donations = donationRepository.Get();
             foreach (var donation in donations) 
             {
-                try {
-                    donation.Donor = userRepository.GetById(donation.DonorId);
-                    if (donation.RecipientId > 0)
-                    {
-                        donation.Recipient = userRepository.GetById(donation.RecipientId);
-
-                    }
-                }
-                catch (Exception eerror)
-                {
-                    Console.WriteLine(eerror);
-                }
-
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                donation.Recipient = userRepository.GetById(donation.RecipientId);
             }
             return Ok(donations);
         }
@@ -50,7 +39,15 @@ namespace OSL.MobileAppService.Controllers
         [HttpGet("{Id}")]
         public IActionResult Get(int Id)
         {
-            return Ok(donationRepository.Get(Id));
+            var donation = donationRepository.GetById(Id);
+
+            if (donation != null) {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                donation.Recipient = userRepository.GetById(donation.RecipientId);
+                return Ok(donation);
+            } else {
+                return new NotFoundResult();
+            }
         }
 
         // POST api/values

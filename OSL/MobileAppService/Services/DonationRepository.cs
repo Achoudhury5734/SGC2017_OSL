@@ -50,9 +50,9 @@ namespace OSL.MobileAppService.Services
             return donations;
         }
 
-        public Donation Get(int Id)
+        public Donation GetById(int Id)
         {
-            var query = "SELECT * Donations WHERE Id = @Id";
+            var query = "SELECT * FROM [Donation] WHERE [Id] = @Id";
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
