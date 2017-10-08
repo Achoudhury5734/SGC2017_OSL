@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using OSL.Services;
 using Xamarin.Forms;
 
 namespace OSL.Views
@@ -32,7 +33,10 @@ namespace OSL.Views
             User.Phone_Number = phoneNumber.Text;
             User.Person_Name = personName.Text;
 
-            //await DisplayAlert(User.Organization_Name, User.Person_Name, User.Organization_City);
+            var userRep = new UserRepository();
+            var res = await userRep.Create(User);
+            if (res == null)
+                await DisplayAlert("Oops", "Something went wrong", "Ok");
             /*string url = "http://secondhelpingweb.azurewebsites.net/api/users";
             var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
             request.Method = "POST";*/

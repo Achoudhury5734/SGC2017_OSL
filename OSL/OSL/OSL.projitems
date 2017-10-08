@@ -52,7 +52,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\DonorItemPage.xaml.cs">
       <DependentUpon>DonorItemPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\RootPage.xaml.cs">
       <DependentUpon>RootPage.xaml</DependentUpon>
       <SubType>Code</SubType>

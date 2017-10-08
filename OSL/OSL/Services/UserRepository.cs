@@ -47,7 +47,7 @@ namespace OSL.Services
 
         public async Task<User> Create(User user)
         {
-            var response = await App.ApiClient.PostAsync($"api/users", new StringContent(JsonConvert.SerializeObject(user)));
+            var response = await App.ApiClient.PostAsync($"api/users", new StringContent(JsonConvert.SerializeObject(user),Encoding.UTF8, "application/json"));
 
             if (response.StatusCode == HttpStatusCode.OK) {
                 return user;
@@ -58,7 +58,7 @@ namespace OSL.Services
 
         public async Task<User> Update(User user)
         {
-            var response = await App.ApiClient.PutAsync($"api/users/me", new StringContent(JsonConvert.SerializeObject(user)));
+            var response = await App.ApiClient.PutAsync($"api/users/me", new StringContent(JsonConvert.SerializeObject(user),Encoding.UTF8, "application/json"));
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
