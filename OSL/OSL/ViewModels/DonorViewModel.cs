@@ -1,5 +1,6 @@
 ﻿using OSL.Models;
 using OSL.Services;
+using OSL.Views;
 using Plugin.Media;
 using System;
 using System.Threading.Tasks;
@@ -70,6 +71,14 @@ namespace OSL.ViewModels
             set { SetProperty(ref expirationTime, value); }
         }
 
+        private Page page;
+
+        public Page Page
+        {
+            get { return page; }
+            set { SetProperty(ref page, value); }
+        }
+
         public ICommand SaveCommand { get; }
         public ICommand TakePictureCommand { get; }
 
@@ -84,6 +93,8 @@ namespace OSL.ViewModels
                 Type = (DonationType)Enum.Parse(typeof(DonationType), DonationType)
             };
             await donationRepository.SaveDonationAsync(donationCapture);
+
+            await page.Navigation.PushAsync(new DonationListPage());
         }
 
         public async Task TakePictureAsync()

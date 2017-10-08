@@ -5,10 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="OSL.Views.DonorItemPage" 
              xmlns:vm="using:OSL.ViewModels"
-             Title="New Item">
-    <ContentPage.BindingContext>
-        <vm:DonorViewModel />
-    </ContentPage.BindingContext>
+             Title="New Item" >
     <ContentPage.ToolbarItems>
 		<ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
 	</ContentPage.ToolbarItems>
