@@ -1,115 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
-using System.Threading.Tasks;
+using OSL.Models;
 
 namespace OSL.Views
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        private bool loggingOut = false;
+
+        public MainPage(bool logout = false)
         {
+            loggingOut = logout;
+
             InitializeComponent();
-
-            //Navigation.PushModalAsync(new NewItemPage());
-            /*Page itemsPage, aboutPage = null;
-
-            switch (Device.RuntimePlatform)
-            {
-                case Device.iOS:
-                    itemsPage = new NavigationPage(new ItemsPage())
-                    {
-                        Title = "Browse"
-                    };
-
-                    aboutPage = new NavigationPage(new AboutPage())
-                    {
-                        Title = "About"
-                    };
-                    itemsPage.Icon = "tab_feed.png";
-                    aboutPage.Icon = "tab_about.png";
-                    break;
-                default:
-                    itemsPage = new ItemsPage()
-                    {
-                        Title = "Browse"
-                    };
-
-                    aboutPage = new AboutPage()
-                    {
-                        Title = "About"
-                    };
-                    break;
-            }
-
-            Children.Add(itemsPage);
-            Children.Add(aboutPage);
-
-            Title = Children[0].Title;*/
         }
 
         protected override async void OnAppearing()
         {
-            await UpdateSignInStateAsync(false);
+            if (loggingOut) {
+                OnClickLogout(null, null);
+                return;
+            }
 
-            // Check to see if we have a User
-            // in the cache already.
             try
             {
+                UpdateButtonState(true);
+
+                // Check to see if we have a User in the cache already.
                 AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
-                UpdateUserInfo(ar);
-                await UpdateSignInStateAsync(true);
+                App.AccessToken = ar.AccessToken;
+                App.User = GetUser(ar);
+
+                Application.Current.MainPage = new RootPage();
             }
             catch (Exception ex)
             {
-                // Uncomment for debugging purposes
-                //await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
-
-                // Doesn't matter, we go in interactive mode
-                UpdateSignInStateAsync(false).Wait();
+                UpdateButtonState(false);
             }
         }
 
-        void OnClickRegister(object sender, EventArgs e)
-        {
-            DisplayAlert("1","2","3").Wait();
+        private void UpdateButtonState(bool isSignedIn) {
+            btnLogout.IsVisible = isSignedIn;
+            btnLogin.IsVisible = !isSignedIn;
+            btnSignup.IsVisible = !isSignedIn;
         }
 
-        async void OnSignInSignOut(object sender, EventArgs e)
+        async void OnClickSignup(object sender, EventArgs e)
         {
             try
             {
-                if (btnSignInSignOut.Text == "Sign in")
-                {
-                    AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
-                    UpdateUserInfo(ar);
-                    await UpdateSignInStateAsync(true);
-                }
-                else
-                {
-                    foreach (var user in App.PCA.Users)
-                    {
-                        App.PCA.Remove(user);
-                    }
-                    await UpdateSignInStateAsync(false);
+                AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
+                App.AccessToken = ar.AccessToken;
+                App.User = GetUser(ar);
+
+                UpdateButtonState(true);
+
+                if (App.User == null) {
+                    Application.Current.MainPage = new RegisterPage();
+                } else {
+                    Application.Current.MainPage = new RootPage();
                 }
             }
             catch (Exception ex)
             {
-                // Checking the exception message 
-                // should ONLY be done for B2C
-                // reset and not any other error.
-                if (ex.Message.Contains("AADB2C90118"))
-                    OnPasswordReset();
-                // Alert if any exception excludig user cancelling sign-in dialog
-                else if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
+                if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
+                {
+                    // Alert if any exception excludig user cancelling sign-in dialog
                     await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
+                }
             }
+        }
+
+        void OnClickLogout(object sender, EventArgs e) {
+            foreach (var user in App.PCA.Users)
+            {
+                App.PCA.Remove(user);
+            }
+
+            UpdateButtonState(false);
         }
 
         private IUser GetUserByPolicy(IEnumerable<IUser> users, string policy)
@@ -117,7 +90,7 @@ namespace OSL.Views
             foreach (var user in users)
             {
                 string userIdentifier = Base64UrlDecode(user.Identifier.Split('.')[0]);
-                if (userIdentifier.EndsWith(policy.ToLower())) return user;
+                if (userIdentifier.EndsWith(policy.ToLower(), StringComparison.CurrentCulture)) return user;
             }
 
             return null;
@@ -132,11 +105,14 @@ namespace OSL.Views
             return decoded;
         }
 
-        public void UpdateUserInfo(AuthenticationResult ar)
+        public User GetUser(AuthenticationResult ar)
         {
             JObject user = ParseIdToken(ar.IdToken);
-            lblName.Text = user["emails"]?[0]?.ToString();
-            lblId.Text = user["oid"]?.ToString();
+            if (user["newUser"] != null && user["newUser"].ToString() == "true") {
+                return null;
+            }
+
+            return new User();
         }
 
         JObject ParseIdToken(string idToken)
@@ -145,65 +121,6 @@ namespace OSL.Views
             idToken = idToken.Split('.')[1];
             idToken = Base64UrlDecode(idToken);
             return JObject.Parse(idToken);
-        }
-
-        async void OnCallApi(object sender, EventArgs e)
-        {
-            try
-            {
-                lblApi.Text = $"Calling API {App.BackendUrl}";
-
-                AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
-                string token = ar.AccessToken;
-
-                // Get data from API
-                HttpClient client = new HttpClient();
-                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, App.BackendUrl);
-                message.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                HttpResponseMessage response = await client.SendAsync(message);
-                string responseString = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    lblApi.Text = $"Response from API {App.BackendUrl} | {responseString}";
-                }
-                else
-                {
-                    lblApi.Text = $"Error calling API {App.BackendUrl} | {responseString}";
-                }
-            }
-            catch (MsalUiRequiredException ex)
-            {
-                await DisplayAlert($"Session has expired, please sign out and back in.", ex.ToString(), "Dismiss");
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
-            }
-        }
-
-        async void OnPasswordReset()
-        {
-            try
-            {
-                AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, (IUser)null, UIBehavior.SelectAccount, string.Empty, null, App.AuthorityPasswordReset, App.UiParent);
-                UpdateUserInfo(ar);
-            }
-            catch (Exception ex)
-            {
-                // Alert if any exception excludig user cancelling sign-in dialog
-                if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
-                    await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
-            }
-        }
-
-        async Task UpdateSignInStateAsync(bool isSignedIn)
-        {
-            btnSignInSignOut.Text = isSignedIn ? "Sign out" : "Sign in";
-            //btnPasswordReset.IsVisible = isSignedIn;
-            btnCallApi.IsVisible = isSignedIn;
-            slUser.IsVisible = isSignedIn;
-            lblApi.Text = "";
-            await App.NavigationPage.Navigation.PushAsync(new PickupItemsPage());
         }
     }
 }

@@ -2,27 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OSL.Views.MainPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="MSAL Xamarin Forms Sample" VerticalOptions="Start" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" />
             <BoxView Color="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-            <StackLayout x:Name="slUser" IsVisible="False" Padding="5,10">
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Name " FontAttributes="Bold" />
-                    <Label x:Name="lblName" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Id " FontAttributes="Bold" />
-                    <Label x:Name="lblId" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="API Payload " FontAttributes="Bold" />
-                    <Label x:Name="lblApi" />
-                </StackLayout>
-            </StackLayout>
+            <Button x:Name="btnLogin" Text="Log in" Clicked="OnClickSignup" IsVisible="false" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnSignup" Text="Signup" Clicked="OnClickSignup" IsVisible="false" VerticalOptions="End" HorizontalOptions="FillAndExpand" />
             <BoxView Color="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-<!--            <Button x:Name="btnPasswordReset" Text="Reset Password" Clicked="OnPasswordReset" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>-->
-            <Button x:Name="register" Text="Register" Clicked="OnClickRegister" VerticalOptions="End" HorizontalOptions="FillAndExpand" />
-            <Button x:Name="btnCallApi" Text="Call API" Clicked="OnCallApi" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnSignInSignOut" Text="Sign in" Clicked="OnSignInSignOut" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnLogout" Text="Logout" Clicked="OnClickLogout" IsVisible="false" VerticalOptions="End" HorizontalOptions="FillAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
