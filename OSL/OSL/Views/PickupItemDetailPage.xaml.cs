@@ -4,26 +4,26 @@ using Xamarin.Forms;
 
 namespace OSL
 {
-    public partial class ItemDetailPage : ContentPage
+    public partial class PickupItemDetailPage : ContentPage
     {
-        ItemDetailViewModel viewModel;
+        PickupItemDetailViewModel viewModel;
 
         // Note - The Xamarin.Forms Previewer requires a default, parameterless constructor to render a page.
-        public ItemDetailPage()
+        public PickupItemDetailPage()
         {
             InitializeComponent();
 
-            var item = new Item
+            var item = new PickupItem
             {
                 Text = "Item 1",
                 Description = "This is an item description."
             };
 
-            viewModel = new ItemDetailViewModel(item);
+            viewModel = new PickupItemDetailViewModel(item);
             BindingContext = viewModel;
         }
 
-        public ItemDetailPage(ItemDetailViewModel viewModel)
+        public PickupItemDetailPage(PickupItemDetailViewModel viewModel)
         {
             InitializeComponent();
 

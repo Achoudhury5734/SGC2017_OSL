@@ -1,6 +1,8 @@
 ﻿
 using System;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace OSL.MobileAppService.Models
 {
@@ -12,7 +14,10 @@ namespace OSL.MobileAppService.Models
         public string Person_Name { get; set; }
         public bool Verified { get; set; }
         public bool Admin { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
         public UserStatus Status { get; set; }
+
         public string Phone_GUID { get; set; }
         public string Phone_Number { get; set; }
         public string Organization_Name { get; set; }
@@ -25,10 +30,7 @@ namespace OSL.MobileAppService.Models
         public double Lat { get; set; }
         public double Long { get; set; }
 
-        public User()
-        {
-
-        }
+        public User() {}
 
         public User(SqlDataReader reader)
         {
@@ -36,8 +38,8 @@ namespace OSL.MobileAppService.Models
             Oid = reader["Oid"].ToString();
             Email = reader["Email"].ToString();
             Person_Name = reader["Person_Name"].ToString();
-            Verified = reader["Verified"].ToString() != "0";
-            Admin = reader["Admin"].ToString() != "0";
+            Verified = reader["Verified"].ToString() == "True";
+            Admin = reader["Admin"].ToString() == "True";
             Status = Enum.Parse<UserStatus>(reader["Status"].ToString());
             Phone_GUID = reader["Phone_GUID"].ToString();
             Phone_Number = reader["Phone_Number"].ToString();
@@ -48,8 +50,8 @@ namespace OSL.MobileAppService.Models
             Organization_State = reader["Organization_State"].ToString();
             Organization_PostalCode = reader["Organization_PostalCode"].ToString();
             Organization_Country = reader["Organization_Country"].ToString();
-            Lat = double.Parse(reader["Lat"].ToString());
-            Long = double.Parse(reader["Long"].ToString());
+            //Lat = double.Parse(reader["Lat"]?.ToString());
+            //Long = double.Parse(reader["Long"]?.ToString());
         }
     }
 }

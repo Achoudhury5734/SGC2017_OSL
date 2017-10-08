@@ -7,22 +7,22 @@ using Xamarin.Forms;
 
 namespace OSL
 {
-    public class ItemsViewModel : ViewModelBase
+    public class PickupItemsViewModel : ViewModelBase
     {
-        public ObservableCollection<Item> Items { get; set; }
+        public ObservableCollection<PickupItem> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public ItemsViewModel()
+        public PickupItemsViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
+            Items = new ObservableCollection<PickupItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
+            MessagingCenter.Subscribe<NewPickupItemPage, PickupItem>(this, "AddItem", async (obj, item) =>
             {
-                var _item = item as Item;
+                var _item = item as PickupItem;
                 Items.Add(_item);
-                await DataStore.AddItemAsync(_item);
+                await DataStore.AddPickupItemAsync(_item);
             });
         }
 
@@ -36,7 +36,7 @@ namespace OSL
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = await DataStore.GetPickupItemsAsync(true);
                 foreach (var item in items)
                 {
                     Items.Add(item);
