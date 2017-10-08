@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Identity.Client;
+using Xamarin.Forms;
+using System.Net.Http.Headers;
+using OSL.Services;
 using System.Linq;
 using System.Text;
-using Microsoft.Identity.Client;
-using Newtonsoft.Json.Linq;
-using Xamarin.Forms;
-using OSL.Models;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
 
 namespace OSL.Views
 {
     public partial class MainPage : ContentPage
     {
-        private bool loggingOut = false;
+        private bool loggingOut;
+        private UserRepository userRepository;
 
         public MainPage(bool logout = false)
         {
             loggingOut = logout;
+            userRepository = new UserRepository();
 
             InitializeComponent();
         }
@@ -39,7 +37,7 @@ namespace OSL.Views
                 AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
                 App.AccessToken = ar.AccessToken;
                 App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
-                App.User = await GetUser(ar);
+                App.User = await userRepository.GetUserFromIdentityToken(ar.IdToken);
 
                 Application.Current.MainPage = new RootPage();
             }
@@ -63,7 +61,7 @@ namespace OSL.Views
                 AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
                 App.AccessToken = ar.AccessToken;
                 App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
-                App.User = await GetUser(ar);
+                App.User = await userRepository.GetUserFromIdentityToken(ar.IdToken);
 
                 UpdateButtonState(true);
 
@@ -110,32 +108,6 @@ namespace OSL.Views
             var byteArray = Convert.FromBase64String(s);
             var decoded = Encoding.UTF8.GetString(byteArray, 0, byteArray.Count());
             return decoded;
-        }
-
-        public async Task<User> GetUser(AuthenticationResult ar)
-        {
-            JObject arUser = ParseIdToken(ar.IdToken);
-            if (arUser["newUser"] != null && arUser["newUser"].ToString() == "True") {
-                return null;
-            }
-
-            try
-            {
-                var json = await App.ApiClient.GetStringAsync($"api/users/me");
-                var user = JsonConvert.DeserializeObject<User>(json);
-                return user;
-            } catch (Exception ex) {
-                Console.WriteLine("Error fetching user: " + ex.StackTrace);
-                return null;
-            }
-        }
-
-        JObject ParseIdToken(string idToken)
-        {
-            // Get the piece with actual user info
-            idToken = idToken.Split('.')[1];
-            idToken = Base64UrlDecode(idToken);
-            return JObject.Parse(idToken);
         }
     }
 }
