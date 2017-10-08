@@ -5,36 +5,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="OSL.Views.DonorItemPage" 
              xmlns:vm="using:OSL.ViewModels"
-             Title="New Item">
-    <ContentPage.BindingContext>
-        <vm:DonorViewModel />
-    </ContentPage.BindingContext>
+             Title="New Item" >
     <ContentPage.ToolbarItems>
 		<ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<StackLayout Spacing="20" Padding="15">
-            <Image x:Name="image" Source="{Binding ImageSource}" HeightRequest="200" />
-            <Button Text="Take a picture" x:Name="takePicture" Command="{Binding TakePictureCommand}" />
-            <Label Text="Title" FontSize="Medium" />
-            <Entry Text="{Binding DonationTitle}" FontSize="Small" />
-            <Label Text="Quantity (lbs)" FontSize="Medium" />
-            <Entry Text="{Binding Quantity}" Keyboard="Numeric" FontSize="Small" Margin="0" />
-            <Label Text="Type" FontSize="Medium" />
-            <Picker SelectedItem="{Binding DonationType}">
-                <Picker.Items>
-                    <x:String>Frozen</x:String>
-                    <x:String>Cold</x:String>
-                    <x:String>Prepped</x:String>
-                    <x:String>Dry</x:String>
-                </Picker.Items>
-            </Picker>
-            <Label Text="Deadline" FontSize="Medium" Margin="0" />
-            <StackLayout Orientation="Horizontal">
-                <DatePicker x:Name="expirationDate" />
-                <TimePicker x:Name="expirationTime" />
+        <ScrollView>
+            <StackLayout Spacing="20" Padding="15">
+                <Image x:Name="image" Source="{Binding ImageSource}" HeightRequest="200" />
+                <Button Text="Take a picture" x:Name="takePicture" Command="{Binding TakePictureCommand}" />
+                <Label Text="Title" FontSize="Medium" />
+                <Entry Text="{Binding DonationTitle}" FontSize="Small" />
+                <Label Text="Quantity (lbs)" FontSize="Medium" />
+                <Entry Text="{Binding Quantity}" Keyboard="Numeric" FontSize="Small" Margin="0" />
+                <Label Text="Type" FontSize="Medium" />
+                <Picker SelectedItem="{Binding DonationType}">
+                    <Picker.Items>
+                        <x:String>Frozen</x:String>
+                        <x:String>Cold</x:String>
+                        <x:String>Prepped</x:String>
+                        <x:String>Dry</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Label Text="Deadline" FontSize="Medium" Margin="0" />
+                <StackLayout Orientation="Horizontal">
+                    <DatePicker x:Name="expirationDate" Date="{Binding ExpirationDate}" />
+                    <TimePicker x:Name="expirationTime" Time="{Binding ExpirationTime}" />
+                </StackLayout>
+                <Button Text="Post" Command="{Binding SaveCommand}" />
             </StackLayout>
-            <Button Text="Post" Command="{Binding SaveCommand}" />
-		</StackLayout>
+        </ScrollView>
 	</ContentPage.Content>
 </ContentPage>
