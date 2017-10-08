@@ -204,7 +204,7 @@ namespace OSL.Views
             btnCallApi.IsVisible = isSignedIn;
             slUser.IsVisible = isSignedIn;
             lblApi.Text = "";
-            await App.NavigationPage.Navigation.PushAsync(new PickupItemsPage());
+            //await App.NavigationPage.Navigation.PushAsync(new NavigationPage(new PickupItemsPage()));
         }
     }
 }

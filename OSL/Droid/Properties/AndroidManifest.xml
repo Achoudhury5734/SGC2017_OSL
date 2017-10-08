@@ -14,5 +14,13 @@
                 <data android:scheme="msal1771869e-f3aa-4d16-bd1a-af2f0e662bcd" android:host="auth" />
            </intent-filter>
          </activity>
+
+    <provider android:name="android.support.v4.content.FileProvider"
+				android:authorities="com.osl.osl.fileprovider"
+				android:exported="false"
+				android:grantUriPermissions="true">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths"></meta-data>
+    </provider>
 	</application>
 </manifest>

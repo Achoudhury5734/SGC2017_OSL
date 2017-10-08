@@ -26,9 +26,8 @@ namespace OSL.Services
             return Task.FromResult(Donations.AsEnumerable());
         }
 
-        public Task SaveDonationAsync(Donation donation)
+        public Task SaveDonationAsync(DonationCapture donation)
         {
-            Donations.Add(donation);
             return Task.CompletedTask;
         }
 
