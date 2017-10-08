@@ -22,7 +22,7 @@ namespace OSL.MobileAppService.Controllers
         public IActionResult Get()
         {
             var user = Users.GetUserFromPrincipal(HttpContext.User);
-            if (!user.Admin) {
+            if (user != null && (!user.Admin || user.Status != UserStatus.Active)) {
                 return new UnauthorizedResult();
             }
 
@@ -35,8 +35,7 @@ namespace OSL.MobileAppService.Controllers
         public IActionResult Get(int id)
         {
             var user = Users.GetUserFromPrincipal(HttpContext.User);
-            if (!user.Admin)
-            {
+            if (user != null && (!user.Admin || user.Status != UserStatus.Active)) {
                 return new UnauthorizedResult();
             }
 
@@ -56,6 +55,14 @@ namespace OSL.MobileAppService.Controllers
         {
             var oid = HttpContext.User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
             var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
+            var isNew = HttpContext.User.Claims.First(c => c.Type == "newUser")?.Value;
+
+            if (isNew != "true") {
+                return new BadRequestResult();
+            }
+
+            value.Oid = oid;
+            value.Email = email;
 
             return Ok(Users.Create(value));
         }
@@ -66,7 +73,7 @@ namespace OSL.MobileAppService.Controllers
         public IActionResult Put(int id, [FromBody]User value)
         {
             var user = Users.GetUserFromPrincipal(HttpContext.User);
-            if (!user.Admin)
+            if (user != null && (!user.Admin || user.Status != UserStatus.Active))
             {
                 return new UnauthorizedResult();
             }
@@ -75,7 +82,7 @@ namespace OSL.MobileAppService.Controllers
 
             if (u != null)
             {
-                return Ok(Users.UpdateUser(value));
+                return Ok(Users.UpdateUser(id, value));
             }
             else
             {
@@ -89,7 +96,7 @@ namespace OSL.MobileAppService.Controllers
         public IActionResult Delete(int id)
         {
             var user = Users.GetUserFromPrincipal(HttpContext.User);
-            if (!user.Admin)
+            if (user != null && (!user.Admin || user.Status != UserStatus.Active))
             {
                 return new UnauthorizedResult();
             }
