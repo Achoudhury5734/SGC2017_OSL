@@ -28,10 +28,10 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{Id}")]
+        public IActionResult Get(int Id)
         {
-            return "value";
+            return Ok(Donations.Get(Id));
         }
 
         // POST api/values

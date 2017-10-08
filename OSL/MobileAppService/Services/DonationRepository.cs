@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 using Microsoft.Extensions.Configuration;
 
 using OSL.MobileAppService.Models;
@@ -28,18 +28,13 @@ namespace OSL.MobileAppService.Services
             }
         }
 
-
         public IEnumerable<Donation> Get()
         {
             var query = "SELECT * FROM Donation";
             var donations = new List<Donation>();
 
-
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                Console.WriteLine("\nQuery data example:");
-                Console.WriteLine("=========================================\n");
-
                 connection.Open();
             
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -47,15 +42,32 @@ namespace OSL.MobileAppService.Services
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        var donation = new Donation {
-                            Id = reader["Id"].ToString(),
-                            Title = reader["Title"].ToString()
-                        };
+                        var donation = new Donation(reader);
                         donations.Add(donation);
                     }
                 }
             }
             return donations;
+        }
+
+        public Donation Get(int Id)
+        {
+            var query = "SELECT * Donations WHERE Id = @Id";
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", Id);
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        return new Donation(reader);
+                    }
+                }
+            }
+            return null;
         }
     }
 }
