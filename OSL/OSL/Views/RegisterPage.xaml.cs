@@ -31,7 +31,7 @@ namespace OSL.Views
             User.Person_Name = orgName.Text;
             User.Phone_Number = phoneNumber.Text;
             User.Person_Name = personName.Text;
-            await DisplayAlert(User.Organization_PostalCode, User.Organization_Name, "b");
+
             //await DisplayAlert(User.Organization_Name, User.Person_Name, User.Organization_City);
             /*string url = "http://secondhelpingweb.azurewebsites.net/api/users";
             var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
