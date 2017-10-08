@@ -55,6 +55,7 @@ namespace OSL.MobileAppService
             services.AddSingleton(Configuration);
             services.AddSingleton<IItemRepository, ItemRepository>();
             services.AddSingleton<DonationRepository, DonationRepository>();
+            services.AddSingleton<UserRepository, UserRepository>();
 
             services.AddSwaggerGen(c =>
             {
