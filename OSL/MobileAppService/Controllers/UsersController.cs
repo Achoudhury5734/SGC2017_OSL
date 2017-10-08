@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OSL.MobileAppService.Models;
@@ -33,7 +34,7 @@ namespace OSL.MobileAppService.Controllers
         // POST api/users
         [Authorize]
         [HttpPost]
-        public IActionResult Create([FromBody]User value)
+        public async Task<IActionResult> Create([FromBody]User value)
         {
             var oid = HttpContext.User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
             var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
@@ -46,13 +47,13 @@ namespace OSL.MobileAppService.Controllers
             value.Oid = oid;
             value.Email = email;
 
-            return Ok(userRepository.Create(value));
+            return Ok(await userRepository.Create(value));
         }
 
         // PUT api/users/me
         [Authorize]
         [HttpPut("me")]
-        public IActionResult Update([FromBody]User value)
+        public async Task<IActionResult> Update([FromBody]User value)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
 
@@ -62,7 +63,7 @@ namespace OSL.MobileAppService.Controllers
                 value.Admin = user.Admin;
                 value.Status = user.Status;
 
-                return Ok(userRepository.UpdateUser(user.Id, value));
+                return Ok(await userRepository.UpdateUser(user.Id, value));
             }
             else
             {

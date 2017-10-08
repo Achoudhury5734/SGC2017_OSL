@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OSL.MobileAppService.Models;
 using OSL.MobileAppService.Services;
@@ -36,13 +37,13 @@ namespace OSL.MobileAppService.Controllers
         }
 
         [HttpPost("{id}/edit")]
-        public IActionResult Edit(int id, [FromForm]User value)
+        public async Task<IActionResult> Edit(int id, [FromForm]User value)
         {
             var user = userRepository.GetById(id);
 
             if (user != null)
             {
-                userRepository.UpdateUser(id, value);
+                await userRepository.UpdateUser(id, value);
                 return RedirectToAction("Edit", new { id });
             }
 

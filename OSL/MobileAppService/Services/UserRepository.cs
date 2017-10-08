@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Geocoding.Google;
 using Microsoft.Extensions.Configuration;
 
 using OSL.MobileAppService.Models;
@@ -12,9 +14,12 @@ namespace OSL.MobileAppService.Services
     public class UserRepository
     {
         private readonly SqlConnectionStringBuilder builder;
+        private readonly IConfigurationRoot configuration;
 
         public UserRepository(IConfigurationRoot configuration)
         {
+            this.configuration = configuration;
+
             try
             {
                 builder = new SqlConnectionStringBuilder()
@@ -64,10 +69,13 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public bool Create(User user)
+        public async Task<bool> Create(User user)
         {
+            var geocoder = new GoogleGeocoder();
+            var addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+
             var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +
-                "Organization_Address_Line1, Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country) VALUES " +
+                "Organization_Address_Line1, Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country, Lat, Long) VALUES " +
                     $"('{user.Oid}', " +
                     $"'{user.Email}', " +
                     $"'{user.Person_Name}', " +
@@ -81,7 +89,9 @@ namespace OSL.MobileAppService.Services
                     $"'{user.Organization_City}', " +
                     $"'{user.Organization_State}', " +
                     $"'{user.Organization_PostalCode}', " +
-                    $"'{user.Organization_Country}')";
+                    $"'{user.Organization_Country}', " +
+                    $"{addresses.First().Coordinates.Latitude}, " +
+                    $"{addresses.First().Coordinates.Longitude})";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -139,10 +149,13 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public bool UpdateUser(int id, User user)
+        public async Task<bool> UpdateUser(int id, User user)
         {
             var admin = user.Admin ? 1 : 0;
             var verified = user.Verified ? 1 : 0;
+
+            var geocoder = new GoogleGeocoder();
+            var addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
 
             var query = $"UPDATE [User] SET " +
                     $"[Person_Name] = '{user.Person_Name}', " +
@@ -157,7 +170,9 @@ namespace OSL.MobileAppService.Services
                     $"[Organization_City] = '{user.Organization_City}', " +
                     $"[Organization_State] = '{user.Organization_State}', " +
                     $"[Organization_PostalCode] = '{user.Organization_PostalCode}', " +
-                    $"[Organization_Country] = '{user.Organization_Country}' " +
+                    $"[Organization_Country] = '{user.Organization_Country}', " +
+                    $"[Lat] = {addresses.First().Coordinates.Latitude}, " +
+                    $"[Long] = {addresses.First().Coordinates.Longitude} " +
                 $"WHERE [Id] = {id}";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
