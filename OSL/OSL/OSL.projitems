@@ -43,8 +43,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\NewItemPage.xaml.cs">
-      <DependentUpon>NewItemPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DonorItemPage.xaml.cs">
+      <DependentUpon>DonorItemPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +65,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PickupItemDetailPage.xaml" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PickupItemsPage.xaml" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\NewPickupItemPage.xaml" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\NewItemPage.xaml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\DonorItemPage.xaml" />
   </ItemGroup>
 </Project>

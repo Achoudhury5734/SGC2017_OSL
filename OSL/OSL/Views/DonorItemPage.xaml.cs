@@ -4,12 +4,12 @@ using Xamarin.Forms;
 
 namespace OSL
 {
-    public partial class NewItemPage : ContentPage
+    public partial class DonorItemPage : ContentPage
     {
         public Models.Donation Item { get; set; }
         private Image image;
 
-        public NewItemPage()
+        public DonorItemPage()
         {
             InitializeComponent();
             takePicture.Clicked += Take_Picture;
