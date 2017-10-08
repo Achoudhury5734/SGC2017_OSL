@@ -19,6 +19,7 @@ namespace OSL.MobileAppService.Models
         public DateTime? StatusUpdated { get; set; }
         public DateTime? Expiration { get; set; }
         public int Amount { get; set; }
+        public string Image { get; set; }
         public string PictureUrl { get; set; }
 
         public Donation() {}

@@ -43,6 +43,7 @@ namespace OSL.MobileAppService.Services
                     while (reader.Read())
                     {
                         var donation = new Donation(reader);
+                        donation.PictureUrl = "http://lorempixel.com/400/300/?guid=" + Guid.NewGuid();
                         donations.Add(donation);
                     }
                 }
@@ -64,7 +65,9 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.Clear();
                     while (reader.Read())
                     {
-                        return new Donation(reader);
+                        var donation = new Donation(reader);
+                        donation.PictureUrl = "http://lorempixel.com/400/300/?guid=" + Guid.NewGuid();
+                        return donation;
                     }
                 }
             }
