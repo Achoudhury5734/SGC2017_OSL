@@ -76,7 +76,7 @@ namespace OSL.MobileAppService.Controllers
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
             } else {
-                // var pictureUrl = await imageService.UploadImageAsync(donation.Image);
+                var pictureUrl = await imageService.UploadImageAsync(donation.Image);
                 donation.DonorId = user.Id;
                 donation.Created = DateTime.Now;
                 donation.Updated = DateTime.Now;
