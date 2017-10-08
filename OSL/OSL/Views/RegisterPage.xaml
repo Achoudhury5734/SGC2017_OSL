@@ -7,18 +7,18 @@
             <Label Text="Organization Name" />
             <Entry x:Name="orgName" Text="{Binding User.Organization_Name}"/>
             <Label Text="Address"/>
-            <Entry Text="{Binding User.Organization_Address_Line1}"/>
-            <Entry Text="{Binding User.Organization_Address_Line1}"/>
+            <Entry x:Name="orgAddress1" Text="{Binding User.Organization_Address_Line1}"/>
+            <Entry x:Name="orgAddress2" Text="{Binding User.Organization_Address_Line1}"/>
             <Label Text="City"/>
-            <Entry Text="{Binding User.Organization_City}" />
+            <Entry x:Name="orgCity" Text="{Binding User.Organization_City}" />
             <Label Text="Zip"/>
-            <Entry Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"/>
+            <Entry x:Name="orgZip" Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"/>
             <Label Text="State" />
-            <Entry Text="{Binding User.Organization_State}" />
+            <Entry x:Name="orgState" Text="{Binding User.Organization_State}" />
             <Label Text="Phone Number" />
-            <Entry Text="{Binding User.Phone_Number}" Keyboard="Telephone" />
+            <Entry x:Name="phoneNumber" Text="{Binding User.Phone_Number}" Keyboard="Telephone" />
             <Label Text="Contact Name" />
-            <Entry Text="{Binding User.Person_Name}" />
+            <Entry x:Name="personName" Text="{Binding User.Person_Name}" />
             <Button Text="Register" x:Name="registerButton" />
         </StackLayout>
 	</ContentPage.Content>

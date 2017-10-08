@@ -23,8 +23,15 @@ namespace OSL.Views
         private async void Handle_Registration(object sender, EventArgs e)
         {
             User.Organization_Country = "USA";
-            User.Organization_Name = orgName.Value;
-            await DisplayAlert(User.Organization_Country, "a", "b");
+            User.Organization_Name = orgName.Text;
+            User.Organization_City = orgCity.Text;
+            User.Organization_Address_Line1 = orgAddress1.Text;
+            User.Organization_Address_Line2 = orgAddress2.Text;
+            User.Organization_PostalCode = orgZip.Text;
+            User.Person_Name = orgName.Text;
+            User.Phone_Number = phoneNumber.Text;
+            User.Person_Name = personName.Text;
+            await DisplayAlert(User.Organization_PostalCode, User.Organization_Name, "b");
             //await DisplayAlert(User.Organization_Name, User.Person_Name, User.Organization_City);
             /*string url = "http://secondhelpingweb.azurewebsites.net/api/users";
             var request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
