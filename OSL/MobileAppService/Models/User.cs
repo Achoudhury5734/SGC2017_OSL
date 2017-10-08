@@ -25,6 +25,11 @@ namespace OSL.MobileAppService.Models
         public double Lat { get; set; }
         public double Long { get; set; }
 
+        public User()
+        {
+
+        }
+
         public User(SqlDataReader reader)
         {
             Id = int.Parse(reader["Id"].ToString());
