@@ -14,12 +14,12 @@ namespace OSL
             items = new List<PickupItem>();
             var mockItems = new List<PickupItem>
             {
-                new PickupItem { Id = Guid.NewGuid().ToString(), Text = "First item", Location = "Bellevue", Description="This is an item description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), Text = "Second item",Location = "Seattle", Description="This is an item description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), Text = "Third item", Location = "Auburn", Description="This is an item description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Location = "Tacoma", Description="This is an item description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Location = "Bellevue", Description="This is an item description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Location = "Seattle", Description="This is an item description." },
+                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Bellevue", Description="This is an item1 description." },
+                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg",Location = "Seattle", Description="This is an item2 description." },
+                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Auburn", Description="This is an item3 description." },
+                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Tacoma", Description="This is an item4 description." },
+                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Bellevue", Description="This is an item5 description." },
+                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Seattle", Description="This is an item6 description." },
             };
 
             foreach (var item in mockItems)

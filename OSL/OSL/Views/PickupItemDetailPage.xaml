@@ -4,7 +4,11 @@
              x:Class="OSL.PickupItemDetailPage"
              Title="{Binding Title}">
 	<StackLayout Spacing="20" Padding="15">
-		<Label Text="{Binding Item.Text}" FontSize="Medium" />
+        <Image Source="{Binding Item.PictureURL}" HeightRequest="200" WidthRequest="200" />
+        <Label Text="{Binding Item.Text}" FontSize="Medium" />
 		<Label Text="{Binding Item.Description}" FontSize="Small" />
-	</StackLayout>
+
+        <Button Text="Accept" x:Name="Accept"/>
+        <Button Text="Go to Website" x:Name="ButtonWebsite"/>
+    </StackLayout>
 </ContentPage>
