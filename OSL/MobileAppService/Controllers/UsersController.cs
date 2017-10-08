@@ -16,42 +16,24 @@ namespace OSL.MobileAppService.Controllers
             this.userRepository = userRepository;
         }
 
-        // GET: api/values
+        // GET api/users/me
         [Authorize]
-        [HttpGet]
+        [HttpGet("me")]
         public IActionResult Get()
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (user != null && (!user.Admin || user.Status != UserStatus.Active)) {
-                return new UnauthorizedResult();
-            }
 
-            return Ok(userRepository.Get());
-        }
-
-        // GET api/values/5
-        [Authorize]
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (user != null && (!user.Admin || user.Status != UserStatus.Active)) {
-                return new UnauthorizedResult();
-            }
-
-            var u = userRepository.GetById(id);
-
-            if (u != null) {
-                return Ok(u);
+            if (user != null) {
+                return Ok(user);
             } else {
                 return new NotFoundResult();
             }
         }
 
-        // POST api/values
+        // POST api/users
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]User value)
+        public IActionResult Create([FromBody]User value)
         {
             var oid = HttpContext.User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
             var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
@@ -67,46 +49,20 @@ namespace OSL.MobileAppService.Controllers
             return Ok(userRepository.Create(value));
         }
 
-        // PUT api/values/5
+        // PUT api/users/me
         [Authorize]
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]User value)
+        [HttpPut("me")]
+        public IActionResult Update([FromBody]User value)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (user != null && (!user.Admin || user.Status != UserStatus.Active))
-            {
-                return new UnauthorizedResult();
-            }
 
-            var u = userRepository.GetById(id);
-
-            if (u != null)
+            if (user != null)
             {
-                return Ok(userRepository.UpdateUser(id, value));
-            }
-            else
-            {
-                return new NotFoundResult();
-            }
-        }
+                value.Verified = user.Verified;
+                value.Admin = user.Admin;
+                value.Status = user.Status;
 
-        // DELETE api/values/5
-        [Authorize]
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (user != null && (!user.Admin || user.Status != UserStatus.Active))
-            {
-                return new UnauthorizedResult();
-            }
-
-            var u = userRepository.GetById(id);
-
-            if (u != null)
-            {
-                userRepository.DeleteById(id);
-                return StatusCode(204);
+                return Ok(userRepository.UpdateUser(user.Id, value));
             }
             else
             {

@@ -73,7 +73,7 @@ namespace OSL.MobileAppService.Services
                     $"'{user.Person_Name}', " +
                     "0, " +
                     "0, " +
-                    "'Inactive', " +
+                    $"{UserStatus.Active.ToString()}, " +
                     $"'{user.Phone_Number}', " +
                     $"'{user.Organization_Name}', " +
                     $"'{user.Organization_Address_Line1}', " +
@@ -120,7 +120,7 @@ namespace OSL.MobileAppService.Services
 
         public User GetById(int id)
         {
-            var query = $"SELECT * FROM [User] WHERE [Id] = '{id}'";
+            var query = $"SELECT * FROM [User] WHERE [Id] = {id}";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -173,7 +173,22 @@ namespace OSL.MobileAppService.Services
             }
         }
 
-        public void DeleteById(int id)
+        public void ActivateById(int id)
+        {
+            var query = $"UPDATE [User] SET [Status] = '{UserStatus.Active.ToString("F")}' WHERE [Id] = {id}";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void DeactivateById(int id)
         {
             var query = $"UPDATE [User] SET [Status] = '{UserStatus.Inactive.ToString("F")}' WHERE [Id] = {id}";
 

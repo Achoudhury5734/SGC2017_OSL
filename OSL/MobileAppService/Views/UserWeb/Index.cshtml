@@ -1,19 +1,15 @@
-﻿@model IEnumerable<OSL.MobileAppService.Models.User>
+﻿@using OSL.MobileAppService.Models
+@model IEnumerable<OSL.MobileAppService.Models.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "All Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <img src="http://i1378.photobucket.com/albums/ah104/christinedestiny/sackLunch_icon_zpssdqik6ew.png" height="250" width="250" align="middle">
 
-<p>
-    <a asp-action="Create"></a>
-</p>
-<table class="table">
-
-    <tr>
-        <table name="db_book">
-            <table border=" 1 | 0">
-
+        <table name="db_book" border=" 1 | 0">
+            <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Id) <br />
@@ -31,7 +27,6 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Status)<br />
-                </th>
                 </th>
     </tr>
     </thead>
@@ -55,13 +50,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
-           
             <td>
-            
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) | |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) | |
+				@{
+				    if (item.Status == UserStatus.Active) {
+                        @Html.ActionLink("Deactivate", "Deactivate", new { id=item.Id })
+    				} else {
+                        @Html.ActionLink("Activate", "Activate", new { id=item.Id })
+    				}
+				}
             </td>
         </tr>
 }

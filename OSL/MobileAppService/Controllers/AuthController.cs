@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -19,38 +21,46 @@ namespace OSL.MobileAppService.Controllers
         }
 
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl = "")
         {
+            ViewData["ReturnUrl"] = ReturnUrl;
+
             return View("Login");
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string user, string password)
+        public async Task<IActionResult> Login(string username, string password, string ReturnUrl = "")
         {
-            if (user != adminUser || password != adminPass) {
+            if (username != adminUser || password != adminPass) {
                 return new UnauthorizedResult();
             }
 
-            var principal = new ClaimsPrincipal();
+            var claims = new[] {
+                new Claim("name", "Admin"),
+                new Claim(ClaimTypes.Role, "Admin")
+            };
 
-            await HttpContext.SignInAsync("MyCookieAuthenticationScheme", principal);
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
 
-            return View("Login");
+            await HttpContext.SignInAsync("CookieScheme", principal, new AuthenticationProperties
+            {
+                IsPersistent = true,
+            });
+
+            if (!String.IsNullOrWhiteSpace(ReturnUrl)) {
+                return Redirect(ReturnUrl);
+            }
+
+            return Redirect("/users");
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "CookieScheme")]
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync("MyCookieAuthenticationScheme");
+            await HttpContext.SignOutAsync("CookieScheme");
 
             return RedirectToAction("Login");
-        }
-
-        [HttpGet("forbidden")]
-        public IActionResult Forbidden()
-        {
-            return View("Forbidden");
         }
     }
 }
