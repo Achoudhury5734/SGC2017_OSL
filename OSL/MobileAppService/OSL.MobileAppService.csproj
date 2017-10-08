@@ -21,6 +21,7 @@
     <PackageReference Include="Xam.Plugin.Media" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />
     <PackageReference Include="Geocoding.Google" Version="4.0.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +31,9 @@
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Services\EmptyClass.cs" />
+    <Compile Remove="Controllers\ImageController.cs" />
   </ItemGroup>
 </Project>

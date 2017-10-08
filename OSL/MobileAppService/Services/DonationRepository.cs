@@ -113,7 +113,7 @@ namespace OSL.MobileAppService.Services
                             return GetById(Id);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return null;
                     }
