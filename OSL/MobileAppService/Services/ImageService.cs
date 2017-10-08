@@ -20,14 +20,17 @@ namespace OSL.MobileAppService.Services
             }  
             try  
             {  
-                StorageCredentials credentials = new StorageCredentials(Configuration, accesskey);
-                CloudStorageAccount cloudStorageAccount = ConnectionString.GetConnectionString();  
-                CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();  
-                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("DonationImage");  
+                var credentials = new StorageCredentials(
+                    configuration["BlobStorage:AccountName"],
+                    configuration["BlobStorage:AccessKey"]
+                );
+                var account = new CloudStorageAccount(credentials, useHttps: true);
+                var client = account.CreateCloudBlobClient(); 
+                var container = client.GetContainerReference(configuration["BlobStorage:ContainerName"]);  
 
-                if (await cloudBlobContainer.CreateIfNotExistsAsync())  
+                if (await container.CreateIfNotExistsAsync())  
                 {  
-                    await cloudBlobContainer.SetPermissionsAsync(new BlobContainerPermissions {  
+                    await container.SetPermissionsAsync(new BlobContainerPermissions {  
                         PublicAccess = BlobContainerPublicAccessType.Blob  
                     });  
                 }  
