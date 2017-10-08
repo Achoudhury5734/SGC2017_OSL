@@ -69,6 +69,24 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
+        public bool IsActiveAdmin(User user)
+        {
+            if (user != null && user.Admin && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool IsActiveUser(User user)
+        {
+            if (user != null && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public async Task<bool> Create(User user)
         {
             var geocoder = new GoogleGeocoder();

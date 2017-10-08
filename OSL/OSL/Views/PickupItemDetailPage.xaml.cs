@@ -15,8 +15,8 @@ namespace OSL
 
             var item = new PickupItem
             {
-                Text = "Item 1",
-                Description = "This is an item description."
+                Text = "Item bla",
+                Description = "Static content."
             };
 
             viewModel = new PickupItemDetailViewModel(item);
@@ -28,6 +28,14 @@ namespace OSL
             InitializeComponent();
 
             BindingContext = this.viewModel = viewModel;
+
+            Accept.Clicked += Accept_Clicked;
+        }
+
+        private void Accept_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Information", "Thank you for accepting the donation","Accept", "Cancel");
+            this.Navigation.PushAsync(new PickupItemsPage());
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +24,12 @@ namespace OSL.MobileAppService.Controllers
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
 
-            if (user != null) {
+            if (user != null)
+            {
                 return Ok(user);
-            } else {
+            }
+            else
+            {
                 return new NotFoundResult();
             }
         }
@@ -40,7 +43,8 @@ namespace OSL.MobileAppService.Controllers
             var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
             var isNew = HttpContext.User.Claims.First(c => c.Type == "newUser")?.Value;
 
-            if (isNew != "true") {
+            if (isNew != "true")
+            {
                 return new BadRequestResult();
             }
 

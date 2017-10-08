@@ -13,5 +13,6 @@ namespace OSL
         public string DonorName { get; set; }
         public string Location { get; set; }
         public string Distance { get; set; }
+        public string PictureURL { get; set; }
     }
 }
