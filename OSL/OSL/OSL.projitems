@@ -46,6 +46,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\DonorItemPage.xaml.cs">
       <DependentUpon>DonorItemPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml">
