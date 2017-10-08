@@ -15,7 +15,7 @@ namespace OSL
         {
             InitializeComponent();
 
-            Navigation.PushModalAsync(new NewItemPage());
+            //Navigation.PushModalAsync(new NewItemPage());
             /*Page itemsPage, aboutPage = null;
 
             switch (Device.RuntimePlatform)
@@ -72,6 +72,11 @@ namespace OSL
                 // Doesn't matter, we go in interactive mode
                 UpdateSignInState(false);
             }
+        }
+
+        async void OnClickRegister(object sender, EventArgs e)
+        {
+            DisplayAlert("1","2","3");
         }
 
         async void OnSignInSignOut(object sender, EventArgs e)

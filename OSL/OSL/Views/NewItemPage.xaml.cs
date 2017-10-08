@@ -13,7 +13,7 @@ namespace OSL
         {
             InitializeComponent();
             takePicture.Clicked += Take_Picture;
-            //postButton.Clicked += Post_Clicked;
+            postButton.Clicked += Post_Clicked;
             image = new Image();
             Item = new Models.Donation()
             {
@@ -27,7 +27,7 @@ namespace OSL
 
        async void Post_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("Hi", "a","b");
+            
             await Navigation.PopToRootAsync();
         }
 
