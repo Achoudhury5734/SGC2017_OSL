@@ -17,7 +17,7 @@
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<ViewCell>
-							<StackLayout Padding="10">
+                            <StackLayout Padding="10" Orientation="Horizontal">
                                 <Image Source="{Binding PictureURL}"/>
                                 <Label Text="{Binding Text}"
                                        LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
