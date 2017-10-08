@@ -19,10 +19,12 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.0" />
     <PackageReference Include="Xam.Plugin.Media" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Views\Shared\" />
+    <Folder Include="Views\Auth\" />
   </ItemGroup>
 </Project>

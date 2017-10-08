@@ -31,6 +31,5 @@ namespace OSL.MobileAppService.Controllers
 
             return new NotFoundResult();
         }
-
     }
 }

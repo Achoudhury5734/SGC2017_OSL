@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 using Swashbuckle.AspNetCore.Swagger;
 
-using OSL.Models;
 using OSL.MobileAppService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
@@ -51,9 +50,14 @@ namespace OSL.MobileAppService
                     };
                 });
 
+            services.AddAuthentication("MyCookieAuthenticationScheme")
+                .AddCookie("MyCookieAuthenticationScheme", options => {
+                    options.AccessDeniedPath = "/forbidden";
+                    options.LoginPath = "/login";
+                });
+
             services.AddMvc();
             services.AddSingleton(Configuration);
-            services.AddSingleton<IItemRepository, ItemRepository>();
             services.AddSingleton<DonationRepository, DonationRepository>();
             services.AddSingleton<UserRepository, UserRepository>();
 
