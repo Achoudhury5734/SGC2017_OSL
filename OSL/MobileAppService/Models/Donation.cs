@@ -15,21 +15,15 @@ namespace OSL.MobileAppService.Models
         public DonationType Type { get; set; }
         public DonationStatus Status { get; set; }
         public DateTime? Created { get; set; }
-        public DateTime? Updated {
-            get {
-                return value;
-            } set {
-                if (value == null) {
-                    return DateTime.Now;
-                }
-            }
-        }
+        public DateTime? Updated { get; set; }
         public DateTime? StatusUpdated { get; set; }
         public DateTime? Expiration { get; set; }
         public int Amount { get; set; }
         public string PictureUrl { get; set; }
 
-        public Donation() {}
+        public Donation() {
+            
+        }
 
         public Donation(SqlDataReader reader)
         {
