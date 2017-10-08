@@ -45,6 +45,7 @@ namespace OSL.Views
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error loading user: " + ex.StackTrace);
                 UpdateButtonState(false);
             }
         }
@@ -114,14 +115,26 @@ namespace OSL.Views
         public async Task<User> GetUser(AuthenticationResult ar)
         {
             JObject arUser = ParseIdToken(ar.IdToken);
-            if (arUser["newUser"] != null && arUser["newUser"].ToString() == "true") {
+            if (arUser["newUser"] != null && arUser["newUser"].ToString() == "True") {
                 return null;
             }
 
+<<<<<<< HEAD
              var json = await App.ApiClient.GetStringAsync($"api/users/me");
              var user = JsonConvert.DeserializeObject<User>(json);
 
              return user;
+=======
+            try
+            {
+                var json = await App.ApiClient.GetStringAsync($"api/users/me");
+                var user = JsonConvert.DeserializeObject<User>(json);
+                return user;
+            } catch (Exception ex) {
+                Console.WriteLine("Error fetching user: " + ex.StackTrace);
+                return null;
+            }
+>>>>>>> master
         }
 
         JObject ParseIdToken(string idToken)
