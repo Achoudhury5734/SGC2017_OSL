@@ -6,6 +6,10 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using OSL.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace OSL.Views
 {
@@ -34,7 +38,8 @@ namespace OSL.Views
                 // Check to see if we have a User in the cache already.
                 AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
                 App.AccessToken = ar.AccessToken;
-                App.User = GetUser(ar);
+                App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
+                App.User = await GetUser(ar);
 
                 Application.Current.MainPage = new RootPage();
             }
@@ -56,7 +61,8 @@ namespace OSL.Views
             {
                 AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
                 App.AccessToken = ar.AccessToken;
-                App.User = GetUser(ar);
+                App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
+                App.User = await GetUser(ar);
 
                 UpdateButtonState(true);
 
@@ -105,14 +111,17 @@ namespace OSL.Views
             return decoded;
         }
 
-        public User GetUser(AuthenticationResult ar)
+        public async Task<User> GetUser(AuthenticationResult ar)
         {
-            JObject user = ParseIdToken(ar.IdToken);
-            if (user["newUser"] != null && user["newUser"].ToString() == "true") {
+            JObject arUser = ParseIdToken(ar.IdToken);
+            if (arUser["newUser"] != null && arUser["newUser"].ToString() == "true") {
                 return null;
             }
 
-            return new User();
+            var json = await App.ApiClient.GetStringAsync($"api/users/me");
+            var user = JsonConvert.DeserializeObject<User>(json);
+
+            return user;
         }
 
         JObject ParseIdToken(string idToken)
