@@ -12,6 +12,12 @@ namespace OSL.Views
         public RegisterPage()
         {
             InitializeComponent();
+            registerButton.Clicked += handle_Registration;
+        }
+
+        private void handle_Registration(object sender, EventArgs e)
+        {
+            
         }
     }
 }

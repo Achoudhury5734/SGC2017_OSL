@@ -7,6 +7,7 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using OSL.Views;
 
 namespace OSL
 {
@@ -77,7 +78,7 @@ namespace OSL
 
         async void OnClickRegister(object sender, EventArgs e)
         {
-            DisplayAlert("1","2","3");
+            await Navigation.PushModalAsync(new RegisterPage());
         }
 
         async void OnSignInSignOut(object sender, EventArgs e)

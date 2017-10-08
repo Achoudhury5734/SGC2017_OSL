@@ -24,7 +24,7 @@
                 <DatePicker x:Name="expirationDate" />
                 <TimePicker x:Name="expirationTime" />
             </StackLayout>
-            <Button Title="Post" x:Name="postButton" />
+            <Button Text="Post" x:Name="postButton" />
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

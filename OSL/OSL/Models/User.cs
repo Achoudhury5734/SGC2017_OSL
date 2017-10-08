@@ -5,6 +5,7 @@ namespace OSL.Models
     {
         public string Id { get; set; }
         public string Email { get; set; }
+        // From auth AccessToken
         public string OId { get; set; }
         public decimal Lat { get; set; }
         public decimal Long { get; set; }
@@ -13,11 +14,10 @@ namespace OSL.Models
         //public string Country { get; set; }
         public string OrgName { get; set; }
         public string PostalCode { get; set; }
-        public string State { get; set;}
+        public string State { get; set; }
         public string Person_Name { get; set; }
         public string Phone_Number { get; set; }
         public string Status { get; set; }
         public bool Verified { get; set; }
-        public string Password { get; set}  //?
-    }
+    };
 }

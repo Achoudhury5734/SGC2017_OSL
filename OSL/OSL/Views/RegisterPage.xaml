@@ -3,8 +3,6 @@
 	<ContentPage.Content>
         <Label Text="Organization Name" />
         <Entry Text="{Binding User.OrgName}"/>
-        <Label Text="Email" />
-        <Entry Text="{Binding User.Email}" Keyboard="Email"/>
         <Label Text="Password" />
         <Entry Text="{Binding User.Password}" isPassword="true" />
         <Label Text="Address"/>
