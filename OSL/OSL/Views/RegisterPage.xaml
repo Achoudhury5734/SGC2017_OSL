@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OSL.Views.RegisterPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:forms="using:Xamarin.Forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="OSL.Views.RegisterPage" xmlns:vm="using:OSL.ViewModels">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <OnPlatform.iOS> 0,20,0,0 </OnPlatform.iOS>
+        </OnPlatform>
+    </ContentPage.Padding>
 	<ContentPage.Content>
-        
+        <StackLayout>
+            <Label Text="Organization Name" />
+            <Entry x:Name="orgName" Text="{Binding User.Organization_Name}"/>
+            <Label Text="Address"/>
+            <Entry x:Name="orgAddress1" Text="{Binding User.Organization_Address_Line1}"/>
+            <Entry x:Name="orgAddress2" Text="{Binding User.Organization_Address_Line1}"/>
+            <Label Text="City"/>
+            <Entry x:Name="orgCity" Text="{Binding User.Organization_City}" />
+            <Label Text="State" />
+            <Entry x:Name="orgState" Text="{Binding User.Organization_State}" />
+            <Label Text="Zip"/>
+            <Entry x:Name="orgZip" Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"/>
+            <Label Text="Phone Number" />
+            <Entry x:Name="phoneNumber" Text="{Binding User.Phone_Number}" Keyboard="Telephone" />
+            <Label Text="Contact Name" />
+            <Entry x:Name="personName" Text="{Binding User.Person_Name}" />
+            <Button Text="Register" x:Name="registerButton" />
+        </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

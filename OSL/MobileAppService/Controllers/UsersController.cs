@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -41,9 +42,9 @@ namespace OSL.MobileAppService.Controllers
         {
             var oid = HttpContext.User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
             var email = HttpContext.User.Claims.First(c => c.Type == "emails")?.Value;
-            var isNew = HttpContext.User.Claims.First(c => c.Type == "newUser")?.Value;
 
-            if (isNew != "true")
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (user != null)
             {
                 return new BadRequestResult();
             }
@@ -51,7 +52,14 @@ namespace OSL.MobileAppService.Controllers
             value.Oid = oid;
             value.Email = email;
 
-            return Ok(await userRepository.Create(value));
+            try
+            {
+                var res = await userRepository.Create(value);
+                return Ok(res);
+            } catch (Exception ex) {
+                Response.StatusCode = 500;
+                return new JsonResult(ex);
+            }
         }
 
         // PUT api/users/me

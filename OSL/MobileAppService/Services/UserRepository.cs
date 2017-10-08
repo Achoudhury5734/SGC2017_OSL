@@ -92,8 +92,15 @@ namespace OSL.MobileAppService.Services
 
         public async Task<bool> Create(User user)
         {
-            var geocoder = new GoogleGeocoder();
-            var addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+            IEnumerable<GoogleAddress> addresses = null;
+
+            try
+            {
+                var geocoder = new GoogleGeocoder();
+                addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+            } catch (Exception ex) {
+                Console.WriteLine("Error geocoding: " + ex.StackTrace);
+            }
 
             var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, Organization_Address_Line1, " +
                 "Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country, Lat, Long) VALUES " +
@@ -102,11 +109,11 @@ namespace OSL.MobileAppService.Services
                     $"@Person_Name, " +
                     "0, " +
                     "0, " +
-                    $"{UserStatus.Active.ToString()}, " +
+                    $"'{UserStatus.Active.ToString()}', " +
                     $"@Phone_Number, " +
                     $"@Organization_Name, " +
                     $"@Organization_Address_Line1, " +
-                    $"@Organization_Address_Line2', " +
+                    $"@Organization_Address_Line2, " +
                     $"@Organization_City, " +
                     $"@Organization_State, " +
                     $"@Organization_PostalCode, " +
@@ -131,8 +138,8 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Organization_State", user.Organization_State ?? "");
                     command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode ?? "");
                     command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country ?? "");
-                    command.Parameters.AddWithValue("@Lat", addresses.First().Coordinates.Latitude);
-                    command.Parameters.AddWithValue("@Long", addresses.First().Coordinates.Longitude);
+                    command.Parameters.AddWithValue("@Lat", addresses?.FirstOrDefault()?.Coordinates.Latitude ?? 0.0);
+                    command.Parameters.AddWithValue("@Long", addresses?.FirstOrDefault()?.Coordinates.Longitude ?? 0.0);
 
                     var res = command.ExecuteNonQuery();
                     command.Parameters.Clear();
@@ -219,8 +226,17 @@ namespace OSL.MobileAppService.Services
             var admin = user.Admin ? 1 : 0;
             var verified = user.Verified ? 1 : 0;
 
-            var geocoder = new GoogleGeocoder();
-            var addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+            IEnumerable<GoogleAddress> addresses = null;
+
+            try
+            {
+                var geocoder = new GoogleGeocoder();
+                addresses = await geocoder.GeocodeAsync($"{user.Organization_Address_Line1} {user.Organization_Address_Line2}, {user.Organization_City}, {user.Organization_State}, {user.Organization_PostalCode}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error geocoding: " + ex.StackTrace);
+            }
 
             var query = $"UPDATE [User] SET " +
                     $"[Person_Name] = @Person_Name, " +
@@ -257,8 +273,8 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Organization_State", user.Organization_State ?? "");
                     command.Parameters.AddWithValue("@Organization_PostalCode", user.Organization_PostalCode ?? "");
                     command.Parameters.AddWithValue("@Organization_Country", user.Organization_Country ?? "");
-                    command.Parameters.AddWithValue("@Lat", addresses.First().Coordinates.Latitude);
-                    command.Parameters.AddWithValue("@Long", addresses.First().Coordinates.Longitude);
+                    command.Parameters.AddWithValue("@Lat", addresses?.FirstOrDefault()?.Coordinates.Latitude ?? 0.0);
+                    command.Parameters.AddWithValue("@Long", addresses?.FirstOrDefault()?.Coordinates.Longitude ?? 0.0);
                     command.Parameters.AddWithValue("@Id", id);
 
                     var res = command.ExecuteNonQuery();
