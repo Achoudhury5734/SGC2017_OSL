@@ -11,7 +11,7 @@ namespace OSL.MobileAppService.Services
 {
     public class UserRepository
     {
-        private SqlConnectionStringBuilder builder;
+        private readonly SqlConnectionStringBuilder builder;
 
         public UserRepository(IConfigurationRoot configuration)
         {
@@ -38,17 +38,26 @@ namespace OSL.MobileAppService.Services
                 return null;
             }
 
+            var query = $"SELECT * FROM [User] WHERE [Oid] = '{oid}' AND [Status] = 'Active'";
+
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand($"SELECT * FROM User WHERE Oid == {oid}", connection))
+                try
                 {
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        return new User(reader);
+                        SqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            return new User(reader);
+                        }
                     }
+                }
+                catch (SqlException e)
+                {
+                    Console.WriteLine(e.ToString());
                 }
             }
 
@@ -57,29 +66,28 @@ namespace OSL.MobileAppService.Services
 
         public bool Create(User user)
         {
-            var query = $"INSERT INTO User (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +
-                "Organization_Address_Line1, Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country) " +
-                    $"Oid = '{user.Oid}'" +
-                    $"Email = '{user.Email}'" +
-                    $"Person_Name = '{user.Person_Name}'," +
-                    "Verified = 0, " +
-                    "Admin = 0, " +
-                    "Status = 'Inactive', " +
-                    $"Phone_Number = '{user.Phone_Number}', " +
-                    $"Organization_Name = '{user.Organization_Name}', " +
-                    $"Organization_Address_Line1 = '{user.Organization_Address_Line1}', " +
-                    $"Organization_Address_Line2 = '{user.Organization_Address_Line2}', " +
-                    $"Organization_City = '{user.Organization_City}', " +
-                    $"Organization_State = '{user.Organization_State}', " +
-                    $"Organization_PostalCode = '{user.Organization_PostalCode}', " +
-                    $"Organization_Country = '{user.Organization_Country}' " +
-                $"WHERE Id = '{user.Id}'";
+            var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, " +
+                "Organization_Address_Line1, Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country) VALUES " +
+                    $"('{user.Oid}', " +
+                    $"'{user.Email}', " +
+                    $"'{user.Person_Name}', " +
+                    "0, " +
+                    "0, " +
+                    "'Inactive', " +
+                    $"'{user.Phone_Number}', " +
+                    $"'{user.Organization_Name}', " +
+                    $"'{user.Organization_Address_Line1}', " +
+                    $"'{user.Organization_Address_Line2}', " +
+                    $"'{user.Organization_City}', " +
+                    $"'{user.Organization_State}', " +
+                    $"'{user.Organization_PostalCode}', " +
+                    $"'{user.Organization_Country}')";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand(query))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     return command.ExecuteNonQuery() == 1;
                 }
@@ -88,7 +96,7 @@ namespace OSL.MobileAppService.Services
 
         public IEnumerable<User> Get()
         {
-            var query = "SELECT * FROM User";
+            var query = "SELECT * FROM [User]";
             var users = new List<User>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -112,7 +120,7 @@ namespace OSL.MobileAppService.Services
 
         public User GetById(int id)
         {
-            var query = $"SELECT * FROM User WHERE Id = '{id}'";
+            var query = $"SELECT * FROM [User] WHERE [Id] = '{id}'";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -131,23 +139,26 @@ namespace OSL.MobileAppService.Services
             return null;
         }
 
-        public bool UpdateUser(User user)
+        public bool UpdateUser(int id, User user)
         {
-            var query = $"UPDATE User SET " +
-                    $"Person_Name = '{user.Person_Name}'," +
-                    $"Verified = {user.Verified}, " +
-                    $"Admin = {user.Admin}, " +
-                    $"Status = '{user.Status.ToString()}', " +
-                    $"Phone_GUID = '{user.Phone_GUID}', " +
-                    $"Phone_Number = '{user.Phone_Number}', " +
-                    $"Organization_Name = '{user.Organization_Name}', " +
-                    $"Organization_Address_Line1 = '{user.Organization_Address_Line1}', " +
-                    $"Organization_Address_Line2 = '{user.Organization_Address_Line2}', " +
-                    $"Organization_City = '{user.Organization_City}', " +
-                    $"Organization_State = '{user.Organization_State}', " +
-                    $"Organization_PostalCode = '{user.Organization_PostalCode}', " +
-                    $"Organization_Country = '{user.Organization_Country}' " +
-                $"WHERE Id = '{user.Id}'";
+            var admin = user.Admin ? 1 : 0;
+            var verified = user.Verified ? 1 : 0;
+
+            var query = $"UPDATE [User] SET " +
+                    $"[Person_Name] = '{user.Person_Name}', " +
+                    $"[Verified] = {verified}, " +
+                    $"[Admin] = {admin}, " +
+                    $"[Status] = '{user.Status.ToString("F")}', " +
+                    $"[Phone_GUID] = '{user.Phone_GUID}', " +
+                    $"[Phone_Number] = '{user.Phone_Number}', " +
+                    $"[Organization_Name] = '{user.Organization_Name}', " +
+                    $"[Organization_Address_Line1] = '{user.Organization_Address_Line1}', " +
+                    $"[Organization_Address_Line2] = '{user.Organization_Address_Line2}', " +
+                    $"[Organization_City] = '{user.Organization_City}', " +
+                    $"[Organization_State] = '{user.Organization_State}', " +
+                    $"[Organization_PostalCode] = '{user.Organization_PostalCode}', " +
+                    $"[Organization_Country] = '{user.Organization_Country}' " +
+                $"WHERE [Id] = {id}";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -155,14 +166,16 @@ namespace OSL.MobileAppService.Services
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    return command.ExecuteNonQuery() == 1;
+                    var res = command.ExecuteNonQuery();
+
+                    return res == 1;
                 }
             }
         }
 
         public void DeleteById(int id)
         {
-            var query = $"UPDATE User SET 'Status' = '{UserStatus.Inactive.ToString()}' WHERE Id = '{id}'";
+            var query = $"UPDATE [User] SET [Status] = '{UserStatus.Inactive.ToString("F")}' WHERE [Id] = {id}";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
