@@ -30,7 +30,7 @@ namespace OSL
 
         public static UIParent UiParent = null;
 
-        public static NavigationPage NavigationPage { get; private set; }
+        public static NavigationPage NavigationPage { get; set; }
 
         public App()
         {
@@ -39,10 +39,10 @@ namespace OSL
             PCA = new PublicClientApplication(ClientID, Authority);
             PCA.RedirectUri = $"msal{ClientID}://auth";
 
-            MobileCenter.Start($"android={Constants.MobileCenterAndroid};" +
-                   $"uwp={Constants.MobileCenterUWP};" +
-                   $"ios={Constants.MobileCenteriOS}",
-                   typeof(Analytics), typeof(Crashes));
+            //MobileCenter.Start($"android={Constants.MobileCenterAndroid};" +
+            //       $"uwp={Constants.MobileCenterUWP};" +
+            //       $"ios={Constants.MobileCenteriOS}",
+            //       typeof(Analytics), typeof(Crashes));
 
             if (UseMockDataStore)
                 DependencyService.Register<MockDataStore>();
@@ -54,7 +54,8 @@ namespace OSL
             //else
             //    MainPage = new NavigationPage(new MainPage());
 
-            NavigationPage = new NavigationPage(new MainPage());
+            //NavigationPage = new NavigationPage(new MainPage());
+            //MainPage = new MainPage();
             MainPage = new RootPage();
         }
     }
