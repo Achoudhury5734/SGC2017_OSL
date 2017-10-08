@@ -7,6 +7,8 @@ using Xamarin.Forms;
 using Microsoft.Identity.Client;
 using OSL.Views;
 using OSL.Models;
+using System.Net.Http;
+using System;
 
 namespace OSL
 {
@@ -27,9 +29,11 @@ namespace OSL
         public static string AuthorityPasswordReset = $"{AuthorityBase}{PolicyResetPassword}";
 
         public static bool UseMockDataStore = true;
-        public static string BackendUrl = "https://localhost:5000";
+        public static string BackendUrl = "https://secondhelpingweb.azurewebsites.net";
 
         public static UIParent UiParent = null;
+
+        public static HttpClient ApiClient;
 
         public static User User { get; set; }
         public static string AccessToken { get; set; }
@@ -47,6 +51,9 @@ namespace OSL
                    $"ios={Constants.MobileCenteriOS}",
                    typeof(Analytics), typeof(Crashes));
 #endif
+
+            ApiClient = new HttpClient();
+            ApiClient.BaseAddress = new Uri($"{BackendUrl}/");
 
             if (UseMockDataStore)
                 DependencyService.Register<MockDataStore>();
