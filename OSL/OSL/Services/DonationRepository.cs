@@ -16,7 +16,7 @@ namespace OSL.Services
 
         public List<Donation> Donations { get; set; }
 
-        public Task<Donation> GetDonationAsync(string donationId)
+        public Task<Donation> GetDonationAsync(int donationId)
         {
             return Task.FromResult(Donations.Find(d => d.Id == donationId));
         }

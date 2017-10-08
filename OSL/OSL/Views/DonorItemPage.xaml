@@ -3,7 +3,7 @@
     xmlns:forms="using:Xamarin.Forms"
     xmlns:controls="using:Windows.UI.Xaml.Controls" xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="OSL.DonorItemPage" 
+             x:Class="OSL.Views.DonorItemPage" 
              xmlns:vm="using:OSL.ViewModels"
              Title="New Item">
     <ContentPage.BindingContext>

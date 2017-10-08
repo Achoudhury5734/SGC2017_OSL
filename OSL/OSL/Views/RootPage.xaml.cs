@@ -24,6 +24,11 @@ namespace OSL.Views
             if (item == null)
                 return;
 
+            if (item.Title == "Logout") {
+                Application.Current.MainPage = new MainPage(logout: true);
+                return;
+            }
+
             var page = (Page)Activator.CreateInstance(item.TargetType);
 
             Detail = new NavigationPage(page);
