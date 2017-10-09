@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,13 @@ namespace OSL
             var serializedItem = JsonConvert.SerializeObject(item);
 
             var response = await client.PostAsync($"api/pickupitem", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> AcceptPickupItemAsync(PickupItem item)
+        {
+            var response = await App.ApiClient.PostAsync($"api/donations/{item.Id}/accept", null);
 
             return response.IsSuccessStatusCode;
         }

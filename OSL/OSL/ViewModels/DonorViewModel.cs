@@ -6,6 +6,8 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Plugin.Media.Abstractions;
+using System.Net.Http;
 
 namespace OSL.ViewModels
 {
@@ -35,6 +37,8 @@ namespace OSL.ViewModels
             set { SetProperty(ref imageSource, value); }
         }
 
+        private MediaFile mediaFile;
+
         private string donationTitle;
         public string DonationTitle
         {
@@ -56,15 +60,14 @@ namespace OSL.ViewModels
             set { SetProperty(ref donationType, value); }
         }
 
-        private DateTime dateTime;
+        private DateTime expirationDate;
         public DateTime ExpirationDate
         {
-            get { return dateTime; }
-            set { SetProperty(ref dateTime, value); }
+            get { return expirationDate; }
+            set { SetProperty(ref expirationDate, value); }
         }
 
         private TimeSpan expirationTime;
-
         public TimeSpan ExpirationTime
         {
             get { return expirationTime; }
@@ -72,7 +75,6 @@ namespace OSL.ViewModels
         }
 
         private Page page;
-
         public Page Page
         {
             get { return page; }
@@ -84,15 +86,7 @@ namespace OSL.ViewModels
 
         public async Task SaveDonationAsync()
         {
-            var donationCapture = new DonationCapture
-            {
-                Quantity = Quantity,
-                Expiration = ExpirationDate.Add(ExpirationTime),
-                Title = DonationTitle,
-                ImageSource = ImageSource,
-                Type = (DonationType)Enum.Parse(typeof(DonationType), DonationType)
-            };
-            await donationRepository.SaveDonationAsync(donationCapture);
+            await donationRepository.SaveDonationAsync(DonationTitle, mediaFile, Quantity, DonationType, ExpirationDate, ExpirationTime);
 
             await page.Navigation.PushAsync(new DonationListPage());
         }
@@ -107,21 +101,21 @@ namespace OSL.ViewModels
             //    return;
             //}
 
-            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            mediaFile = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 Directory = "Sample",
                 Name = "image.jpg"
             });
 
-            if (file == null)
+            if (mediaFile == null)
                 return;
 
             //await DisplayAlert("File Location", file.Path, "OK");
 
             ImageSource = ImageSource.FromStream(() =>
             {
-                var stream = file.GetStream();
-                file.Dispose();
+                var stream = mediaFile.GetStream();
+                //mediaFile.Dispose();
                 return stream;
             });
 
