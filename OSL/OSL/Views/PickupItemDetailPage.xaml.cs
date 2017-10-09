@@ -14,7 +14,6 @@ namespace OSL
         {
             InitializeComponent();
 
-            dataStore = new CloudDataStore();
             var item = new PickupItem
             {
                 Title = "New Item posted"
@@ -27,6 +26,7 @@ namespace OSL
         public PickupItemDetailPage(PickupItemDetailViewModel viewModel)
         {
             InitializeComponent();
+            dataStore = new CloudDataStore();
 
             BindingContext = this.viewModel = viewModel;
 
