@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OSL.Views;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,15 +24,15 @@ namespace OSL
             if (item == null)
                 return;
 
-            await Navigation.PushModalAsync(new PickupItemDetailPage(new PickupItemDetailViewModel(item)));
+            await Navigation.PushAsync(new PickupItemDetailPage(new PickupItemDetailViewModel(item)));
 
             // Manually deselect item
             PickupItemsListView.SelectedItem = null;
         }
 
-        async void AddItem_Clicked(object sender, EventArgs e)
+        async void DonateItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NewPickupItemPage());
+            await Navigation.PushAsync(new DonorItemPage());//(new NewPickupItemPage());
         }
 
         protected override void OnAppearing()

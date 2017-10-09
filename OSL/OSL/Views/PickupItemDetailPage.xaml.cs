@@ -14,11 +14,9 @@ namespace OSL
         {
             InitializeComponent();
 
-            dataStore = new CloudDataStore();
             var item = new PickupItem
             {
-                Text = "Item bla",
-                Description = "Static content."
+                Title = "New Item posted"
             };
 
             viewModel = new PickupItemDetailViewModel(item);
@@ -28,6 +26,7 @@ namespace OSL
         public PickupItemDetailPage(PickupItemDetailViewModel viewModel)
         {
             InitializeComponent();
+            dataStore = new CloudDataStore();
 
             BindingContext = this.viewModel = viewModel;
 
@@ -39,8 +38,8 @@ namespace OSL
             var res = await dataStore.AcceptPickupItemAsync(viewModel.Item);
 
             await DisplayAlert("Information", "Thank you for accepting the donation", "OK");
-
-            await this.Navigation.PushModalAsync(new PickupItemsPage());
+                        
+            await this.Navigation.PopAsync();
         }
     }
 }
