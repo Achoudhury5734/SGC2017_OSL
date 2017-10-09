@@ -14,8 +14,7 @@ namespace OSL
 
 			Item = new PickupItem
 			{
-				Text = "Item name",
-				Description = "This is an item description."
+				Title = "Item name"
 			};
 
 			BindingContext = this;

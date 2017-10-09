@@ -7,7 +7,7 @@ namespace OSL
         public PickupItem Item { get; set; }
         public PickupItemDetailViewModel(PickupItem item = null)
         {
-            Title = item?.Text;
+            Title = item?.Title;
             Item = item;
         }
     }

@@ -3,12 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.PickupItemDetailPage"
              Title="{Binding Title}">
-	<StackLayout Spacing="20" Padding="15">
-        <Image Source="{Binding Item.PictureURL}" HeightRequest="200" WidthRequest="200" />
-        <Label Text="{Binding Item.Text}" FontSize="Medium" />
-		<Label Text="{Binding Item.Description}" FontSize="Small" />
+	<StackLayout Spacing="10" Padding="10" Orientation="Vertical">
+        <ScrollView>
+            <StackLayout Spacing="5" HorizontalOptions="FillAndExpand"
+                    WidthRequest="1000">
+                <Image Source="{Binding Item.PictureUrl}" HeightRequest="200" WidthRequest="200" />
+                <Label Text="{Binding Item.Title}" FontSize="Medium" />
+		        <Label Text="{Binding Item.Description}" FontSize="Small" />
 
-        <Button Text="Accept" x:Name="Accept"/>
-        <Button Text="Go to Website" x:Name="ButtonWebsite"/>
+                <Button Text="Accept" x:Name="Accept"/>
+                <Button Text="Go to Website" x:Name="ButtonWebsite"/>
+            </StackLayout>
+        </ScrollView>
     </StackLayout>
 </ContentPage>

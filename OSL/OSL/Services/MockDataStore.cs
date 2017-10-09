@@ -14,12 +14,12 @@ namespace OSL
             items = new List<PickupItem>();
             var mockItems = new List<PickupItem>
             {
-                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Bellevue", Description="This is an item1 description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg",Location = "Seattle", Description="This is an item2 description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Auburn", Description="This is an item3 description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Tacoma", Description="This is an item4 description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Bellevue", Description="This is an item5 description." },
-                new PickupItem { Id = Guid.NewGuid().ToString(), PictureURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Location = "Seattle", Description="This is an item6 description." },
+                new PickupItem { Id = 10, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Bellevue"},
+                new PickupItem { Id = 11, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg",Expiration = "Seattle"},
+                new PickupItem { Id = 12, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Auburn"},
+                new PickupItem { Id = 13, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Tacoma"},
+                new PickupItem { Id = 14, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Bellevue"},
+                new PickupItem { Id = 15, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Seattle"},
             };
 
             foreach (var item in mockItems)
@@ -46,7 +46,7 @@ namespace OSL
 
         public async Task<bool> DeletePickupItemAsync(string id)
         {
-            var _item = items.Where((PickupItem arg) => arg.Id == id).FirstOrDefault();
+            var _item = items.Where((PickupItem arg) => arg.Id.ToString() == id).FirstOrDefault();
             items.Remove(_item);
 
             return await Task.FromResult(true);
@@ -54,7 +54,7 @@ namespace OSL
 
         public async Task<PickupItem> GetPickupItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(items.FirstOrDefault(s => s.Id.ToString() == id));
         }
 
         public async Task<IEnumerable<PickupItem>> GetPickupItemsAsync(bool forceRefresh = false)
