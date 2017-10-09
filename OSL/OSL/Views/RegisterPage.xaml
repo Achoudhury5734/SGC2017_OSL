@@ -8,23 +8,45 @@
         </OnPlatform>
     </ContentPage.Padding>
 	<ContentPage.Content>
-        <StackLayout>
-            <Label Text="Organization Name" />
-            <Entry x:Name="orgName" Text="{Binding User.Organization_Name}"/>
-            <Label Text="Address"/>
-            <Entry x:Name="orgAddress1" Text="{Binding User.Organization_Address_Line1}"/>
-            <Entry x:Name="orgAddress2" Text="{Binding User.Organization_Address_Line1}"/>
-            <Label Text="City"/>
-            <Entry x:Name="orgCity" Text="{Binding User.Organization_City}" />
-            <Label Text="State" />
-            <Entry x:Name="orgState" Text="{Binding User.Organization_State}" />
-            <Label Text="Zip"/>
-            <Entry x:Name="orgZip" Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"/>
-            <Label Text="Phone Number" />
-            <Entry x:Name="phoneNumber" Text="{Binding User.Phone_Number}" Keyboard="Telephone" />
-            <Label Text="Contact Name" />
-            <Entry x:Name="personName" Text="{Binding User.Person_Name}" />
-            <Button Text="Register" x:Name="registerButton" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Label Text="Organization Name" />
+                <Entry x:Name="orgName" Text="{Binding User.Organization_Name}"
+                       Placeholder="e.g. Operation Sack Lunch"/>
+                <Label Text="Address"/>
+                <Entry x:Name="orgAddress1" Text="{Binding User.Organization_Address_Line1}"
+                       Placeholder="12345 NE 1st ST"/>
+                <Entry x:Name="orgAddress2" Text="{Binding User.Organization_Address_Line1}"
+                       Placeholder="Apt 1 (optional)"/>
+                <Grid>
+                    <Grid.RowDefinitions RowSpacing="1" ColumnSpacing="1">
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                <Label Text="City" Grid.Row="0" Grid.Column="0"/>
+                <Entry x:Name="orgCity" Text="{Binding User.Organization_City}" Grid.Row="1" 
+                       Grid.Column="0" Grid.ColumnSpan="4" Placeholder="Seattle"/>
+                <Label Text="State" Grid.Row="2" Grid.Column="0"/>
+                <Entry x:Name="orgState" Text="{Binding User.Organization_State}" Grid.Row="2" 
+                       Grid.Column="1" Placeholder="WA"/>
+                <Label Text="Zip Code" Grid.Row="2" Grid.Column="2" HorizontalTextAlignment="End"/>
+                <Entry x:Name="orgZip" Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"
+                       Grid.Row="2" Grid.Column="3" Placeholder="98194"/>
+                </Grid>
+                <Label Text="Phone Number" />
+                <Entry x:Name="phoneNumber" Text="{Binding User.Phone_Number}" Keyboard="Telephone"
+                       Placeholder="555-555-5555"/>
+                <Label Text="Contact Name" />
+                <Entry x:Name="personName" Text="{Binding User.Person_Name}" Placeholder="Jane Person"/>
+                <Button Text="Register" x:Name="registerButton" />
+            </StackLayout>
+        </ScrollView>
 	</ContentPage.Content>
 </ContentPage>

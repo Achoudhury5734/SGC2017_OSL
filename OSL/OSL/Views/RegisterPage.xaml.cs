@@ -32,13 +32,28 @@ namespace OSL.Views
             User.Person_Name = orgName.Text;
             User.Phone_Number = phoneNumber.Text;
             User.Person_Name = personName.Text;
+            User.Organization_State = orgState.Text;
 
-            var userRep = new UserRepository();
+            foreach (var pi in User.GetType().GetProperties())
+            {
+                if (String.IsNullOrEmpty((string)pi.GetValue(User)))  
+                {
+                    if (!pi.Name.Equals("Organization_Address_Line2")) 
+                    {
+                        await DisplayAlert("Unable to register",
+                                           "Please fill out all fields", "Ok");
+                        return;
+                    }
+                }
+            }
+            await DisplayAlert("Thanks for signing up",
+                         "We'll let you know when you're verified. Feel free to look around!", "Ok");
+            /*var userRep = new UserRepository();
             var res = await userRep.Create(User);
             if (res == null)
                 await DisplayAlert("Oops", "Something went wrong", "Ok");
             else
-                Application.Current.MainPage = new RootPage();
+                Application.Current.MainPage = new RootPage();*/
 		}
 
         private void BadFormAlert(string field)
