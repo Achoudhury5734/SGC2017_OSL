@@ -28,7 +28,7 @@ namespace OSL
         public static string Authority = $"{AuthorityBase}{PolicySignUpSignIn}";
         public static string AuthorityPasswordReset = $"{AuthorityBase}{PolicyResetPassword}";
 
-        public static bool UseMockDataStore = true;
+        public static bool UseMockDataStore = false;
         public static string BackendUrl = "https://secondhelpingweb.azurewebsites.net";
 
         public static UIParent UiParent = null;

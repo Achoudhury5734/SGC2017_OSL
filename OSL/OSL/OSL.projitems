@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DonationCapture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DonationStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DonationType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Donor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PickupItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CloudDataStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DonationRepository.cs" />
