@@ -1,10 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="OSL.Views.YTDTallyPage">
+             x:Class="OSL.Views.YTDTallyPage"
+             xmlns:vs="using:OSL.ViewModels">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add Waste" Clicked="AddWaste_Clicked"/> 
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Padding="10" Orientation="Horizontal">
-            <Label Text="YTD Tally coming soon!"  FontSize="16" HorizontalTextAlignment="Center" />
+        <StackLayout Padding="10" Orientation="Vertical">
+            <!--<Label Text="YTD Tally coming soon!"  FontSize="16" HorizontalTextAlignment="Center" />-->
+            <Label Text="2017" FontSize="16" HorizontalTextAlignment="Center" />
+            <Label Text="Pounds Wasted"/>
+            <Label x:Name="yearWasted" Text="{Binding YearWasted}"/>
+            <Label Text="Pounds Donated" />
+            <Label x:Name="yearDonated" Text="{Binding YearDonated}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
