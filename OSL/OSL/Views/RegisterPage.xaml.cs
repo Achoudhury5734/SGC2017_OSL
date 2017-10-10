@@ -36,29 +36,29 @@ namespace OSL.Views
 
             foreach (var pi in User.GetType().GetProperties())
             {
-                if (String.IsNullOrEmpty((string)pi.GetValue(User)))  
+                if (String.IsNullOrEmpty((string)pi.GetValue(User)))
                 {
-                    if (!pi.Name.Equals("Organization_Address_Line2")) 
+                    if (!pi.Name.Equals("Organization_Address_Line2"))
                     {
                         await DisplayAlert("Unable to register",
-                                           "Please fill out all fields", "Ok");
+                                           "Please fill out all required fields", "Ok");
                         return;
                     }
                 }
             }
-            await DisplayAlert("Thanks for signing up",
-                         "We'll let you know when you're verified. Feel free to look around!", "Ok");
-            /*var userRep = new UserRepository();
+
+            var userRep = new UserRepository();
             var res = await userRep.Create(User);
             if (res == null)
-                await DisplayAlert("Oops", "Something went wrong", "Ok");
+            {
+                await DisplayAlert("Oops", "Something went wrong. Please try again later.", "Ok");
+            }
             else
-                Application.Current.MainPage = new RootPage();*/
+            {
+                await DisplayAlert("Thanks for signing up!",
+                         "We'll let you know when you're verified. Feel free to look around!", "Ok");
+                Application.Current.MainPage = new RootPage();
+            }
 		}
-
-        private void BadFormAlert(string field)
-        {
-            DisplayAlert("Unable to register", "Please give a " + field, "Ok");
-        }
     }
 }
