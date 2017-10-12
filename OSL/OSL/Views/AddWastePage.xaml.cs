@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using OSL.Models;
 using OSL.Services;
@@ -22,12 +21,14 @@ namespace OSL.Views
             Donation waste = new Donation();
             waste.Amount = int.Parse(Regex.Replace(newWaste.Text, "[^0-9.]", ""));
             waste.Status = DonationStatus.Wasted;
-            await DisplayAlert("Adding waste", waste.Amount.ToString(), "Ok");
-            /*var res = await wasteRep.CreateWaste(waste);
+            waste.Expiration = DateTime.Now;
+            waste.PictureUrl = null;
+            waste.Title = "UserEnteredWaste";
+            var res = await wasteRep.CreateWaste(waste);
 
             if (res == null)
                 await DisplayAlert("Oops", "Something went wrong. Please try again later", "Ok");
-            else*/
+            else
                 await Navigation.PopAsync();
         }
     }

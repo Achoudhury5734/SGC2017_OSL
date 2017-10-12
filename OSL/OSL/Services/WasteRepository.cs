@@ -35,22 +35,5 @@ namespace OSL.Services
                    item.Created.Value.Year == DateTime.Now.Year
                    select item;
         }
-
-        public int GetDonorWaste(IEnumerable<Donation> items)
-        {
-            var queryWaste = from item in items
-                             where item.Status == DonationStatus.Wasted
-                             select item.Amount;
-            return queryWaste.Sum();
-        }
-
-        public int GetDonorComplete(IEnumerable<Donation> items)
-        {
-            var queryComplete = from item in items
-                                    //where item.Status == DonationStatus.Completed
-                                where item.Status == DonationStatus.Listed
-                                select item.Amount;
-            return queryComplete.Sum();
-        }
     }
 }

@@ -15,6 +15,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -24,6 +25,8 @@
             <Label x:Name="yearWasted" Text="{Binding YearWasted}" Grid.Row="0" Grid.Column="1"/>
             <Label Text="Donated" Grid.Row="1" Grid.Column="0" />
             <Label x:Name="yearDonated" Text="{Binding YearDonated}" Grid.Row="1" Grid.Column="1"/>
+            <Label Text="Listed" Grid.Row="2" Grid.Column="0" />
+            <Label x:Name="listed" Text="{Binding Listed}" Grid.Row="2" Grid.Column="1"/>
             </Grid>
        </StackLayout>
     </ContentPage.Content>

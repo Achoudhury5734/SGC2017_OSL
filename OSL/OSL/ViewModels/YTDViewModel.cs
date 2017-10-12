@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using OSL.Models;
 using OSL.Services;
 using Xamarin.Forms;
 
@@ -10,6 +13,7 @@ namespace OSL.ViewModels
     {
         public string YearWasted { get; set; }
         public string YearDonated { get; set; }
+        public string Listed { get; set; }
         public int CurrentYear { get; set; }
         public Command LoadAmountsCommand { get; set; }
 
@@ -32,10 +36,12 @@ namespace OSL.ViewModels
             try
             {
                 var userDonations = await wasteRep.GetYearDonorItems(13);
-                YearWasted = wasteRep.GetDonorWaste(userDonations) + " lbs";
+                YearWasted = queryDonorItems(DonationStatus.Wasted, userDonations) + " lbs"; 
                 OnPropertyChanged("YearWasted");
-                YearDonated = wasteRep.GetDonorComplete(userDonations) + " lbs";
+                YearDonated = queryDonorItems(DonationStatus.Completed, userDonations) + " lbs";
                 OnPropertyChanged("YearDonated");
+                Listed = queryDonorItems(DonationStatus.Listed, userDonations) + " lbs";
+                OnPropertyChanged("Listed");
             }
             catch (Exception ex)
             {
@@ -45,6 +51,14 @@ namespace OSL.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private int queryDonorItems(DonationStatus status, IEnumerable<Donation> items) 
+        {
+            var query = from item in items
+                             where item.Status == status
+                             select item.Amount;
+            return query.Sum();
         }
     }
 }
