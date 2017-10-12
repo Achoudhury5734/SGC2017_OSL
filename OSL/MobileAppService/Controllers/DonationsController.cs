@@ -17,6 +17,7 @@ namespace OSL.MobileAppService.Controllers
     {
         private readonly DonationRepository donationRepository;
         private readonly UserRepository userRepository;
+        ImageService imageService = new ImageService();
 
         public DonationsController(DonationRepository donationRepository, UserRepository userRepository)
         {
@@ -75,6 +76,7 @@ namespace OSL.MobileAppService.Controllers
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
             } else {
+                donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
                 donation.DonorId = user.Id;
                 donation.Created = DateTime.Now;
                 donation.Updated = DateTime.Now;
@@ -95,10 +97,27 @@ namespace OSL.MobileAppService.Controllers
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // POST api/Donation/5/status/PendingPickup
+        [Authorize]
+        [HttpPost("{Id}/status/{Status}")]
+        public IActionResult POST(int Id, string Status)
         {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user)) {
+                return new UnauthorizedResult();
+            } else {
+                var originalDonation = donationRepository.GetById(Id);
+                if (originalDonation == null) {
+                    return new NotFoundResult();
+                }
+                //
+                // Process Status property property HERE.
+                // Only Donor can change to Wasted, Completed, or Canceled
+                // ...
+
+            }
+            return BadRequest("Invalid donation data.");
+
         }
 
         // DELETE api/values/5
