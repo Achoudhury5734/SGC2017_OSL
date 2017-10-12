@@ -23,30 +23,32 @@ namespace OSL.Services
             return null;
         }
 
-        private async Task<IEnumerable<Donation>> GetDonorItems(int donorId)
+        public async Task<IEnumerable<Donation>> GetYearDonorItems(int donorId)
         {
             var response = await App.ApiClient.GetAsync($"api/donations");
             if (response.StatusCode != HttpStatusCode.OK)
                 return null;
             var result = response.Content.ReadAsStringAsync().Result;
             var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(result);
-            return from item in items where item.DonorId == donorId select item;
+            return from item in items 
+                   where item.DonorId == donorId && 
+                   item.Created.Value.Year == DateTime.Now.Year
+                   select item;
         }
 
-        public async Task<int> GetDonorWaste(int donorId)
+        public int GetDonorWaste(IEnumerable<Donation> items)
         {
-            var items = await GetDonorItems(donorId);
             var queryWaste = from item in items
                              where item.Status == DonationStatus.Wasted
                              select item.Amount;
             return queryWaste.Sum();
         }
 
-        public async Task<int> GetDonorComplete(int donorId)
+        public int GetDonorComplete(IEnumerable<Donation> items)
         {
-            var items = await GetDonorItems(donorId);
             var queryComplete = from item in items
-                                where item.Status == DonationStatus.Completed
+                                    //where item.Status == DonationStatus.Completed
+                                where item.Status == DonationStatus.Listed
                                 select item.Amount;
             return queryComplete.Sum();
         }

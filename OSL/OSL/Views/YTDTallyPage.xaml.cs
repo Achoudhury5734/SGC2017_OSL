@@ -12,10 +12,13 @@ namespace OSL.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class YTDTallyPage : ContentPage
 	{
+        YTDViewModel viewModel;
+
 		public YTDTallyPage()
 		{
-            this.BindingContext = new YTDViewModel();
 			InitializeComponent ();
+            viewModel = new YTDViewModel();
+            BindingContext = viewModel;
 		}
 
         async void AddWaste_Clicked(object sender, EventArgs e) 
@@ -23,5 +26,10 @@ namespace OSL.Views
             await Navigation.PushAsync(new AddWastePage());
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            viewModel.LoadAmountsCommand.Execute(null);
+        }
 	}
 }

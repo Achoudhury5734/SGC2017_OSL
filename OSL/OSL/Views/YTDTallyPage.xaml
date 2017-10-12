@@ -2,18 +2,29 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.Views.YTDTallyPage"
-             xmlns:vs="using:OSL.ViewModels">
+             xmlns:vm="using:OSL.ViewModels"
+             Title="YTD Tally">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add Waste" Clicked="AddWaste_Clicked"/> 
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Padding="10" Orientation="Vertical">
-            <!--<Label Text="YTD Tally coming soon!"  FontSize="16" HorizontalTextAlignment="Center" />-->
-            <Label Text="2017" FontSize="16" HorizontalTextAlignment="Center" />
-            <Label Text="Pounds Wasted"/>
-            <Label x:Name="yearWasted" Text="{Binding YearWasted}"/>
-            <Label Text="Pounds Donated" />
-            <Label x:Name="yearDonated" Text="{Binding YearDonated}"/>
-        </StackLayout>
+       <StackLayout Padding="10" Orientation="Vertical">
+            <Label x:Name="currentYear" Text="{Binding CurrentYear}" FontSize="18" HorizontalTextAlignment="Center" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            <Label Text="Wasted" Grid.Row="0" Grid.Column="0"/>
+            <Label x:Name="yearWasted" Text="{Binding YearWasted}" Grid.Row="0" Grid.Column="1"/>
+            <Label Text="Donated" Grid.Row="1" Grid.Column="0" />
+            <Label x:Name="yearDonated" Text="{Binding YearDonated}" Grid.Row="1" Grid.Column="1"/>
+            </Grid>
+       </StackLayout>
     </ContentPage.Content>
 </ContentPage>
