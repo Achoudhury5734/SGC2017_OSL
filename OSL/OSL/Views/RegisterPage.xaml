@@ -11,26 +11,26 @@
         <ScrollView>
             <StackLayout>
                 <Label Text="Organization Name" />
-                <Entry x:Name="orgName" Text="{Binding User.Organization_Name}"
-                       Placeholder="e.g. Operation Sack Lunch"/>
+                <Entry Text="{Binding User.Organization_Name}"
+                       Placeholder="Org Name"/>
                 <Label Text="Address"/>
-                <Entry x:Name="orgAddress1" Text="{Binding User.Organization_Address_Line1}"
-                       Placeholder="12345 NE 1st ST"/>
-                <Entry x:Name="orgAddress2" Text="{Binding User.Organization_Address_Line1}"
-                       Placeholder="Apt 1 (optional)"/>
+                <Entry Text="{Binding User.Organization_Address_Line1}"
+                       Placeholder="Line 1 e.g. 12345 NE 1st ST"/>
+                <Entry Text="{Binding User.Organization_Address_Line1}"
+                       Placeholder="Line 2 (optional)"/>
                 <Label Text="City"/>
-                <Entry x:Name="orgCity" Text="{Binding User.Organization_City}" Placeholder="Seattle"/>
+                <Entry Text="{Binding User.Organization_City}" Placeholder="City"/>
                 <Label Text="State"/>
-                <Entry x:Name="orgState" Text="{Binding User.Organization_State}" Placeholder="WA"/>
+                <Entry Text="{Binding User.Organization_State}" Placeholder="State"/>
                 <Label Text="Zip Code"/>
-                <Entry x:Name="orgZip" Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"
-                       Placeholder="98194"/>
+                <Entry Text="{Binding User.Organization_PostalCode}" Keyboard="Numeric"
+                       Placeholder="5 digits"/>
                 <Label Text="Phone Number" />
-                <Entry x:Name="phoneNumber" Text="{Binding User.Phone_Number}" Keyboard="Telephone"
+                <Entry Text="{Binding User.Phone_Number}" Keyboard="Telephone"
                        Placeholder="555-555-5555"/>
                 <Label Text="Contact Name" />
-                <Entry x:Name="personName" Text="{Binding User.Person_Name}" Placeholder="Jane Person"/>
-                <Button Text="Register" x:Name="registerButton" />
+                <Entry Text="{Binding User.Person_Name}" Placeholder="Jane Person"/>
+                <Button Text="Register" x:Name="registerButton" Command="{Binding RegisterUserCommand}" />
             </StackLayout>
         </ScrollView>
 	</ContentPage.Content>

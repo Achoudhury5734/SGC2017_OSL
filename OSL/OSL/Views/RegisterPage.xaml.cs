@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using OSL.Services;
+using OSL.ViewModels;
 using Xamarin.Forms;
 
 namespace OSL.Views
@@ -13,52 +7,29 @@ namespace OSL.Views
     public partial class RegisterPage : ContentPage
     {
         public Models.User User;
+        RegistrationViewModel viewModel;
 
         public RegisterPage()
         {
             User = new Models.User();
+            viewModel = new RegistrationViewModel();
+            BindingContext = viewModel;
             InitializeComponent();
-            registerButton.Clicked += Handle_Registration;
+
+            MessagingCenter.Subscribe<RegistrationViewModel, string>(this, "BadRegistrationAlert", BadRegistration);
+            MessagingCenter.Subscribe<RegistrationViewModel>(this, "GoodRegistrationAlert", GoodRegistration);
         }
 
-        private async void Handle_Registration(object sender, EventArgs e)
+        private void BadRegistration(RegistrationViewModel obj, string message)
         {
-            User.Organization_Country = "USA";
-            User.Organization_Name = orgName.Text;
-            User.Organization_City = orgCity.Text;
-            User.Organization_Address_Line1 = orgAddress1.Text;
-            User.Organization_Address_Line2 = orgAddress2.Text;
-            User.Organization_PostalCode = orgZip.Text;
-            User.Person_Name = orgName.Text;
-            User.Phone_Number = phoneNumber.Text;
-            User.Person_Name = personName.Text;
-            User.Organization_State = orgState.Text;
+            DisplayAlert("Could not register", message, "Ok");
+        }
 
-            foreach (var pi in User.GetType().GetProperties())
-            {
-                if (String.IsNullOrEmpty((string)pi.GetValue(User)))
-                {
-                    if (!pi.Name.Equals("Organization_Address_Line2"))
-                    {
-                        await DisplayAlert("Unable to register",
-                                           "Please fill out all required fields", "Ok");
-                        return;
-                    }
-                }
-            }
-
-            var userRep = new UserRepository();
-            var res = await userRep.Create(User);
-            if (res == null)
-            {
-                await DisplayAlert("Oops", "Something went wrong. Please try again later.", "Ok");
-            }
-            else
-            {
-                await DisplayAlert("Thanks for signing up!",
+        private void GoodRegistration(RegistrationViewModel obj) 
+        {
+            DisplayAlert("Thanks for signing up!",
                          "We'll let you know when you're verified. Feel free to look around!", "Ok");
-                Application.Current.MainPage = new RootPage();
-            }
-		}
+            Application.Current.MainPage = new RootPage();
+        }
     }
 }
