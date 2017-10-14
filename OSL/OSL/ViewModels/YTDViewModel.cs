@@ -35,11 +35,14 @@ namespace OSL.ViewModels
 
             try
             {
-                var userDonations = await wasteRep.GetYearDonorItems(13);
+                var userDonations = await wasteRep.GetYearDonorItems(App.User.Id);
+
                 YearWasted = queryDonorItems(DonationStatus.Wasted, userDonations) + " lbs"; 
                 OnPropertyChanged("YearWasted");
+
                 YearDonated = queryDonorItems(DonationStatus.Completed, userDonations) + " lbs";
                 OnPropertyChanged("YearDonated");
+
                 Listed = queryDonorItems(DonationStatus.Listed, userDonations) + " lbs";
                 OnPropertyChanged("Listed");
             }
