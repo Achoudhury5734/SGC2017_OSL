@@ -5,12 +5,12 @@ using OSL.ViewModels;
 
 namespace OSL.Views
 {
-    public partial class DonorItemPage : ContentPage
+    public partial class DonationPage : ContentPage
     {
-        public DonorItemPage()
+        public DonationPage()
         {
             InitializeComponent();
-            this.BindingContext = new DonorViewModel
+            this.BindingContext = new DonationViewModel
             {
                 Page = this
             };

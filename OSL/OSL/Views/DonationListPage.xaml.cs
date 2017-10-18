@@ -1,20 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using OSL;
+using OSL.Models;
+using OSL.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DonationListPage : ContentPage
 	{
-		public DonationListPage ()
+		public DonationListPage()
 		{
-			InitializeComponent ();
-		}
-	}
+			InitializeComponent();
+            this.BindingContext = new DonationListViewModel
+            {
+                Page = this
+            };
+        }
+
+        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+        {
+            var item = args.SelectedItem as Donation;
+            if (item == null)
+                return;
+
+            await Navigation.PushAsync(new DonationDetailPage(new DonationDetailViewModel(item)));
+
+            // Manually deselect item
+            ItemsListView.SelectedItem = null;
+        }
+    }
 }
