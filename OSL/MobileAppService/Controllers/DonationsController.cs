@@ -46,7 +46,7 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
-        // GET: api/donor/5
+        // GET: api/values/donor/13
         [Authorize]
         [HttpGet("donor/{donorId}")]
         public IActionResult GetUserDonations(int donorId)
