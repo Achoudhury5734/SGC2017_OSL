@@ -17,7 +17,7 @@ namespace OSL.MobileAppService.Controllers
     {
         private readonly DonationRepository donationRepository;
         private readonly UserRepository userRepository;
-        ImageService imageService = new ImageService();
+        //ImageService imageService = new ImageService();
 
         public DonationsController(DonationRepository donationRepository, UserRepository userRepository)
         {
@@ -40,6 +40,29 @@ namespace OSL.MobileAppService.Controllers
             {
                 donation.Donor = userRepository.GetById(donation.DonorId);
                 if (donation.RecipientId.HasValue) {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
+            }
+            return Ok(donations);
+        }
+
+        // GET: api/donor/5
+        [Authorize]
+        [HttpGet("donor/{donorId}")]
+        public IActionResult GetUserDonations(int donorId)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donations = donationRepository.GetByUserId(donorId);
+            foreach (var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                if (donation.RecipientId.HasValue)
+                {
                     donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
                 }
             }
@@ -76,7 +99,7 @@ namespace OSL.MobileAppService.Controllers
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
             } else {
-                donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
+               // donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
                 donation.DonorId = user.Id;
                 donation.Created = DateTime.Now;
                 donation.Updated = DateTime.Now;

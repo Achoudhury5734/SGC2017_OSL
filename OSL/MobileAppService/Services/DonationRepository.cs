@@ -51,6 +51,30 @@ namespace OSL.MobileAppService.Services
             return donations;
         }
 
+        public IEnumerable<Donation> GetByUserId(int DonorId) 
+        {
+            var query = "SELECT * FROM Donation WHERE [DonorId] = @DonorId";
+            var donations = new List<Donation>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DonorId", DonorId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var donation = new Donation(reader);
+                        donation.PictureUrl = "http://lorempixel.com/400/300/?guid=" + Guid.NewGuid();
+                        donations.Add(donation);
+                    }
+                }
+            }
+            return donations;
+        }
+
         public Donation GetById(int Id)
         {
             var query = "SELECT * FROM [Donation] WHERE [Id] = @Id";
