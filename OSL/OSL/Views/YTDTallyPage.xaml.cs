@@ -1,5 +1,7 @@
 ﻿using System;
 using OSL.ViewModels;
+using OxyPlot;
+using OxyPlot.Xamarin.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,9 +12,9 @@ namespace OSL.Views
 	{
         YTDViewModel viewModel;
 
-		public YTDTallyPage()
-		{
-			InitializeComponent ();
+        public YTDTallyPage()
+        {
+            InitializeComponent();
             viewModel = new YTDViewModel();
             BindingContext = viewModel;
 		}

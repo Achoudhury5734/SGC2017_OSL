@@ -18,6 +18,7 @@ namespace OSL.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
 
             App.UiParent = new UIParent(Xamarin.Forms.Forms.Context as Activity);
 

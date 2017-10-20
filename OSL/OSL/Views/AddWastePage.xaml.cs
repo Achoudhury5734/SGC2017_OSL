@@ -19,7 +19,7 @@ namespace OSL.Views
         {
             WasteRepository wasteRep = new WasteRepository();
             Donation waste = new Donation();
-            waste.Amount = int.Parse(Regex.Replace(newWaste.Text, "[^0-9.]", ""));
+            waste.Amount = Convert.ToInt32(double.Parse(Regex.Replace(newWaste.Text, "[^0-9.]", "")));
             waste.Status = DonationStatus.Wasted;
             waste.Expiration = DateTime.Now;
             waste.PictureUrl = null;

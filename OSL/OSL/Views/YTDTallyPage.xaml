@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
              x:Class="OSL.Views.YTDTallyPage"
              xmlns:vm="using:OSL.ViewModels"
              Title="YTD Tally">
@@ -8,11 +9,14 @@
         <ToolbarItem Text="Add Waste" Clicked="AddWaste_Clicked"/> 
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
+       <ScrollView>
        <StackLayout Padding="10" Orientation="Vertical">
-            <Label x:Name="currentYear" Text="{Binding CurrentYear}" FontSize="18" HorizontalTextAlignment="Center" />
-            <ActivityIndicator IsRunning="{Binding IsBusy}"/>
-            <Grid>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+            <oxy:PlotView Model="{Binding Model}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                          HeightRequest="300" WidthRequest="350"/>
+            <Grid Padding="20" IsVisible="{Binding NotBusy}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -21,13 +25,16 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-            <Label Text="Wasted" Grid.Row="0" Grid.Column="0"/>
-            <Label x:Name="yearWasted" Text="{Binding YearWasted}" Grid.Row="0" Grid.Column="1"/>
-            <Label Text="Donated" Grid.Row="1" Grid.Column="0" />
-            <Label x:Name="yearDonated" Text="{Binding YearDonated}" Grid.Row="1" Grid.Column="1"/>
-            <Label Text="Listed" Grid.Row="2" Grid.Column="0" />
-            <Label x:Name="listed" Text="{Binding Listed}" Grid.Row="2" Grid.Column="1"/>
+                <Label Text="Donated" Grid.Row="0" Grid.Column="0" />
+                <Label Text="{Binding YearDonated}" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label Text="Wasted" Grid.Row="1" Grid.Column="0"/>
+                <Label Text="{Binding YearWasted}" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label Text="Listed" Grid.Row="2" Grid.Column="0" />
+                <Label Text="{Binding Listed}" Grid.Row="2" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label Text="Pending" Grid.Row="3" Grid.Column="0"/>
+                <Label Text="{Binding Pending}" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="End"/>
             </Grid>
        </StackLayout>
+       </ScrollView>
     </ContentPage.Content>
 </ContentPage>

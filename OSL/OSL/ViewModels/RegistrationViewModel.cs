@@ -48,8 +48,6 @@ namespace OSL.ViewModels
         {
             foreach (var pi in User.GetType().GetProperties())
             {
-                if (pi.Name.Equals("Id"))
-                    continue;
                 if (String.IsNullOrEmpty((string)pi.GetValue(User)))
                 {
                     if (!pi.Name.Equals("Organization_Address_Line2"))

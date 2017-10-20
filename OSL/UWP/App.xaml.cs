@@ -50,6 +50,7 @@ namespace OSL.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 Xamarin.Forms.Forms.Init(e); // requires the `e` parameter
+                OxyPlot.Xamarin.Forms.Platform.UWP.PlotViewRenderer.Init();
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
