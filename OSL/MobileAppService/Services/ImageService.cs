@@ -4,14 +4,15 @@ using System.IO;
 using System.Linq;  
 using System.Threading.Tasks;  
 using System.Web;
-using Microsoft.WindowsAzure.Storage;  
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace OSL.MobileAppService.Services
 {
     public class ImageService
     {
-        public async Task<string> UploadImageAsync(string imageToUploadBase64  
+       /* public async Task<string> UploadImageAsync(string imageToUploadBase64)  
         {  
             string imageFullPath = null;  
             if (imageToUploadBase64 == "" || imageToUploadBase64 == null)  
@@ -47,6 +48,6 @@ namespace OSL.MobileAppService.Services
 
             }  
             return imageFullPath;  
-        }  
+        }  */
     }
 }
