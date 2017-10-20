@@ -46,33 +46,10 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
-        // GET: api/values/donor/13
-        [Authorize]
-        [HttpGet("donor/{donorId}")]
-        public IActionResult GetUserDonations(int donorId)
-        {
-            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (!userRepository.IsActiveUser(user))
-            {
-                return new UnauthorizedResult();
-            }
-
-            var donations = donationRepository.GetByUserId(donorId);
-            foreach (var donation in donations)
-            {
-                donation.Donor = userRepository.GetById(donation.DonorId);
-                if (donation.RecipientId.HasValue)
-                {
-                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
-                }
-            }
-            return Ok(donations);
-        }
-
         // GET: api/values/donor/me
         [Authorize]
         [HttpGet("donor/me")]
-        public IActionResult GetDonations()
+        public IActionResult GetUserDonations()
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
