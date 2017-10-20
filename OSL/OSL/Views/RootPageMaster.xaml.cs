@@ -33,7 +33,7 @@ namespace OSL.Views
             {
                 MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
                 {
-                    new RootPageMenuItem { Id = 0, Title = "Donate", TargetType=typeof(DonorItemPage) },
+                    new RootPageMenuItem { Id = 0, Title = "Donate", TargetType=typeof(DonationPage) },
                     new RootPageMenuItem { Id = 1, Title = "Pickup", TargetType=typeof(PickupItemsPage) },
                     new RootPageMenuItem { Id = 2, Title = "YTD Tally", TargetType=typeof(YTDTallyPage) },
                     new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) }

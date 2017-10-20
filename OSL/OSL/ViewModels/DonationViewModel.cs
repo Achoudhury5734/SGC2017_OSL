@@ -11,13 +11,13 @@ using System.Net.Http;
 
 namespace OSL.ViewModels
 {
-    public class DonorViewModel : ViewModelBase
+    public class DonationViewModel : ViewModelBase
     {
         private readonly DonationRepository donationRepository;
 
-        public DonorViewModel()
+        public DonationViewModel()
         {
-            SaveCommand = new Command(async () => await SaveDonationAsync());
+            SaveCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
             TakePictureCommand = new Command(async () => await TakePictureAsync());
 
             ExpirationDate = DateTime.Now;
@@ -81,12 +81,16 @@ namespace OSL.ViewModels
             set { SetProperty(ref page, value); }
         }
 
-        public ICommand SaveCommand { get; }
+        public Command SaveCommand { get; }
         public ICommand TakePictureCommand { get; }
 
         public async Task SaveDonationAsync()
         {
+            IsBusy = true;
+            SaveCommand.ChangeCanExecute();
             await donationRepository.SaveDonationAsync(DonationTitle, mediaFile, Quantity, DonationType, ExpirationDate, ExpirationTime);
+            IsBusy = false;
+            SaveCommand.ChangeCanExecute();
 
             await page.Navigation.PushAsync(new DonationListPage());
         }

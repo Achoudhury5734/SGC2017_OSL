@@ -32,7 +32,7 @@ namespace OSL
 
         async void DonateItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new DonorItemPage());//(new NewPickupItemPage());
+            await Navigation.PushAsync(new DonationPage());//(new NewPickupItemPage());
         }
 
         protected override void OnAppearing()

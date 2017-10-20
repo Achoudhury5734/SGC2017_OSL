@@ -13,19 +13,19 @@ namespace OSL.Services
 {
     public class DonationRepository
     {
-        public DonationRepository()
+        static DonationRepository()
         {
             Donations = new List<Donation>();
         }
 
-        public List<Donation> Donations { get; set; }
+        public static List<Donation> Donations { get; set; }
 
         public Task<Donation> GetDonationAsync(int donationId)
         {
             return Task.FromResult(Donations.Find(d => d.Id == donationId));
         }
 
-        public Task<IEnumerable<Donation>> GetDonationsByAccountAsync(string accountId)
+        public Task<IEnumerable<Donation>> GetDonationsByUserAsync()
         {
             return Task.FromResult(Donations.AsEnumerable());
         }
@@ -57,6 +57,8 @@ namespace OSL.Services
                 throw;
             }
 
+            //Just for testing...
+            Donations.Add(new Donation { Title = donationCapture.Title, PictureUrl = "https://i.ytimg.com/vi/jqDUmYVQxOI/hqdefault.jpg", Type = (DonationType)Enum.Parse(typeof(DonationType), donationCapture.Type ) });
         }
 
         public static byte[] ReadFully(Stream input)
