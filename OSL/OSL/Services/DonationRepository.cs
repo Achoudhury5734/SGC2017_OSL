@@ -25,9 +25,10 @@ namespace OSL.Services
             return Task.FromResult(Donations.Find(d => d.Id == donationId));
         }
 
-        public Task<IEnumerable<Donation>> GetDonationsByUserAsync()
+        public async Task<IEnumerable<Donation>> GetDonationsByUserAsync()
         {
-            return Task.FromResult(Donations.AsEnumerable());
+            var json = await App.ApiClient.GetStringAsync(App.BackendUrl + "/api/donations/donor/me");
+            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
         public async Task SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
@@ -43,22 +44,12 @@ namespace OSL.Services
             };
 
             var serializedDonationCapture = JsonConvert.SerializeObject(donationCapture);
-            try
-            {
-                var message = new HttpRequestMessage(HttpMethod.Post, App.BackendUrl + "/api/donations");
-                message.Content = new StringContent(serializedDonationCapture, Encoding.UTF8, "application/json");
 
-                var response = await App.ApiClient.SendAsync(message);
-                response.EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
+            var message = new HttpRequestMessage(HttpMethod.Post, App.BackendUrl + "/api/donations");
+            message.Content = new StringContent(serializedDonationCapture, Encoding.UTF8, "application/json");
 
-                throw;
-            }
-
-            //Just for testing...
-            Donations.Add(new Donation { Title = donationCapture.Title, PictureUrl = "https://i.ytimg.com/vi/jqDUmYVQxOI/hqdefault.jpg", Type = (DonationType)Enum.Parse(typeof(DonationType), donationCapture.Type ) });
+            var response = await App.ApiClient.SendAsync(message);
+            response.EnsureSuccessStatusCode();
         }
 
         public static byte[] ReadFully(Stream input)
