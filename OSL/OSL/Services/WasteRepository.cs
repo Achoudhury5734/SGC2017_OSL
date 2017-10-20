@@ -23,16 +23,15 @@ namespace OSL.Services
             return null;
         }
 
-        public async Task<IEnumerable<Donation>> GetYearDonorItems(int donorId)
+        public async Task<IEnumerable<Donation>> GetYearDonorItems()
         {
-            var response = await App.ApiClient.GetAsync($"api/donations");
+            var response = await App.ApiClient.GetAsync($"api/donations/donor/me");
             if (response.StatusCode != HttpStatusCode.OK)
                 return null;
             var result = response.Content.ReadAsStringAsync().Result;
             var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(result);
             return from item in items 
-                   where item.DonorId == donorId && 
-                   item.Created.Value.Year == DateTime.Now.Year
+                   where item.Created.Value.Year == DateTime.Now.Year
                    select item;
         }
     }

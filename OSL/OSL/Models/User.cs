@@ -3,7 +3,6 @@ namespace OSL.Models
 {
     public class User
     {
-        public int Id { get; set; }
         public string Person_Name { get; set; }
         public string Phone_Number { get; set; }
         public string Organization_Name { get; set; }

@@ -3,7 +3,7 @@
 	<ContentPage.Content>
         <StackLayout>
             <Label Text="Add Waste To Log"/>
-            <Entry x:Name="newWaste" Keyboard="Numeric"/>
+            <Entry x:Name="newWaste" Keyboard="Numeric" Placeholder="Quantity (lbs)"/>
             <Button Text="Add" x:Name="addWaste"/>
         </StackLayout>
 	</ContentPage.Content>

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using OSL.Models;
 using OSL.Services;
+using OxyPlot;
+using OxyPlot.Series;
 using Xamarin.Forms;
 
 namespace OSL.ViewModels
@@ -14,16 +16,30 @@ namespace OSL.ViewModels
         public string YearWasted { get; set; }
         public string YearDonated { get; set; }
         public string Listed { get; set; }
-        public int CurrentYear { get; set; }
+        public string Pending { get; set; }
         public Command LoadAmountsCommand { get; set; }
+        public PlotModel Model { get; set; }
+
+        private double yearWasted;
+        private double yearDonated;
+        private double listed;
+        private double pending;
 
         private readonly WasteRepository wasteRep;
 
         public YTDViewModel()
         {
             wasteRep = new WasteRepository();
-            CurrentYear = DateTime.Now.Year;
             LoadAmountsCommand = new Command(async () => await ExecuteLoadAmountsCommand());
+            Model = new PlotModel();
+            notBusy = false;
+        }
+
+        private bool notBusy;
+        public bool NotBusy
+        {
+            get{ return notBusy; }
+            set { notBusy = value; }
         }
 
         async Task ExecuteLoadAmountsCommand() 
@@ -35,16 +51,26 @@ namespace OSL.ViewModels
 
             try
             {
-                var userDonations = await wasteRep.GetYearDonorItems(App.User.Id);
+                var userDonations = await wasteRep.GetYearDonorItems();
 
-                YearWasted = queryDonorItems(DonationStatus.Wasted, userDonations) + " lbs"; 
+                yearWasted = queryDonorItems(DonationStatus.Wasted, userDonations);
+                YearWasted = yearWasted + " lbs"; 
                 OnPropertyChanged("YearWasted");
 
-                YearDonated = queryDonorItems(DonationStatus.Completed, userDonations) + " lbs";
+                yearDonated = queryDonorItems(DonationStatus.Completed, userDonations);
+                YearDonated = yearDonated + " lbs";
                 OnPropertyChanged("YearDonated");
 
-                Listed = queryDonorItems(DonationStatus.Listed, userDonations) + " lbs";
+                listed = queryDonorItems(DonationStatus.Listed, userDonations);
+                Listed = listed + " lbs";
                 OnPropertyChanged("Listed");
+
+                pending = queryDonorItems(DonationStatus.PendingPickup, userDonations);
+                Pending = pending + " lbs";
+                OnPropertyChanged("Pending");
+
+                Model = generatePlotModel();
+                OnPropertyChanged("Model");
             }
             catch (Exception ex)
             {
@@ -53,6 +79,8 @@ namespace OSL.ViewModels
             finally
             {
                 IsBusy = false;
+                NotBusy = true;
+                OnPropertyChanged("NotBusy");
             }
         }
 
@@ -62,6 +90,38 @@ namespace OSL.ViewModels
                              where item.Status == status
                              select item.Amount;
             return query.Sum();
+        }
+
+        private PlotModel generatePlotModel()
+        {
+            var model = new PlotModel
+            {
+                Title = DateTime.Now.Year + "",
+                PlotAreaBorderColor = OxyColors.Transparent
+            };
+            var ps = new PieSeries
+            {
+                StrokeThickness = 2.0,
+                InsideLabelPosition = 0.5,
+                AngleSpan = 360,
+                StartAngle = 0,
+                InnerDiameter = 0.4
+            };
+
+            // Over the year pending and listed should be way smaller and labels won't fit
+            ps.Slices.Add(new PieSlice("", listed) { Fill = OxyColors.DarkOrange });
+            ps.Slices.Add(new PieSlice("", pending) { Fill = OxyColors.Yellow });
+            ps.Slices.Add(new PieSlice("Donated", yearDonated) {Fill = OxyColors.LimeGreen });
+            ps.Slices.Add(new PieSlice("Wasted", yearWasted) {Fill = OxyColors.Red });
+            ps.FontSize = 15.5;
+
+            ps.TickHorizontalLength = 0.0;
+            ps.TickRadialLength = 0.0;
+            ps.OutsideLabelFormat = "";
+
+            model.Series.Add(ps);
+
+            return model;
         }
     }
 }
