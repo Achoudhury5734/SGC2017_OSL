@@ -19,8 +19,6 @@ namespace OSL
             Title = "My donations";
             Items = new ObservableCollection<Donation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItems(), () => !IsBusy);
-
-            ExecuteLoadItems().Wait();
         }
 
         public ObservableCollection<Donation> Items { get; set; }
@@ -37,6 +35,7 @@ namespace OSL
             {
                 Items.Clear();
                 var items = await donationRepository.GetDonationsByUserAsync();
+
                 foreach (var item in items)
                 {
                     Items.Add(item);

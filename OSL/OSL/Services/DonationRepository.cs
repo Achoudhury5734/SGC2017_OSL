@@ -27,7 +27,9 @@ namespace OSL.Services
 
         public async Task<IEnumerable<Donation>> GetDonationsByUserAsync()
         {
-            var json = await App.ApiClient.GetStringAsync(App.BackendUrl + "/api/donations/donor/me");
+            //var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
+            var json = await App.ApiClient.GetStringAsync("api/donations");
+
             return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
