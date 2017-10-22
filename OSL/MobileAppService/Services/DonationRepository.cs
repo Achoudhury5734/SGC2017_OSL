@@ -28,9 +28,32 @@ namespace OSL.MobileAppService.Services
             }
         }
 
-        public IEnumerable<Donation> Get()
+        public IEnumerable<Donation> GetAll()
         {
-            var query = "SELECT * FROM Donation";
+            var query = "SELECT * FROM [Donation]";
+            var donations = new List<Donation>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var donation = new Donation(reader);
+                        donation.PictureUrl = "http://lorempixel.com/400/300/?guid=" + Guid.NewGuid();
+                        donations.Add(donation);
+                    }
+                }
+            }
+            return donations;
+        }
+
+        public IEnumerable<Donation> GetListed()
+        {
+            var query = $"SELECT * FROM [Donation] WHERE [Status] = {(int)DonationStatus.Listed}";
             var donations = new List<Donation>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -150,5 +173,61 @@ namespace OSL.MobileAppService.Services
             }
             return null;
         }
+
+        public void AcceptDonation(int donationId, int recipientId)
+        {
+            var query = "UPDATE Donation " +
+                        $"SET RecipientId = @RecipientId, Status = {(int)DonationStatus.PendingPickup} " +
+                        "WHERE [Id] = @Id;";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", donationId);
+                    command.Parameters.AddWithValue("@RecipientId", recipientId);
+                    command.ExecuteScalar();
+                }
+            }
+        }
+
+        public void CompleteDonation(int donationId)
+        {
+            var query = "UPDATE Donation " +
+                        $"SET Status = {(int)DonationStatus.Completed} " +
+                        "WHERE [Id] = @Id;";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", donationId);
+                    command.ExecuteScalar();
+                }
+            }
+        }
+
+        public void WasteDonation(int donationId)
+        {
+            var query = "UPDATE Donation " +
+                        $"SET Status = {(int)DonationStatus.Wasted} " +
+                        "WHERE [Id] = @Id;";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", donationId);
+                    command.ExecuteScalar();
+                }
+            }
+        }
+
     }
 }

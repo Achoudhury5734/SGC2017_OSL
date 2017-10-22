@@ -18,13 +18,13 @@ namespace OSL
             this.donationRepository = new DonationRepository();
             Title = "My donations";
             Items = new ObservableCollection<Donation>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItems(), () => !IsBusy);
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsAsync(), () => !IsBusy);
         }
 
         public ObservableCollection<Donation> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        async Task ExecuteLoadItems()
+        async Task ExecuteLoadItemsAsync()
         {
             if (IsBusy)
                 return;

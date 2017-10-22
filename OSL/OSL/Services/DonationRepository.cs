@@ -13,23 +13,9 @@ namespace OSL.Services
 {
     public class DonationRepository
     {
-        static DonationRepository()
-        {
-            Donations = new List<Donation>();
-        }
-
-        public static List<Donation> Donations { get; set; }
-
-        public Task<Donation> GetDonationAsync(int donationId)
-        {
-            return Task.FromResult(Donations.Find(d => d.Id == donationId));
-        }
-
         public async Task<IEnumerable<Donation>> GetDonationsByUserAsync()
         {
-            //var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
-            var json = await App.ApiClient.GetStringAsync("api/donations");
-
+            var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
             return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
@@ -54,6 +40,18 @@ namespace OSL.Services
             response.EnsureSuccessStatusCode();
         }
 
+        public async Task CompleteDonationAsync(int donationId)
+        {
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/complete", null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task WasteDonationAsync(int donationId)
+        {
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/waste", null);
+            response.EnsureSuccessStatusCode();
+        }
+
         public static byte[] ReadFully(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
@@ -67,19 +65,6 @@ namespace OSL.Services
                 return ms.ToArray();
             }
         }
-        public Task CompleteDonationAsync(string donationId)
-        {
-            return Task.CompletedTask;
-        }
 
-        public Task WasteDonationAsync(string donationId)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task AcceptDonation(string accountId, string donationId)
-        {
-            return Task.CompletedTask;
-        }
     }
 }
