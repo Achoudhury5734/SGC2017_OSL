@@ -60,6 +60,7 @@ namespace OSL.MobileAppService
             services.AddSingleton(Configuration);
             services.AddSingleton<DonationRepository, DonationRepository>();
             services.AddSingleton<UserRepository, UserRepository>();
+            services.AddSingleton<ImageService, ImageService>();
 
             services.AddSwaggerGen(c =>
             {

@@ -17,12 +17,13 @@ namespace OSL.MobileAppService.Controllers
     {
         private readonly DonationRepository donationRepository;
         private readonly UserRepository userRepository;
-        //ImageService imageService = new ImageService();
+        private readonly ImageService imageService;
 
-        public DonationsController(DonationRepository donationRepository, UserRepository userRepository)
+        public DonationsController(DonationRepository donationRepository, UserRepository userRepository, ImageService imageService)
         {
             this.donationRepository = donationRepository;
             this.userRepository = userRepository;
+            this.imageService = imageService;
         }
 
         // GET: api/donations
@@ -116,13 +117,13 @@ namespace OSL.MobileAppService.Controllers
         // POST api/donations
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Donation donation)
+        public async Task<IActionResult> Post([FromBody]Donation donation)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
             } else {
-               // donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
+                donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
                 donation.DonorId = user.Id;
                 donation.Created = DateTime.Now;
                 donation.Updated = DateTime.Now;

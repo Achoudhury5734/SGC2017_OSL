@@ -25,7 +25,7 @@ namespace OSL.Services
             var donationCapture = new DonationCapture
             {
                 Expiration = expirationDate.Add(expirationTime),
-                Image = JsonConvert.SerializeObject(filebytes),
+                Image = filebytes,
                 Amount = quantity,
                 Title = donationTitle,
                 Type = donationType

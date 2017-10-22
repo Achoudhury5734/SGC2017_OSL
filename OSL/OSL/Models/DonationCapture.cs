@@ -8,7 +8,7 @@ namespace OSL.Models
         public string Type { get; set; }
         public int Amount { get; set; }
         public DateTime Expiration { get; internal set; }
-        public string Image { get; set; }
+        public byte[] Image { get; set; }
 
     }
 }
