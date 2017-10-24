@@ -261,6 +261,7 @@ namespace OSL.MobileAppService.Services
                 {
                     command.Parameters.AddWithValue("@Id", donationId);
                     command.Parameters.AddWithValue("@Updated", DateTime.Now);
+                    command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
                     command.ExecuteScalar();
                     command.Parameters.Clear();
                 }
