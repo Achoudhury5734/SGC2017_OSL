@@ -7,27 +7,31 @@ using System.Web;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Extensions.Configuration;
 
 namespace OSL.MobileAppService.Services
 {
     public class ImageService
     {
-       /* public async Task<string> UploadImageAsync(string imageToUploadBase64)  
+        public ImageService(IConfigurationRoot configurationRoot)
+        {
+            Configuration = configurationRoot;
+        }
+
+        public IConfigurationRoot Configuration { get; }
+
+        public async Task<string> UploadImageAsync(byte[] imageToUploadBytes)  
         {  
             string imageFullPath = null;  
-            if (imageToUploadBase64 == "" || imageToUploadBase64 == null)  
-            {  
-                return null;  
-            }  
             try  
             {  
                 var credentials = new StorageCredentials(
-                    configuration["BlobStorage:AccountName"],
-                    configuration["BlobStorage:AccessKey"]
+                    Configuration["BlobStorage:AccountName"],
+                    Configuration["BlobStorage:AccessKey"]
                 );
-                var account = new CloudStorageAccount(credentials, useHttps: true);
-                var client = account.CreateCloudBlobClient(); 
-                var container = client.GetContainerReference(configuration["BlobStorage:ContainerName"]);  
+                var storageAccount = new CloudStorageAccount(credentials, useHttps: true);
+                var blobClient = storageAccount.CreateCloudBlobClient(); 
+                var container = blobClient.GetContainerReference(Configuration["BlobStorage:ContainerName"]);  
 
                 if (await container.CreateIfNotExistsAsync())  
                 {  
@@ -35,11 +39,11 @@ namespace OSL.MobileAppService.Services
                         PublicAccess = BlobContainerPublicAccessType.Blob  
                     });  
                 }  
-                string imageName = Guid.NewGuid().ToString() + "-" + Path.GetExtension(imageToUpload.FileName);  
+                string imageName = Guid.NewGuid().ToString() + ".jpg";  
 
-                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);  
-                cloudBlockBlob.Properties.ContentType = imageToUpload.ContentType;  
-                await cloudBlockBlob.UploadFromStreamAsync(imageToUpload.InputStream);  
+                CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(imageName);  
+
+                await cloudBlockBlob.UploadFromByteArrayAsync(imageToUploadBytes, 0, imageToUploadBytes.Length);  
 
                 imageFullPath = cloudBlockBlob.Uri.ToString();  
             }  
@@ -48,6 +52,6 @@ namespace OSL.MobileAppService.Services
 
             }  
             return imageFullPath;  
-        }  */
+        }
     }
 }

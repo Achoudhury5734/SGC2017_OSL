@@ -4,7 +4,8 @@
              x:Class="OSL.Views.DonationDetailPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin Forms!" />
+            <Button Text="Complete Donation" Command="{Binding CompleteCommand}"/>
+            <Button Text="Waste Donation" Command="{Binding WasteCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

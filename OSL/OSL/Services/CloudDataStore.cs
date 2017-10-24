@@ -26,7 +26,7 @@ namespace OSL
             {
                 //Below line required for debugging only
                 //App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ilg1ZVhrNHh5b2pORnVtMWtsMll0djhkbE5QNC1jNTdkTzZRR1RWQndhTmsifQ.eyJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNjcxYjE0NGYtZjc1OS00ODYyLWIzMTktZmU4YjYxNjAyMTUyL3YyLjAvIiwiZXhwIjoxNTA3NTgzMDAzLCJuYmYiOjE1MDc0OTY2MDMsImF1ZCI6ImMyZmRjN2U1LWE2NDUtNDc4Ni04ZDY1LTZhMWQ3OGUxZDRlZCIsIm9pZCI6Ijk4NjczYjQ5LTI3ZTgtNGM3OC04N2RmLTA1NzZkZThmOTMyOCIsInN1YiI6Ijk4NjczYjQ5LTI3ZTgtNGM3OC04N2RmLTA1NzZkZThmOTMyOCIsImVtYWlscyI6WyJkYXZlc3RlcnM4MUBnbWFpbC5jb20iXSwidGZwIjoiQjJDXzFfU2lnblVwU2lnbkluIiwic2NwIjoidXNlciIsImF6cCI6IjE3NzE4NjllLWYzYWEtNGQxNi1iZDFhLWFmMmYwZTY2MmJjZCIsInZlciI6IjEuMCJ9.DxyAPAEVXTp5i8bCHmWo9_7Bqr2KryYgrlCmv6mk7GDVtZL1H6vAZn_aMFXx4UbjbWnBvl45KBqJFma2TtHfEzrA7tMrdOvkYkExo3SPA5p8TwH4w5qiRYh5HMJlR9kTQBr1KZKwumfPGL_sejm2hOWKtAt7piJGZq9dOPwVRSbpTyVeYkLAzaMhulkqwW3hW4RcsbKabdV0IPVVajmhbpxmaz4BrpxM05Fc_AJVQOpVX6Wdd_NUhoDKiRq-x3Xst_FoLzjYnhSr5BKnDzpkICUGLeFzTuTEbxfVkhpgL-_NbX4Rzq8BkNvSnuW8ZilBDslJeF0bG_cgxaaDEmzckA");
-                var json = await App.ApiClient.GetStringAsync($"api/donations");
+                var json = await App.ApiClient.GetStringAsync($"api/donations/status/listed");
                 
                 items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<PickupItem>>(json));
             }
@@ -59,7 +59,7 @@ namespace OSL
 
         public async Task<bool> AcceptPickupItemAsync(PickupItem item)
         {
-            var response = await App.ApiClient.PostAsync($"api/donations/{item.Id}/accept", null);
+            var response = await App.ApiClient.PutAsync($"api/donations/{item.Id}/accept", null);
 
             return response.IsSuccessStatusCode;
         }

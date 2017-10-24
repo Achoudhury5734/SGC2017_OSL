@@ -18,15 +18,13 @@ namespace OSL
             this.donationRepository = new DonationRepository();
             Title = "My donations";
             Items = new ObservableCollection<Donation>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItems(), () => !IsBusy);
-
-            ExecuteLoadItems().Wait();
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsAsync(), () => !IsBusy);
         }
 
         public ObservableCollection<Donation> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        async Task ExecuteLoadItems()
+        async Task ExecuteLoadItemsAsync()
         {
             if (IsBusy)
                 return;
@@ -37,6 +35,7 @@ namespace OSL
             {
                 Items.Clear();
                 var items = await donationRepository.GetDonationsByUserAsync();
+
                 foreach (var item in items)
                 {
                     Items.Add(item);

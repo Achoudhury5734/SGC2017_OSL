@@ -36,9 +36,15 @@ namespace OSL
         private async void Accept_Clicked(object sender, EventArgs e)
         {
             var res = await dataStore.AcceptPickupItemAsync(viewModel.Item);
+            if (res)
+            {
+                await DisplayAlert("Information", "Thank you for accepting the donation", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "Donation was not accepted", "OK");
+            }
 
-            await DisplayAlert("Information", "Thank you for accepting the donation", "OK");
-                        
             await this.Navigation.PopAsync();
         }
     }

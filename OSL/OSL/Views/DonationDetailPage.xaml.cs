@@ -16,6 +16,9 @@ namespace OSL.Views
 		public DonationDetailPage (DonationDetailViewModel donationDetailViewModel)
 		{
 			InitializeComponent ();
-		}
-	}
+            donationDetailViewModel.Page = this;
+            this.BindingContext = donationDetailViewModel;
+
+        }
+    }
 }

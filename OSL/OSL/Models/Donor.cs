@@ -3,11 +3,9 @@ using Newtonsoft.Json;
 
 namespace OSL
 {
+    //I think this class can be deprecated. Please use User instead.
     public class Donor
     {
-        [JsonProperty("organization_Address_Line2")]
-        public string OrganizationAddressLine2 { get; set; }
-
         [JsonProperty("lat")]
         public long Lat { get; set; }
 
@@ -28,6 +26,9 @@ namespace OSL
 
         [JsonProperty("organization_Address_Line1")]
         public string OrganizationAddressLine1 { get; set; }
+
+        [JsonProperty("organization_Address_Line2")]
+        public string OrganizationAddressLine2 { get; set; }
 
         [JsonProperty("organization_PostalCode")]
         public string OrganizationPostalCode { get; set; }

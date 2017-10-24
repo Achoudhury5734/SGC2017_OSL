@@ -9,10 +9,12 @@ namespace OSL.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DonationListPage : ContentPage
 	{
+        DonationListViewModel viewModel;
+
 		public DonationListPage()
 		{
 			InitializeComponent();
-            this.BindingContext = new DonationListViewModel
+            this.BindingContext = viewModel = new DonationListViewModel
             {
                 Page = this
             };
@@ -28,6 +30,12 @@ namespace OSL.Views
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            viewModel.LoadItemsCommand.Execute(null);
         }
     }
 }

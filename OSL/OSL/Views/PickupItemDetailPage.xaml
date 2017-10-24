@@ -7,7 +7,7 @@
         <ScrollView>
             <StackLayout Spacing="5" HorizontalOptions="FillAndExpand"
                     WidthRequest="1000">
-                <Image Source="{Binding Item.PictureUrl}" HeightRequest="200" WidthRequest="200" />
+                <Image Source="{Binding Item.PictureUrl}" />
                 <Label Text="{Binding Item.Title}" FontSize="Medium" />
 		        <Label Text="{Binding Item.Description}" FontSize="Small" />
 

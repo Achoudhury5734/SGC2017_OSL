@@ -5,8 +5,8 @@ namespace OSL.Models
     public class Donation
     {
         public int Id { get; set; }
-        public int DonorId { get; set; }
-        public int? RecipientId { get; set; }
+        public User Donor { get; set; }
+        public User Recipient { get; set; }
         public string Title { get; set; }
         public DonationType Type { get; set; }
         public DonationStatus Status { get; set; }

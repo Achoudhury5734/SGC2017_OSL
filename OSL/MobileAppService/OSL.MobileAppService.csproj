@@ -2,9 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/ecdce131-31f6-46bd-9fc0-5d68165b9e97/resourcegroups/secondhelping/providers/microsoft.insights/components/SecondHelpingWeb</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/ecdce131-31f6-46bd-9fc0-5d68165b9e97/resourcegroups/secondhelping/providers/microsoft.insights/components/SecondHelpingWeb</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
@@ -35,5 +38,8 @@
   <ItemGroup>
     <Compile Remove="Services\EmptyClass.cs" />
     <Compile Remove="Controllers\ImageController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>

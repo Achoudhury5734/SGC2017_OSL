@@ -114,12 +114,9 @@ namespace OSL.ViewModels
             if (mediaFile == null)
                 return;
 
-            //await DisplayAlert("File Location", file.Path, "OK");
-
             ImageSource = ImageSource.FromStream(() =>
             {
                 var stream = mediaFile.GetStream();
-                //mediaFile.Dispose();
                 return stream;
             });
 

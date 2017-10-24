@@ -13,21 +13,10 @@ namespace OSL.Services
 {
     public class DonationRepository
     {
-        static DonationRepository()
+        public async Task<IEnumerable<Donation>> GetDonationsByUserAsync()
         {
-            Donations = new List<Donation>();
-        }
-
-        public static List<Donation> Donations { get; set; }
-
-        public Task<Donation> GetDonationAsync(int donationId)
-        {
-            return Task.FromResult(Donations.Find(d => d.Id == donationId));
-        }
-
-        public Task<IEnumerable<Donation>> GetDonationsByUserAsync()
-        {
-            return Task.FromResult(Donations.AsEnumerable());
+            var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
+            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
         public async Task SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
@@ -36,29 +25,31 @@ namespace OSL.Services
             var donationCapture = new DonationCapture
             {
                 Expiration = expirationDate.Add(expirationTime),
-                Image = JsonConvert.SerializeObject(filebytes),
+                Image = filebytes,
                 Amount = quantity,
                 Title = donationTitle,
                 Type = donationType
             };
 
             var serializedDonationCapture = JsonConvert.SerializeObject(donationCapture);
-            try
-            {
-                var message = new HttpRequestMessage(HttpMethod.Post, App.BackendUrl + "/api/donations");
-                message.Content = new StringContent(serializedDonationCapture, Encoding.UTF8, "application/json");
 
-                var response = await App.ApiClient.SendAsync(message);
-                response.EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
+            var message = new HttpRequestMessage(HttpMethod.Post, App.BackendUrl + "/api/donations");
+            message.Content = new StringContent(serializedDonationCapture, Encoding.UTF8, "application/json");
 
-                throw;
-            }
+            var response = await App.ApiClient.SendAsync(message);
+            response.EnsureSuccessStatusCode();
+        }
 
-            //Just for testing...
-            Donations.Add(new Donation { Title = donationCapture.Title, PictureUrl = "https://i.ytimg.com/vi/jqDUmYVQxOI/hqdefault.jpg", Type = (DonationType)Enum.Parse(typeof(DonationType), donationCapture.Type ) });
+        public async Task CompleteDonationAsync(int donationId)
+        {
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/complete", null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task WasteDonationAsync(int donationId)
+        {
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/waste", null);
+            response.EnsureSuccessStatusCode();
         }
 
         public static byte[] ReadFully(Stream input)
@@ -74,19 +65,6 @@ namespace OSL.Services
                 return ms.ToArray();
             }
         }
-        public Task CompleteDonationAsync(string donationId)
-        {
-            return Task.CompletedTask;
-        }
 
-        public Task WasteDonationAsync(string donationId)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task AcceptDonation(string accountId, string donationId)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

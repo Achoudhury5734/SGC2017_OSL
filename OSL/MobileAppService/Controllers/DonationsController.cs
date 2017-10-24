@@ -17,39 +17,19 @@ namespace OSL.MobileAppService.Controllers
     {
         private readonly DonationRepository donationRepository;
         private readonly UserRepository userRepository;
-        //ImageService imageService = new ImageService();
+        private readonly ImageService imageService;
 
-        public DonationsController(DonationRepository donationRepository, UserRepository userRepository)
+        public DonationsController(DonationRepository donationRepository, UserRepository userRepository, ImageService imageService)
         {
             this.donationRepository = donationRepository;
             this.userRepository = userRepository;
+            this.imageService = imageService;
         }
 
-        // GET: api/values
+        // GET: api/donations
         [Authorize]
         [HttpGet]
         public IActionResult Get()
-        {
-            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (!userRepository.IsActiveUser(user)) {
-                return new UnauthorizedResult();
-            }
-
-            var donations = donationRepository.Get();
-            foreach (var donation in donations) 
-            {
-                donation.Donor = userRepository.GetById(donation.DonorId);
-                if (donation.RecipientId.HasValue) {
-                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
-                }
-            }
-            return Ok(donations);
-        }
-
-        // GET: api/values/donor/me
-        [Authorize]
-        [HttpGet("donor/me")]
-        public IActionResult GetUserDonations()
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
@@ -57,7 +37,7 @@ namespace OSL.MobileAppService.Controllers
                 return new UnauthorizedResult();
             }
 
-            var donations = donationRepository.GetByUserId(user.Id);
+            var donations = donationRepository.GetAll();
             foreach (var donation in donations)
             {
                 donation.Donor = userRepository.GetById(donation.DonorId);
@@ -69,7 +49,74 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
-        // GET api/values/5
+        // GET: api/donations/status/listed
+        [Authorize]
+        [HttpGet("status/listed")]
+        public IActionResult GetListedDonations()
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user)) {
+                return new UnauthorizedResult();
+            }
+
+            var donations = donationRepository.GetListed();
+            foreach (var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                if (donation.RecipientId.HasValue) {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
+            }
+            return Ok(donations);
+        }
+
+        // GET: api/donations/donor/me
+        [Authorize]
+        [HttpGet("donor/me")]
+        public IActionResult GetDonorDonations()
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donations = donationRepository.GetByDonorId(user.Id);
+            foreach (var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                if (donation.RecipientId.HasValue)
+                {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
+            }
+            return Ok(donations);
+        }
+
+        //GET: api/values/recipient/me
+        [Authorize]
+        [HttpGet("recipient/me")]
+        public IActionResult GetRecipientDonations()
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donations = donationRepository.GetByRecipientId(user.Id);
+            foreach (var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                if (donation.RecipientId.HasValue)
+                {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
+            }
+            return Ok(donations);
+        }
+
+        // GET api/donations/5
         [HttpGet("{Id}")]
         public IActionResult Get(int Id)
         {
@@ -90,16 +137,16 @@ namespace OSL.MobileAppService.Controllers
             }
         }
 
-        // POST api/values
+        // POST api/donations
         [Authorize]
         [HttpPost]
-        public IActionResult Post([FromBody]Donation donation)
+        public async Task<IActionResult> Post([FromBody]Donation donation)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
             } else {
-               // donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
+                donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
                 donation.DonorId = user.Id;
                 donation.Created = DateTime.Now;
                 donation.Updated = DateTime.Now;
@@ -120,33 +167,185 @@ namespace OSL.MobileAppService.Controllers
             }
         }
 
-        // POST api/Donation/5/status/PendingPickup
+        //PUT api/donations/5
         [Authorize]
-        [HttpPost("{Id}/status/{Status}")]
-        public IActionResult POST(int Id, string Status)
+        [HttpPut("{Id}")]
+        public IActionResult Update(int Id, [FromBody]Donation donation)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
-            if (!userRepository.IsActiveUser(user)) {
+            if (!userRepository.IsActiveUser(user))
+            {
                 return new UnauthorizedResult();
-            } else {
+            }
+            else
+            {
                 var originalDonation = donationRepository.GetById(Id);
-                if (originalDonation == null) {
+                if (originalDonation == null)
+                {
                     return new NotFoundResult();
                 }
-                //
-                // Process Status property property HERE.
-                // Only Donor can change to Wasted, Completed, or Canceled
-                // ...
 
+                if (donation.DonorId != user.Id)
+                {
+                    return new UnauthorizedResult();
+                }
+
+                donation.Updated = DateTime.Now;
+                var updated = donationRepository.Update(donation);
+                if (updated)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
-            return BadRequest("Invalid donation data.");
-
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // PUT api/donations/5/accept
+        [Authorize]
+        [HttpPut("{id}/accept")]
+        public IActionResult Accept(int id)
         {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donation = donationRepository.GetById(id);
+            if (donation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            if (donation.RecipientId.HasValue || donation.Status != DonationStatus.Listed)
+            {
+                return BadRequest("Donation is not available");
+            }
+
+            donationRepository.AcceptDonation(id, user.Id);
+            return Ok();
+        }
+
+        // PUT api/donations/5/complete
+        [Authorize]
+        [HttpPut("{id}/complete")]
+        public IActionResult Complete(int id)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donation = donationRepository.GetById(id);
+            if (donation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            //Verify that donation is owned by user
+            if (donation.DonorId != user.Id)
+            {
+                return new UnauthorizedResult();
+            }
+
+            if (donation.Status != DonationStatus.PendingPickup)
+            {
+                return BadRequest("Donation must be accepted before it can be completed");
+            }
+
+            donationRepository.CompleteDonation(id);
+            return Ok();
+        }
+
+        // PUT api/donations/5/waste
+        [Authorize]
+        [HttpPut("{id}/waste")]
+        public IActionResult Waste(int id)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donation = donationRepository.GetById(id);
+            if (donation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            if (donation.DonorId != user.Id)
+            {
+                return new UnauthorizedResult();
+            }
+
+            donationRepository.WasteDonation(id);
+            return Ok();
+        }
+
+        //PUT api/donations/5/cancel
+        [Authorize]
+        [HttpPut("{Id}/cancel")]
+        public IActionResult RecipientRelist(int Id)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donation = donationRepository.GetById(Id);
+            if (donation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            if (user.Id != donation.RecipientId)
+            {
+                return new UnauthorizedResult();
+            }
+            
+            donationRepository.RelistDonation(Id);
+            return Ok();
+        }
+
+        //PUT api/donations/5/relist
+        [Authorize]
+        [HttpPut("{Id}/relist")]
+        public IActionResult DonorRelist(int Id, [FromBody]Donation donation)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var originalDonation = donationRepository.GetById(Id);
+            if (originalDonation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            if (user.Id != donation.DonorId)
+            {
+                return new UnauthorizedResult();
+            }
+
+            if (originalDonation.Status == DonationStatus.Completed)
+            {
+                return BadRequest("Cannot relist completed donation");
+            }
+
+            originalDonation.Type = donation.Type;
+            originalDonation.Title = donation.Title;
+            originalDonation.Expiration = donation.Expiration;
+            originalDonation.Amount = donation.Amount;
+            donationRepository.RelistDonation(originalDonation);
+            return Ok();
         }
     }
 }
