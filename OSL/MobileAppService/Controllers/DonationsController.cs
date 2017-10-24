@@ -168,6 +168,7 @@ namespace OSL.MobileAppService.Controllers
         }
 
         //PUT api/donations/5
+        [Authorize]
         [HttpPut("{Id}")]
         public IActionResult Update(int Id, [FromBody]Donation donation)
         {
@@ -229,6 +230,7 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // PUT api/donations/5/complete
+        [Authorize]
         [HttpPut("{id}/complete")]
         public IActionResult Complete(int id)
         {
@@ -260,6 +262,7 @@ namespace OSL.MobileAppService.Controllers
         }
 
         // PUT api/donations/5/waste
+        [Authorize]
         [HttpPut("{id}/waste")]
         public IActionResult Waste(int id)
         {
