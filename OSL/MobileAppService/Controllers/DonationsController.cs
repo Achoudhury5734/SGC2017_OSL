@@ -70,6 +70,29 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
+        // GET: api/donations/distance/15
+        [Authorize]
+        [HttpGet("distance/{miles}")]
+        public IActionResult GetDonationsWithinDistance(int miles)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+            double meters = miles * 1609.34;
+            var donations = donationRepository.GetListedWithinDistance(user.Lat, user.Long, meters);
+            foreach(var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                if (donation.RecipientId.HasValue)
+                {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
+            }
+            return Ok(donations);
+        }
+
         // GET: api/donations/donor/me
         [Authorize]
         [HttpGet("donor/me")]

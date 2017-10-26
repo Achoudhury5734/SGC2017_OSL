@@ -120,6 +120,38 @@ namespace OSL.MobileAppService.Services
             return donations;
         }
 
+        public IEnumerable<Donation> GetListedWithinDistance(double Lat, double Long, double distance)
+        {
+            var query = "DECLARE @g geography;" +
+                        "SET @g = geography::Point(@Lat, @Long, 4326);" +
+                        "SELECT* FROM [Donation] WHERE " +
+                       $"[Status] = {(int) DonationStatus.Listed} " +
+                        "AND Donation.DonorId IN " +
+                        "(SELECT[Id] FROM [User] WHERE @Distance >= " +
+                            "(SELECT @g.STDistance(geography::Point([Lat], [Long], 4326))));";
+            var donations = new List<Donation>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Distance", distance);
+                    command.Parameters.AddWithValue("@Lat", Lat);
+                    command.Parameters.AddWithValue("@Long", Long);
+                    SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
+                    while (reader.Read())
+                    {
+                        var donation = new Donation(reader);
+                        donations.Add(donation);
+                    }                       
+                }
+            }
+            return donations;
+        }
+
         public Donation GetById(int Id)
         {
             var query = "SELECT * FROM [Donation] WHERE [Id] = @Id";
