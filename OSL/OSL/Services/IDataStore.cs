@@ -10,5 +10,6 @@ namespace OSL
         Task<bool> DeletePickupItemAsync(string id);
         Task<T> GetPickupItemAsync(string id);
         Task<IEnumerable<T>> GetPickupItemsAsync(bool forceRefresh = false);
+        Task<IEnumerable<T>> GetFilteredItemsAsync(double latitude, double longitude, bool forceRefresh = true);
     }
 }

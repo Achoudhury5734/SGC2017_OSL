@@ -34,6 +34,21 @@ namespace OSL
             return items;
         }
 
+        public async Task<IEnumerable<PickupItem>> GetFilteredItemsAsync(double latitude, double longitude, bool forceRefresh = true)
+        {
+            if (forceRefresh && CrossConnectivity.Current.IsConnected)
+            {
+                //var json = await App.ApiClient.GetStringAsync($"api/donations/status/listed");
+                var data = new { miles = 20, Lat = latitude, Long = longitude };
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                var response = await App.ApiClient.PostAsync("api/donations/distance/", content);
+                var results = response.Content.ReadAsStringAsync().Result;
+                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<PickupItem>>(results));
+            }
+
+            return items;
+        }
+
         public async Task<PickupItem> GetPickupItemAsync(string id)
         {
             if (id != null && CrossConnectivity.Current.IsConnected)

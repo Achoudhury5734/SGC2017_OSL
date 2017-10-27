@@ -61,5 +61,7 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to the camera to take photos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access location when open.</string>
 </dict>
 </plist>

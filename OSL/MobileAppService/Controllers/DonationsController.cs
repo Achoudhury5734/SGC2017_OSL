@@ -70,18 +70,31 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
-        // GET: api/donations/distance/15
+
+        public class DistanceRequest
+        {
+            public int Miles { get; set; }
+            public double? Lat { get; set; }
+            public double? Long { get; set; }
+        }
+
+        // POST: api/donations/distance/
         [Authorize]
-        [HttpGet("distance/{miles}")]
-        public IActionResult GetDonationsWithinDistance(int miles)
+        [HttpPost("distance/")]
+        public IActionResult GetDonationsWithinDistance([FromBody] DistanceRequest request)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
             {
                 return new UnauthorizedResult();
             }
-            double meters = miles * 1609.34;
-            var donations = donationRepository.GetListedWithinDistance(user.Lat, user.Long, meters);
+            double meters = request.Miles * 1609.34;
+
+            // If no location given, use organization location
+            var Lat = request.Lat ?? user.Lat;
+            var Long = request.Long ?? user.Long;
+
+            var donations = donationRepository.GetListedWithinDistance(Lat, Long, meters);
             foreach(var donation in donations)
             {
                 donation.Donor = userRepository.GetById(donation.DonorId);

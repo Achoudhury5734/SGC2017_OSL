@@ -30,9 +30,10 @@ namespace OSL
             PickupItemsListView.SelectedItem = null;
         }
 
-        async void DonateItem_Clicked(object sender, EventArgs e)
+        void Filter_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new DonationPage());//(new NewPickupItemPage());
+            //await Navigation.PushAsync(new DonationPage());//(new NewPickupItemPage());
+            viewModel.LoadFilteredItemsCommand.Execute(null);
         }
 
         protected override void OnAppearing()
