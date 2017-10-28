@@ -62,7 +62,7 @@ namespace OSL
             return await Task.FromResult(items);
         }
 
-        public async Task<IEnumerable<PickupItem>> GetFilteredItemsAsync(double Lat, double Long, bool forceRefres = false)
+        public async Task<IEnumerable<PickupItem>> GetFilteredItemsAsync(int range, double? Lat, double? Long, bool forceRefres = false)
         {
             return await Task.FromResult(items);
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+using System.Text.RegularExpressions;
 
 namespace OSL
 {
@@ -16,6 +17,7 @@ namespace OSL
             InitializeComponent();
 
             BindingContext = viewModel = new PickupItemsViewModel();
+            MessagingCenter.Subscribe<PickupItemsViewModel>(this, "GeolocationFailure", GeolocationFailed);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -30,10 +32,20 @@ namespace OSL
             PickupItemsListView.SelectedItem = null;
         }
 
-        void Filter_Clicked(object sender, EventArgs e)
+        void Filter_Changed(object sender, EventArgs e)
         {
-            //await Navigation.PushAsync(new DonationPage());//(new NewPickupItemPage());
-            viewModel.LoadFilteredItemsCommand.Execute(null);
+            int range = -1;
+            var selected = Regex.Replace(DistancePicker.SelectedItem.ToString(), "[^0-9.]", "");
+            if (selected != "")
+            {
+                range = int.Parse(selected);
+            }
+            viewModel.LoadItemsCommand.Execute(range);
+        }
+
+        private void GeolocationFailed(PickupItemsViewModel obj)
+        {
+            DisplayAlert("Geolocation Failed", "Using organization address instead", "Ok");
         }
 
         protected override void OnAppearing()
@@ -41,7 +53,7 @@ namespace OSL
             base.OnAppearing();
 
             if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
+                viewModel.LoadItemsCommand.Execute(-1);
         }
     }
 }

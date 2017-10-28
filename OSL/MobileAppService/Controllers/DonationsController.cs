@@ -71,17 +71,17 @@ namespace OSL.MobileAppService.Controllers
         }
 
 
-        public class DistanceRequest
+        public class NearbyRequest
         {
             public int Miles { get; set; }
-            public double? Lat { get; set; }
-            public double? Long { get; set; }
+            public double? Latitude { get; set; }
+            public double? Longitude { get; set; }
         }
 
-        // POST: api/donations/distance/
+        // POST: api/donations/nearby/
         [Authorize]
-        [HttpPost("distance/")]
-        public IActionResult GetDonationsWithinDistance([FromBody] DistanceRequest request)
+        [HttpPost("nearby/")]
+        public IActionResult GetDonationsWithinDistance([FromBody] NearbyRequest request)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
@@ -91,8 +91,8 @@ namespace OSL.MobileAppService.Controllers
             double meters = request.Miles * 1609.34;
 
             // If no location given, use organization location
-            var Lat = request.Lat ?? user.Lat;
-            var Long = request.Long ?? user.Long;
+            var Lat = request.Latitude ?? user.Lat;
+            var Long = request.Longitude ?? user.Long;
 
             var donations = donationRepository.GetListedWithinDistance(Lat, Long, meters);
             foreach(var donation in donations)

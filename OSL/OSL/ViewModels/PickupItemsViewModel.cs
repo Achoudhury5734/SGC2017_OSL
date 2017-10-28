@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -18,8 +19,7 @@ namespace OSL
         {
             Title = "Browse";
             Items = new ObservableCollection<PickupItem>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            LoadFilteredItemsCommand = new Command(async () => await ExecuteFilteredItemsCommand());
+            LoadItemsCommand = new Command(async (range) => await ExecuteLoadItemsCommand((int)range));
 
             MessagingCenter.Subscribe<NewPickupItemPage, PickupItem>(this, "AddItem", async (obj, item) =>
             {
@@ -27,12 +27,9 @@ namespace OSL
                 Items.Add(_item);
                 await DataStore.AddPickupItemAsync(_item);
             });
-
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 100;
         }
 
-        async Task ExecuteLoadItemsCommand()
+        async Task ExecuteLoadItemsCommand(int range)
         {
             if (IsBusy)
                 return;
@@ -42,7 +39,19 @@ namespace OSL
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetPickupItemsAsync(true);
+                IEnumerable<PickupItem> items;
+                if (range == -1)
+                {
+                    items = await DataStore.GetPickupItemsAsync(true);
+                }
+                else
+                {
+                    var location = await GetCurrentLocation();
+                    if (location != null)
+                        items = await DataStore.GetFilteredItemsAsync(range, location.Latitude, location.Longitude);
+                    else
+                        items = await DataStore.GetFilteredItemsAsync(range, null, null);
+                }
                 foreach (var item in items)
                 {
                     Items.Add(item);
@@ -72,46 +81,23 @@ namespace OSL
                     return position;
 
                 if (!locator.IsGeolocationAvailable || !locator.IsGeolocationEnabled)
+                {
+                    MessagingCenter.Send(this, "GeolocationFailure");
                     return null;
+                }
 
                 position = await locator.GetPositionAsync(TimeSpan.FromSeconds(20), null, true);
             }
-            catch (Exception ex)
+            catch 
             {
-
+                MessagingCenter.Send(this, "GeolocationFailure");
+                return null;
             }
 
             if (position == null)
                 return null;
 
             return position;
-        }
-
-        async Task ExecuteFilteredItemsCommand()
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            try
-            {
-                Items.Clear();
-                var location = await GetCurrentLocation();
-                var items = await DataStore.GetFilteredItemsAsync(location.Latitude, location.Longitude);
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
         }
     }
 }
