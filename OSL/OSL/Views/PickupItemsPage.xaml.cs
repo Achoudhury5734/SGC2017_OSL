@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using System.Text.RegularExpressions;
+using Plugin.Toasts;
 
 namespace OSL
 {
@@ -17,7 +18,19 @@ namespace OSL
             InitializeComponent();
 
             BindingContext = viewModel = new PickupItemsViewModel();
-            MessagingCenter.Subscribe<PickupItemsViewModel>(this, "GeolocationFailure", GeolocationFailed);
+            MessagingCenter.Subscribe<PickupItemsViewModel>(this, "GeolocationFailure", async (obj) =>
+            {
+                var notificator = DependencyService.Get<IToastNotificator>();
+
+                var options = new NotificationOptions()
+                {
+                    Title = "Geolocation Failed",
+                    Description = "Using organization address instead",
+                    ClearFromHistory = true
+                };
+
+                var result = await notificator.Notify(options);
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -32,20 +45,16 @@ namespace OSL
             PickupItemsListView.SelectedItem = null;
         }
 
-        void Filter_Changed(object sender, EventArgs e)
+       void FilterChanged(object sender, EventArgs e)
         {
             int range = -1;
-            var selected = Regex.Replace(DistancePicker.SelectedItem.ToString(), "[^0-9.]", "");
+            var picker = sender as Picker;
+            var selected = Regex.Replace(picker.SelectedItem.ToString(), "[^0-9.]", "");
             if (selected != "")
             {
                 range = int.Parse(selected);
             }
             viewModel.LoadItemsCommand.Execute(range);
-        }
-
-        private void GeolocationFailed(PickupItemsViewModel obj)
-        {
-            DisplayAlert("Geolocation Failed", "Using organization address instead", "Ok");
         }
 
         protected override void OnAppearing()

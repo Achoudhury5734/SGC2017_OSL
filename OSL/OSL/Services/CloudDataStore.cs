@@ -40,8 +40,10 @@ namespace OSL
             {
                 var data = new { Miles = range, Latitude = Lat, Longitude = Long };
                 var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
                 var response = await App.ApiClient.PostAsync("api/donations/nearby/", content);
                 var results = response.Content.ReadAsStringAsync().Result;
+
                 items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<PickupItem>>(results));
             }
 

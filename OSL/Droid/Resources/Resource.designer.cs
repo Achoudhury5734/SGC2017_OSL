@@ -1451,6 +1451,8 @@ namespace OSL.Droid
 			global::Microsoft.Identity.Client.Resource.Styleable.ViewStubCompat_android_id = global::OSL.Droid.Resource.Styleable.ViewStubCompat_android_id;
 			global::Microsoft.Identity.Client.Resource.Styleable.ViewStubCompat_android_inflatedId = global::OSL.Droid.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::Microsoft.Identity.Client.Resource.Styleable.ViewStubCompat_android_layout = global::OSL.Droid.Resource.Styleable.ViewStubCompat_android_layout;
+			global::Plugin.Toasts.Resource.String.ApplicationName = global::OSL.Droid.Resource.String.ApplicationName;
+			global::Plugin.Toasts.Resource.String.Hello = global::OSL.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::OSL.Droid.Resource.Attribute.actionBarSize;
 		}
 		
@@ -5041,8 +5043,11 @@ namespace OSL.Droid
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f0a003f
+			public const int ApplicationName = 2131361855;
+			
 			// aapt resource value: 0x7f0a003e
-			public const int ApplicationName = 2131361854;
+			public const int Hello = 2131361854;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int abc_action_bar_home_description = 2131361813;

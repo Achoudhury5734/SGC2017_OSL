@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
@@ -13,7 +14,6 @@ namespace OSL
     {
         public ObservableCollection<PickupItem> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
-        public Command LoadFilteredItemsCommand { get; set; }
 
         public PickupItemsViewModel()
         {
@@ -29,6 +29,7 @@ namespace OSL
             });
         }
 
+        // -1 range for all
         async Task ExecuteLoadItemsCommand(int range)
         {
             if (IsBusy)

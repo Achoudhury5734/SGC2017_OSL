@@ -4,6 +4,8 @@ using Android.Content.PM;
 using Android.OS;
 using Microsoft.Identity.Client;
 using Plugin.Permissions;
+using Plugin.Toasts;
+using Xamarin.Forms;
 
 namespace OSL.Droid
 {
@@ -19,6 +21,8 @@ namespace OSL.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
+            DependencyService.Register<ToastNotification>(); 
+            ToastNotification.Init(this);
 
             App.UiParent = new UIParent(Xamarin.Forms.Forms.Context as Activity);
 

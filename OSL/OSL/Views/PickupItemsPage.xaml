@@ -3,12 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.PickupItemsPage"
              Title="{Binding Title}" x:Name="BrowseItemsPage">
-	<!--<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Filter" Clicked="Filter_Clicked" />
-	</ContentPage.ToolbarItems>-->
 	<ContentPage.Content>
 		<StackLayout>
-            <Picker SelectedIndex="3" x:Name="DistancePicker" Title="Filter Items" SelectedIndexChanged="Filter_Changed">
+            <Picker SelectedIndex="3" Title="Filter Items" SelectedIndexChanged="FilterChanged">
                 <Picker.Items>
                     <x:String>Within 5 miles</x:String>
                     <x:String>Within 10 miles</x:String>
