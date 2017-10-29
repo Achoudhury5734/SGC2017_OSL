@@ -24,6 +24,7 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="ID_CAP_LOCATION"/>
     <DeviceCapability Name="webcam" />
   </Capabilities>
 </Package>

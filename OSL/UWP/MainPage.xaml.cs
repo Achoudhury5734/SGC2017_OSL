@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plugin.Toasts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Xamarin.Forms;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,6 +28,9 @@ namespace OSL.UWP
         public MainPage()
         {
             this.InitializeComponent();
+
+            DependencyService.Register<ToastNotification>();
+            ToastNotification.Init();
 
             var app = new OSL.App();
             OSL.App.PCA.RedirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().ToString();
