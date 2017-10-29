@@ -120,6 +120,33 @@ namespace OSL.MobileAppService.Services
             return donations;
         }
 
+        public IEnumerable<int> GetDonorStats(int DonorId)
+        {
+            var query = "SELECT [Status], Sum(Amount) FROM Donation WHERE DonorId = @DonorId" +
+                        " AND YEAR(Created) = @CurrentYear GROUP BY [Status]";
+            var stats = new int[(Enum.GetNames(typeof(DonationStatus)).Length)];
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DonorId", DonorId);
+                    command.Parameters.AddWithValue("@CurrentYear", DateTime.Now.Year);
+                    SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
+                    while(reader.Read())
+                    {
+                        var status = (string)reader["Status"];
+                        var sum = (int)reader[1];
+                        stats[int.Parse(status)] = sum;
+                    }
+                }
+            }
+            return stats;
+        }
+
         public Donation GetById(int Id)
         {
             var query = "SELECT * FROM [Donation] WHERE [Id] = @Id";
