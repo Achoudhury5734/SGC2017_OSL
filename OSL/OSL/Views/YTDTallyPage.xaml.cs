@@ -1,7 +1,5 @@
 ﻿using System;
 using OSL.ViewModels;
-using OxyPlot;
-using OxyPlot.Xamarin.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

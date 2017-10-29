@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using OSL.Models;
 using OSL.Services;
@@ -51,23 +49,23 @@ namespace OSL.ViewModels
 
             try
             {
-                var userDonations = await wasteRep.GetYearDonorItems();
+                var userStats = await wasteRep.GetDonorStats();
 
-                yearWasted = queryDonorItems(DonationStatus.Wasted, userDonations);
-                YearWasted = yearWasted + " lbs"; 
-                OnPropertyChanged("YearWasted");
-
-                yearDonated = queryDonorItems(DonationStatus.Completed, userDonations);
-                YearDonated = yearDonated + " lbs";
-                OnPropertyChanged("YearDonated");
-
-                listed = queryDonorItems(DonationStatus.Listed, userDonations);
+                listed = userStats[(int)DonationStatus.Listed];
                 Listed = listed + " lbs";
                 OnPropertyChanged("Listed");
 
-                pending = queryDonorItems(DonationStatus.PendingPickup, userDonations);
+                pending = userStats[(int)DonationStatus.PendingPickup];
                 Pending = pending + " lbs";
                 OnPropertyChanged("Pending");
+
+                yearDonated = userStats[(int)DonationStatus.Completed];
+                YearDonated = yearDonated + " lbs";
+                OnPropertyChanged("YearDonated");
+
+                yearWasted = userStats[(int)DonationStatus.Wasted];
+                YearWasted = yearWasted + " lbs";
+                OnPropertyChanged("YearWasted");
 
                 Model = generatePlotModel();
                 OnPropertyChanged("Model");
@@ -82,14 +80,6 @@ namespace OSL.ViewModels
                 NotBusy = true;
                 OnPropertyChanged("NotBusy");
             }
-        }
-
-        private int queryDonorItems(DonationStatus status, IEnumerable<Donation> items) 
-        {
-            var query = from item in items
-                             where item.Status == status
-                             select item.Amount;
-            return query.Sum();
         }
 
         private PlotModel generatePlotModel()
