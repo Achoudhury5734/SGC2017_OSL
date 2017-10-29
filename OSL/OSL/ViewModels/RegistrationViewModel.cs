@@ -4,6 +4,7 @@ using System.Windows.Input;
 using OSL.Models;
 using OSL.Services;
 using Xamarin.Forms;
+using System.Reflection;
 
 namespace OSL.ViewModels
 {
