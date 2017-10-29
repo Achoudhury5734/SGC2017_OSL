@@ -5,8 +5,6 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace OSL.Services
 {
@@ -23,16 +21,17 @@ namespace OSL.Services
             return null;
         }
 
-        public async Task<IEnumerable<Donation>> GetYearDonorItems()
+        public async Task<int[]> GetDonorStats()
         {
-            var response = await App.ApiClient.GetAsync($"api/donations/donor/me");
+            var response = await App.ApiClient.GetAsync("api/donations/donor/me/stats");
+
             if (response.StatusCode != HttpStatusCode.OK)
                 return null;
+            
             var result = response.Content.ReadAsStringAsync().Result;
-            var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(result);
-            return from item in items 
-                   where item.Created.Value.Year == DateTime.Now.Year
-                   select item;
+            var stats = JsonConvert.DeserializeObject<int[]>(result);
+
+            return stats;
         }
     }
 }

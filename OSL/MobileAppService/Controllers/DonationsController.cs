@@ -129,7 +129,7 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
-        //GET: api/values/recipient/me
+        //GET: api/donations/recipient/me
         [Authorize]
         [HttpGet("recipient/me")]
         public IActionResult GetRecipientDonations()
@@ -150,6 +150,20 @@ namespace OSL.MobileAppService.Controllers
                 }
             }
             return Ok(donations);
+        }
+
+        // GET api/donations/donor/me/stats
+        [Authorize]
+        [HttpGet("donor/me/stats")]
+        public IActionResult GetDonorStats()
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+            var stats = donationRepository.GetDonorStats(user.Id);
+            return Ok(stats);
         }
 
         // GET api/donations/5

@@ -125,12 +125,11 @@ namespace OSL.MobileAppService.Services
             var query = "DECLARE @g geography;" +
                         "SET @g = geography::Point(@Lat, @Long, 4326);" +
                         "SELECT* FROM [Donation] WHERE " +
-                       $"[Status] = {(int) DonationStatus.Listed} " +
+                       $"[Status] = {(int)DonationStatus.Listed} " +
                         "AND Donation.DonorId IN " +
                         "(SELECT[Id] FROM [User] WHERE @Distance >= " +
                             "(SELECT @g.STDistance(geography::Point([Lat], [Long], 4326))));";
             var donations = new List<Donation>();
-
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
@@ -146,10 +145,37 @@ namespace OSL.MobileAppService.Services
                     {
                         var donation = new Donation(reader);
                         donations.Add(donation);
-                    }                       
+                    }
                 }
             }
             return donations;
+        }
+
+        public IEnumerable<int> GetDonorStats(int DonorId)
+        {
+            var query = "SELECT [Status], Sum(Amount) FROM Donation WHERE DonorId = @DonorId" +
+                        " AND YEAR(Created) = @CurrentYear GROUP BY [Status]";
+            var stats = new int[(Enum.GetNames(typeof(DonationStatus)).Length)];
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DonorId", DonorId);
+                    command.Parameters.AddWithValue("@CurrentYear", DateTime.Now.Year);
+                    SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
+                    while(reader.Read())
+                    {
+                        var status = (string)reader["Status"];
+                        var sum = (int)reader[1];
+                        stats[int.Parse(status)] = sum;
+                    }
+                }
+            }
+            return stats;
         }
 
         public Donation GetById(int Id)
