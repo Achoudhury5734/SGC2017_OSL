@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OSL", "OSL\OSL.shproj", "{A39990B1-483E-4A41-8754-286B69961DAE}"
 EndProject
@@ -8,14 +8,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSL.iOS", "iOS\OSL.iOS.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSL.Droid", "Droid\OSL.Droid.csproj", "{80A35EFD-91B6-4F59-AC62-1383BC148085}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSL.UWP", "UWP\OSL.UWP.csproj", "{F20E8A55-93A7-4055-8578-4DDEB743E9E0}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		OSL\OSL.projitems*{2e6d15ce-9bae-40bd-8338-cf35677f82a4}*SharedItemsImports = 4
 		OSL\OSL.projitems*{80a35efd-91b6-4f59-ac62-1383bc148085}*SharedItemsImports = 4
 		OSL\OSL.projitems*{a39990b1-483e-4a41-8754-286b69961dae}*SharedItemsImports = 13
-		OSL\OSL.projitems*{f20e8a55-93a7-4055-8578-4ddeb743e9e0}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,32 +78,6 @@ Global
 		{80A35EFD-91B6-4F59-AC62-1383BC148085}.Release|x86.ActiveCfg = Release|Any CPU
 		{80A35EFD-91B6-4F59-AC62-1383BC148085}.Release|x86.Build.0 = Release|Any CPU
 		{80A35EFD-91B6-4F59-AC62-1383BC148085}.Release|x86.Deploy.0 = Release|Any CPU
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|Any CPU.Build.0 = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|Any CPU.Deploy.0 = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|ARM.ActiveCfg = Debug|ARM
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|ARM.Build.0 = Debug|ARM
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|ARM.Deploy.0 = Debug|ARM
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|iPhone.ActiveCfg = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|x64.ActiveCfg = Debug|x64
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|x64.Build.0 = Debug|x64
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|x64.Deploy.0 = Debug|x64
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|x86.ActiveCfg = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|x86.Build.0 = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Debug|x86.Deploy.0 = Debug|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|Any CPU.ActiveCfg = Release|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|ARM.ActiveCfg = Release|ARM
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|ARM.Build.0 = Release|ARM
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|ARM.Deploy.0 = Release|ARM
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|iPhone.ActiveCfg = Release|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|iPhoneSimulator.ActiveCfg = Release|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|x64.ActiveCfg = Release|x64
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|x64.Build.0 = Release|x64
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|x64.Deploy.0 = Release|x64
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|x86.ActiveCfg = Release|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|x86.Build.0 = Release|x86
-		{F20E8A55-93A7-4055-8578-4DDEB743E9E0}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
