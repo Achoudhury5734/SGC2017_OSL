@@ -34,6 +34,22 @@ namespace OSL
             return items;
         }
 
+        public async Task<IEnumerable<PickupItem>> GetFilteredItemsAsync(int range, double? Lat, double? Long, bool forceRefresh = true)
+        {
+            if (forceRefresh && CrossConnectivity.Current.IsConnected)
+            {
+                var data = new { Miles = range, Latitude = Lat, Longitude = Long };
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
+                var response = await App.ApiClient.PostAsync("api/donations/nearby/", content);
+                var results = response.Content.ReadAsStringAsync().Result;
+
+                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<PickupItem>>(results));
+            }
+
+            return items;
+        }
+
         public async Task<PickupItem> GetPickupItemAsync(string id)
         {
             if (id != null && CrossConnectivity.Current.IsConnected)
@@ -66,7 +82,7 @@ namespace OSL
 
         public async Task<bool> UpdatePickupItemAsync(PickupItem item)
         {
-            if (item == null || item.Id == null || !CrossConnectivity.Current.IsConnected)
+            if (item == null || item.Id == 0L || !CrossConnectivity.Current.IsConnected)
                 return false;
 
             var serializedItem = JsonConvert.SerializeObject(item);

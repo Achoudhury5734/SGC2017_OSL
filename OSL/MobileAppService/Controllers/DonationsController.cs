@@ -70,6 +70,42 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
+
+        public class NearbyRequest
+        {
+            public int Miles { get; set; }
+            public double? Latitude { get; set; }
+            public double? Longitude { get; set; }
+        }
+
+        // POST: api/donations/nearby/
+        [Authorize]
+        [HttpPost("nearby/")]
+        public IActionResult GetDonationsWithinDistance([FromBody] NearbyRequest request)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+            double meters = request.Miles * 1609.34;
+
+            // If no location given, use organization location
+            var Lat = request.Latitude ?? user.Lat;
+            var Long = request.Longitude ?? user.Long;
+
+            var donations = donationRepository.GetListedWithinDistance(Lat, Long, meters);
+            foreach(var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+                if (donation.RecipientId.HasValue)
+                {
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+                }
+            }
+            return Ok(donations);
+        }
+
         // GET: api/donations/donor/me
         [Authorize]
         [HttpGet("donor/me")]
