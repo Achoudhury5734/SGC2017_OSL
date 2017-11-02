@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using OSL.Models;
 using OSL.Services;
 using OxyPlot;
@@ -16,6 +18,7 @@ namespace OSL.ViewModels
         public string Listed { get; set; }
         public string Pending { get; set; }
         public Command LoadAmountsCommand { get; set; }
+        public Command AddWasteCommand { get; set; }
         public PlotModel Model { get; set; }
 
         private double yearWasted;
@@ -28,7 +31,8 @@ namespace OSL.ViewModels
         public YTDViewModel()
         {
             wasteRep = new WasteRepository();
-            LoadAmountsCommand = new Command(async () => await ExecuteLoadAmountsCommand());
+            LoadAmountsCommand = new Command(async () => await ExecuteLoadAmounts());
+            AddWasteCommand = new Command(async () => await ExecuteAddWasteCommand());
             Model = new PlotModel();
             notBusy = false;
         }
@@ -40,7 +44,7 @@ namespace OSL.ViewModels
             set { notBusy = value; }
         }
 
-        async Task ExecuteLoadAmountsCommand() 
+        async Task ExecuteLoadAmounts() 
         {
             if (IsBusy)
                 return;
@@ -91,18 +95,17 @@ namespace OSL.ViewModels
             };
             var ps = new PieSeries
             {
-                StrokeThickness = 2.0,
+                StrokeThickness = 0.0,
                 InsideLabelPosition = 0.5,
                 AngleSpan = 360,
                 StartAngle = 0,
                 InnerDiameter = 0.4
             };
 
-            // Over the year pending and listed should be way smaller and labels won't fit
             ps.Slices.Add(new PieSlice("", listed) { Fill = OxyColors.DarkOrange });
             ps.Slices.Add(new PieSlice("", pending) { Fill = OxyColors.Yellow });
-            ps.Slices.Add(new PieSlice("Donated", yearDonated) {Fill = OxyColors.LimeGreen });
-            ps.Slices.Add(new PieSlice("Wasted", yearWasted) {Fill = OxyColors.Red });
+            ps.Slices.Add(new PieSlice("", yearDonated) {Fill = OxyColors.LimeGreen });
+            ps.Slices.Add(new PieSlice("", yearWasted) {Fill = OxyColors.Red });
             ps.FontSize = 15.5;
 
             ps.TickHorizontalLength = 0.0;
@@ -112,6 +115,40 @@ namespace OSL.ViewModels
             model.Series.Add(ps);
 
             return model;
+        }
+
+        async Task ExecuteAddWasteCommand()
+        {
+            var promptConfig = new PromptConfig();
+            promptConfig.Message = "Add to Wasted Food Count";
+            promptConfig.OkText = "Add";
+            promptConfig.Placeholder = "Quantity (lbs)";
+            var response = await UserDialogs.Instance.PromptAsync(promptConfig);
+
+            int? amount = ProcessInput(response);
+            if (amount.HasValue) {
+                var result = await wasteRep.CreateWaste(amount.Value);
+                if (!result)
+                    UserDialogs.Instance.Alert("Something went wrong.\nPlease try again later.");
+                else
+                    await ExecuteLoadAmounts();
+            }
+        }
+
+        int? ProcessInput(PromptResult response)
+        {
+            if (response.Ok && response != null)
+            {
+                var digits = Regex.Replace(response.Value, "[^0-9.]", "");
+                if (!String.IsNullOrWhiteSpace(digits))
+                {
+                    // Round to nearest int if user entered double
+                    var amount = Convert.ToInt32(double.Parse(digits));
+                    if (amount > 0)
+                        return amount;
+                }
+            }
+            return null;
         }
     }
 }

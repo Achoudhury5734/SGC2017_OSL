@@ -10,15 +10,22 @@ namespace OSL.Services
 {
     public class WasteRepository
     {
-        public async Task<Donation> CreateWaste(Donation donation)
+        public async Task<bool> CreateWaste(int amount)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(donation), Encoding.UTF8, "application/json");
+            Donation waste = new Donation();
+            waste.Amount = amount;
+            waste.Status = DonationStatus.Wasted;
+            waste.Expiration = DateTime.Now;
+            waste.PictureUrl = null;
+            waste.Title = "UserEnteredWaste";
+
+            var content = new StringContent(JsonConvert.SerializeObject(waste), Encoding.UTF8, "application/json");
             var response = await App.ApiClient.PostAsync($"api/donations", content);
 
             if (response.StatusCode == HttpStatusCode.OK)
-                return donation;
-            
-            return null;
+                return true;
+
+            return false;
         }
 
         public async Task<int[]> GetDonorStats()

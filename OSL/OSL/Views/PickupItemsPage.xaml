@@ -3,16 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.PickupItemsPage"
              Title="{Binding Title}" x:Name="BrowseItemsPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Filter" Command="{Binding FilterItemsCommand}"/>
+    </ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<StackLayout>
-            <Picker SelectedIndex="3" Title="Filter Items" SelectedIndexChanged="FilterChanged">
-                <Picker.Items>
-                    <x:String>Within 5 miles</x:String>
-                    <x:String>Within 10 miles</x:String>
-                    <x:String>Within 20 miles</x:String>
-                    <x:String>All Items</x:String>
-                </Picker.Items>
-            </Picker>
 			<ListView x:Name="PickupItemsListView"
                       ItemsSource="{Binding Items}"
                       VerticalOptions="FillAndExpand"
