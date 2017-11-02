@@ -17,11 +17,6 @@ namespace OSL.Views
             BindingContext = viewModel;
 		}
 
-        async void AddWaste_Clicked(object sender, EventArgs e) 
-        {
-            await Navigation.PushAsync(new AddWastePage());
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();

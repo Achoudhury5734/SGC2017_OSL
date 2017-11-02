@@ -6,7 +6,7 @@
              xmlns:vm="using:OSL.ViewModels"
              Title="YTD Tally">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add Waste" Clicked="AddWaste_Clicked"/> 
+        <ToolbarItem Text="Add Waste" Command="{Binding AddWasteCommand}"/> 
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
        <ScrollView>
@@ -23,16 +23,25 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="6*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="Donated" Grid.Row="0" Grid.Column="0" />
-                <Label Text="{Binding YearDonated}" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label Text="Wasted" Grid.Row="1" Grid.Column="0"/>
-                <Label Text="{Binding YearWasted}" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label Text="Listed" Grid.Row="2" Grid.Column="0" />
-                <Label Text="{Binding Listed}" Grid.Row="2" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label Text="Pending" Grid.Row="3" Grid.Column="0"/>
-                <Label Text="{Binding Pending}" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="End"/>
+                    
+                <Label Text="Donated" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label BackgroundColor="Color.LimeGreen" Grid.Row="0" Grid.Column="0"/>
+                <Label Text="{Binding YearDonated}" Grid.Row="0" Grid.Column="2" HorizontalTextAlignment="End"/>
+
+                <Label Text="Pending" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label BackgroundColor="Color.Yellow" Grid.Row="1" Grid.Column="0"/>
+                <Label Text="{Binding Pending}" Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="End"/>
+
+                <Label Text="Listed" Grid.Row="2" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label BackgroundColor="Color.DarkOrange" Grid.Row="2" Grid.Column="0"/>
+                <Label Text="{Binding Listed}" Grid.Row="2" Grid.Column="2" HorizontalTextAlignment="End"/>
+
+                <Label Text="Wasted" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="End"/>
+                <Label BackgroundColor="Color.Red" Grid.Row="3" Grid.Column="0"/>
+                <Label Text="{Binding YearWasted}" Grid.Row="3" Grid.Column="2" HorizontalTextAlignment="End"/>
             </Grid>
        </StackLayout>
        </ScrollView>
