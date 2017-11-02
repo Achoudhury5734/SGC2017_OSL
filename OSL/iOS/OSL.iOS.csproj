@@ -160,12 +160,6 @@
     <Reference Include="Plugin.Geolocator">
       <HintPath>..\packages\Xam.Plugin.Geolocator.4.1.2\lib\Xamarin.iOS10\Plugin.Geolocator.dll</HintPath>
     </Reference>
-    <Reference Include="Toasts.Forms.Plugin.Abstractions">
-      <HintPath>..\packages\Toasts.Forms.Plugin.3.2.1\lib\Xamarin.iOS10\Toasts.Forms.Plugin.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Toasts.Forms.Plugin.iOS">
-      <HintPath>..\packages\Toasts.Forms.Plugin.3.2.1\lib\Xamarin.iOS10\Toasts.Forms.Plugin.iOS.dll</HintPath>
-    </Reference>
     <Reference Include="Acr.Support.iOS">
       <HintPath>..\packages\Acr.Support.2.1.0\lib\Xamarin.iOS10\Acr.Support.iOS.dll</HintPath>
     </Reference>
