@@ -380,7 +380,7 @@ namespace OSL.MobileAppService.Controllers
                 return new NotFoundResult();
             }
 
-            if (user.Id != donation.DonorId)
+            if (user.Id != originalDonation.DonorId)
             {
                 return new UnauthorizedResult();
             }

@@ -120,7 +120,7 @@ namespace OSL.ViewModels
         async Task ExecuteAddWasteCommand()
         {
             var promptConfig = new PromptConfig();
-            promptConfig.Message = "Add to Wasted Food Count";
+            promptConfig.Title = "Add to Wasted Food Count";
             promptConfig.OkText = "Add";
             promptConfig.Placeholder = "Quantity (lbs)";
             var response = await UserDialogs.Instance.PromptAsync(promptConfig);

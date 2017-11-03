@@ -21,7 +21,10 @@ namespace OSL.Services
 
         public async Task SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
         {
-            var filebytes = ReadFully(mediaFile.GetStream());
+            byte[] filebytes = null;
+            if (mediaFile != null)
+                filebytes = ReadFully(mediaFile.GetStream());
+            
             var donationCapture = new DonationCapture
             {
                 Expiration = expirationDate.Add(expirationTime),
@@ -40,16 +43,29 @@ namespace OSL.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task CompleteDonationAsync(int donationId)
+        public async Task<bool> CompleteDonationAsync(int donationId)
         {
             var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/complete", null);
-            response.EnsureSuccessStatusCode();
+            return response.IsSuccessStatusCode;
         }
 
-        public async Task WasteDonationAsync(int donationId)
+        public async Task<bool> WasteDonationAsync(int donationId)
         {
             var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/waste", null);
-            response.EnsureSuccessStatusCode();
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RelistDonationAsync(Donation donation)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(donation), Encoding.UTF8, "application/json");
+            var response = await App.ApiClient.PutAsync($"api/donations/{donation.Id}/relist", content);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<Donation> GetDonationAsync(int donationId)
+        {
+            var json = await App.ApiClient.GetStringAsync($"api/donations/{donationId}");
+            return JsonConvert.DeserializeObject<Donation>(json);
         }
 
         public static byte[] ReadFully(Stream input)

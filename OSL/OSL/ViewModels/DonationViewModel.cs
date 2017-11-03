@@ -17,7 +17,9 @@ namespace OSL.ViewModels
 
         public DonationViewModel()
         {
-            SaveCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
+            PageTitle = "New Item";
+            EnterText = "Save";
+            EnterCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
             TakePictureCommand = new Command(async () => await TakePictureAsync());
 
             ExpirationDate = DateTime.Now;
@@ -81,16 +83,18 @@ namespace OSL.ViewModels
             set { SetProperty(ref page, value); }
         }
 
-        public Command SaveCommand { get; }
+        public string PageTitle { get; set; }
+        public string EnterText { get; set; }
+        public Command EnterCommand { get; }
         public ICommand TakePictureCommand { get; }
 
         public async Task SaveDonationAsync()
         {
             IsBusy = true;
-            SaveCommand.ChangeCanExecute();
+            EnterCommand.ChangeCanExecute();
             await donationRepository.SaveDonationAsync(DonationTitle, mediaFile, Quantity, DonationType, ExpirationDate, ExpirationTime);
             IsBusy = false;
-            SaveCommand.ChangeCanExecute();
+            EnterCommand.ChangeCanExecute();
 
             await page.Navigation.PushAsync(new DonationListPage());
         }

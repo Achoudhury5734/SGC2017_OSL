@@ -74,7 +74,8 @@ namespace OSL.MobileAppService.Services
 
         public IEnumerable<Donation> GetByDonorId(int DonorId)
         {
-            var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId";
+            var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId " +
+                        "AND [Title] != @UserEnteredWaste";
             var donations = new List<Donation>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -84,6 +85,7 @@ namespace OSL.MobileAppService.Services
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@DonorId", DonorId);
+                    command.Parameters.AddWithValue("@UserEnteredWaste", "UserEnteredWaste");
                     SqlDataReader reader = command.ExecuteReader();
                     command.Parameters.Clear();
                     while (reader.Read())

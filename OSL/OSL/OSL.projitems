@@ -79,6 +79,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\YTDViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\WasteRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RegistrationViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RelistViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml">

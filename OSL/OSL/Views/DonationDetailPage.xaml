@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.Views.DonationDetailPage">
@@ -6,6 +6,7 @@
         <StackLayout>
             <Button Text="Complete Donation" Command="{Binding CompleteCommand}"/>
             <Button Text="Waste Donation" Command="{Binding WasteCommand}"/>
+            <Button Text="Relist Donation" Command="{Binding RelistCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
