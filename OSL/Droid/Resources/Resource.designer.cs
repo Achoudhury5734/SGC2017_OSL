@@ -1489,8 +1489,6 @@ namespace OSL.Droid
 			global::Microsoft.Identity.Client.Resource.Styleable.ViewStubCompat_android_inflatedId = global::OSL.Droid.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::Microsoft.Identity.Client.Resource.Styleable.ViewStubCompat_android_layout = global::OSL.Droid.Resource.Styleable.ViewStubCompat_android_layout;
 			global::Splat.Resource.String.library_name = global::OSL.Droid.Resource.String.library_name;
-			global::Plugin.Toasts.Resource.String.ApplicationName = global::OSL.Droid.Resource.String.ApplicationName;
-			global::Plugin.Toasts.Resource.String.Hello = global::OSL.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::OSL.Droid.Resource.Attribute.actionBarSize;
 		}
 		
@@ -3693,8 +3691,26 @@ namespace OSL.Droid
 			// aapt resource value: 0x7f020053
 			public const int avd_hide_password = 2130837587;
 			
+			// aapt resource value: 0x7f020115
+			public const int avd_hide_password_1 = 2130837781;
+			
+			// aapt resource value: 0x7f020116
+			public const int avd_hide_password_2 = 2130837782;
+			
+			// aapt resource value: 0x7f020117
+			public const int avd_hide_password_3 = 2130837783;
+			
 			// aapt resource value: 0x7f020054
 			public const int avd_show_password = 2130837588;
+			
+			// aapt resource value: 0x7f020118
+			public const int avd_show_password_1 = 2130837784;
+			
+			// aapt resource value: 0x7f020119
+			public const int avd_show_password_2 = 2130837785;
+			
+			// aapt resource value: 0x7f02011a
+			public const int avd_show_password_3 = 2130837786;
 			
 			// aapt resource value: 0x7f020055
 			public const int design_bottom_navigation_item_background = 2130837589;
@@ -4245,11 +4261,11 @@ namespace OSL.Droid
 			// aapt resource value: 0x7f02010b
 			public const int notification_icon_background = 2130837771;
 			
-			// aapt resource value: 0x7f020111
-			public const int notification_template_icon_bg = 2130837777;
+			// aapt resource value: 0x7f020113
+			public const int notification_template_icon_bg = 2130837779;
 			
-			// aapt resource value: 0x7f020112
-			public const int notification_template_icon_low_bg = 2130837778;
+			// aapt resource value: 0x7f020114
+			public const int notification_template_icon_low_bg = 2130837780;
 			
 			// aapt resource value: 0x7f02010c
 			public const int notification_tile_bg = 2130837772;
@@ -4258,13 +4274,19 @@ namespace OSL.Droid
 			public const int notify_panel_notification_icon_bg = 2130837773;
 			
 			// aapt resource value: 0x7f02010e
-			public const int roundedbg = 2130837774;
+			public const int osl_icon = 2130837774;
 			
 			// aapt resource value: 0x7f02010f
-			public const int roundedbgdark = 2130837775;
+			public const int osl_logo = 2130837775;
 			
 			// aapt resource value: 0x7f020110
-			public const int xamarin_logo = 2130837776;
+			public const int roundedbg = 2130837776;
+			
+			// aapt resource value: 0x7f020111
+			public const int roundedbgdark = 2130837777;
+			
+			// aapt resource value: 0x7f020112
+			public const int xamarin_logo = 2130837778;
 			
 			static Drawable()
 			{
@@ -5153,9 +5175,6 @@ namespace OSL.Droid
 			// aapt resource value: 0x7f0a003f
 			public const int ApplicationName = 2131361855;
 			
-			// aapt resource value: 0x7f0a003e
-			public const int Hello = 2131361854;
-			
 			// aapt resource value: 0x7f0a0015
 			public const int abc_action_bar_home_description = 2131361813;
 			
@@ -5249,6 +5268,9 @@ namespace OSL.Droid
 			// aapt resource value: 0x7f0a0027
 			public const int abc_toolbar_collapse_description = 2131361831;
 			
+			// aapt resource value: 0x7f0a0040
+			public const int app_name = 2131361856;
+			
 			// aapt resource value: 0x7f0a0036
 			public const int appbar_scrolling_view_behavior = 2131361846;
 			
@@ -5258,8 +5280,8 @@ namespace OSL.Droid
 			// aapt resource value: 0x7f0a0038
 			public const int character_counter_pattern = 2131361848;
 			
-			// aapt resource value: 0x7f0a0040
-			public const int library_name = 2131361856;
+			// aapt resource value: 0x7f0a003e
+			public const int library_name = 2131361854;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int mr_button_content_description = 2131361792;
