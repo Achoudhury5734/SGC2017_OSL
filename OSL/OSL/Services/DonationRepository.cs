@@ -55,10 +55,16 @@ namespace OSL.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> RelistDonationAsync(Donation donation)
+        public async Task<bool> RelistDonationAsync(DonationCapture capture, int donationId, MediaFile mediaFile)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(donation), Encoding.UTF8, "application/json");
-            var response = await App.ApiClient.PutAsync($"api/donations/{donation.Id}/relist", content);
+            byte[] filebytes = null;
+            if (mediaFile != null)
+                filebytes = ReadFully(mediaFile.GetStream());
+
+            capture.Image = filebytes;
+
+            var content = new StringContent(JsonConvert.SerializeObject(capture), Encoding.UTF8, "application/json");
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/relist", content);
             return response.IsSuccessStatusCode;
         }
 

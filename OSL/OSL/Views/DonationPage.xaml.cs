@@ -1,5 +1,4 @@
 ﻿using System;
-using Plugin.Media;
 using Xamarin.Forms;
 using OSL.ViewModels;
 

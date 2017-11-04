@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using OSL.Models;
 using Xamarin.Forms;
@@ -20,8 +18,8 @@ namespace OSL.ViewModels
 
             donationRepository = new DonationRepository();
 
-            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => item.Status != DonationStatus.Completed);
-            WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => item.Status != DonationStatus.Wasted);
+            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation(item.Status));
+            WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation(item.Status));
             RelistCommand = new Command(async () => await RelistDonationAsync(item.Id), () => CanRelistDonation(item.Status));
 
         }

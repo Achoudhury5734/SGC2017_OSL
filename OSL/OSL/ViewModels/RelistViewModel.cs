@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using OSL.Models;
 using OSL.Services;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 using Xamarin.Forms;
 
 namespace OSL.ViewModels
@@ -20,26 +21,35 @@ namespace OSL.ViewModels
         public Page Page;
 
         private Donation donation;
+        private bool canTakePicture;
 
         public RelistViewModel(int id)
         {
+            canTakePicture = false;
             donationRep = new DonationRepository();
-            PageTitle = "Relist Item";
+            PageTitle = "Edit Item";
             EnterText = "Relist";
-            EnterCommand = new Command(async () => await ExecuteRelistCommand(id));
+            EnterCommand = new Command(async () => await ExecuteRelistCommand(id), ()=> !IsBusy);
             LoadDonationCommand = new Command(async () => await ExecuteLoadDonations(id));
-            TakePictureCommand = new Command(() => ExecuteTakePicture(), () =>false);
+            TakePictureCommand = new Command(async () => await ExecuteTakePicture(), () => canTakePicture);
         }
 
         private async Task ExecuteRelistCommand(int id)
         {
-            // Doesn't currently support updating picture
-            donation.Title = DonationTitle;
-            donation.Type = (DonationType)Enum.Parse(typeof(DonationType), DonationType);
-            donation.Amount = Quantity;
-            donation.Expiration = ExpirationDate.Add(ExpirationTime);
+            DonationCapture capture = new DonationCapture()
+            {
+                Title = DonationTitle,
+                Type = DonationType,
+                Amount = Quantity,
+                Expiration = ExpirationDate.Add(ExpirationTime)
+            };
 
-            var res = await donationRep.RelistDonationAsync(donation);
+            IsBusy = true;
+            EnterCommand.ChangeCanExecute();
+            var res = await donationRep.RelistDonationAsync(capture, donation.Id, mediaFile);
+            IsBusy = false;
+            EnterCommand.ChangeCanExecute();
+
             if (!res)
                 ShowFailureDialog("Unable to Relist");
             else
@@ -47,8 +57,27 @@ namespace OSL.ViewModels
                 
         }
 
-        private void ExecuteTakePicture()
+        private MediaFile mediaFile;
+        private async Task ExecuteTakePicture()
         {
+            await CrossMedia.Current.Initialize();
+
+            mediaFile = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                Directory = "Sample",
+                Name = "image.jpg"
+            });
+
+            if (mediaFile == null)
+                return;
+
+            ImageSource = ImageSource.FromStream(() =>
+            {
+                var stream = mediaFile.GetStream();
+                return stream;
+            });
+            OnPropertyChanged("ImageSource");
+
             return;
         }
 
@@ -69,32 +98,44 @@ namespace OSL.ViewModels
             try
             {
                 donation = await donationRep.GetDonationAsync(id);
-                ImageSource = donation.PictureUrl;
-                OnPropertyChanged("ImageSource");
+
                 DonationTitle = donation.Title;
                 OnPropertyChanged("DonationTitle");
+
                 Quantity = donation.Amount;
                 OnPropertyChanged("Quantity");
+
                 DonationType = donation.Type.ToString();
                 OnPropertyChanged("DonationType");
+
+                DateTime expiration;
                 if (donation.Expiration < DateTime.Now)
                 {
                     // If expired, set new expiration to two hours from now
-                    var expiration = DateTime.Now.AddHours(2);
-                    ExpirationDate = expiration.Date;
-                    ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
+                    expiration = DateTime.Now.AddHours(2);
                 }
                 else
                 {
-                    ExpirationDate = donation.Expiration.Value.Date;
-                    ExpirationTime = donation.Expiration.Value.TimeOfDay;
+                    expiration = donation.Expiration.Value;
                 }
+                ExpirationDate = expiration.Date;
+                ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
                 OnPropertyChanged("ExpirationDate");
                 OnPropertyChanged("ExpirationTime");
+
+                if (String.IsNullOrEmpty(donation.PictureUrl) || donation.PictureUrl.Equals("Empty"))
+                {
+                    canTakePicture = true;
+                    TakePictureCommand.ChangeCanExecute();
+                }
+                else 
+                {
+                    ImageSource = donation.PictureUrl;
+                    OnPropertyChanged("ImageSource");
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine(ex);
                 ShowFailureDialog("Unable to Load Donation");
             }
             finally

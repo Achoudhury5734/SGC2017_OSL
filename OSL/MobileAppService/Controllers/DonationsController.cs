@@ -366,7 +366,7 @@ namespace OSL.MobileAppService.Controllers
         //PUT api/donations/5/relist
         [Authorize]
         [HttpPut("{Id}/relist")]
-        public IActionResult DonorRelist(int Id, [FromBody]Donation donation)
+        public async Task<IActionResult> DonorRelist(int Id, [FromBody]Donation donation)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
@@ -388,6 +388,11 @@ namespace OSL.MobileAppService.Controllers
             if (originalDonation.Status == DonationStatus.Completed)
             {
                 return BadRequest("Cannot relist completed donation");
+            }
+
+            if (donation.Image != null)
+            {
+                originalDonation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
             }
 
             originalDonation.Type = donation.Type;

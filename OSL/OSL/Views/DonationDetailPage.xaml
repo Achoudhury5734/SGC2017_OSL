@@ -6,7 +6,7 @@
         <StackLayout>
             <Button Text="Complete Donation" Command="{Binding CompleteCommand}"/>
             <Button Text="Waste Donation" Command="{Binding WasteCommand}"/>
-            <Button Text="Relist Donation" Command="{Binding RelistCommand}"/>
+            <Button Text="Edit and Relist" Command="{Binding RelistCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

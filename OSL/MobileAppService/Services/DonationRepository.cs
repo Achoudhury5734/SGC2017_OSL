@@ -378,8 +378,8 @@ namespace OSL.MobileAppService.Services
             var query = "UPDATE [Donation] " + 
                         $"SET RecipientId = @RecipientId, Status = {(int)DonationStatus.Listed}," +
                         $"[Title] = @Title, [Type] = @Type, [Updated] = @Updated, " +
-                        $"[Expiration] = @Expiration, [Amount] = @Amount, [StatusUpdated] = @StatusUpdated " +
-                        $"WHERE [Id] = @Id";
+                        $"[Expiration] = @Expiration, [Amount] = @Amount, [StatusUpdated] = @StatusUpdated, " +
+                        $"[PictureUrl] = @PictureUrl WHERE [Id] = @Id";
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
@@ -393,6 +393,7 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Expiration", donation.Expiration);
                     command.Parameters.AddWithValue("@Amount", donation.Amount);
                     command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
+                    command.Parameters.AddWithValue("@PictureUrl", donation.PictureUrl);
                     command.ExecuteNonQuery();
                     command.Parameters.Clear();
                 }

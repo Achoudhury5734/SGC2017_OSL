@@ -1,5 +1,4 @@
-﻿using OSL.Models;
-using OSL.Services;
+﻿using OSL.Services;
 using OSL.Views;
 using Plugin.Media;
 using System;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Plugin.Media.Abstractions;
-using System.Net.Http;
 
 namespace OSL.ViewModels
 {
@@ -123,7 +121,6 @@ namespace OSL.ViewModels
                 var stream = mediaFile.GetStream();
                 return stream;
             });
-
         }
     }
 }
