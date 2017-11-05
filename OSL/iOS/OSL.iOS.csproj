@@ -197,8 +197,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_76.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_152.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_167.png" />
-    <ImageAsset Include="Assets.xcassets\Image.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\tab_about.png" />
@@ -211,6 +209,7 @@
     <BundleResource Include="Resources\xamarin_logo%402x.png" />
     <BundleResource Include="Resources\xamarin_logo%403x.png" />
     <BundleResource Include="Resources\sackLunch_startscreen.png" />
+    <BundleResource Include="Resources\osl_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
