@@ -16,7 +16,7 @@ namespace OSL
         public string Copyright { get; } = $"Copyright {DateTime.Now.Year} Operation Sack Lunch";
         public AboutViewModel()
         {
-            Title = "About";
+            Title = "";
 
             OpenWebCommand = new Command(() => Device.OpenUri(new Uri("https://www.oslserves.org/")));
         }

@@ -21,7 +21,20 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
           </Grid.RowDefinitions>
-          <Label
+                    <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                        <ContentView Padding="0,0,0,0" VerticalOptions="FillAndExpand">
+                            <Image VerticalOptions="Center" HeightRequest="64">
+                                <Image.Source>
+                                    <OnPlatform x:TypeArguments="ImageSource">
+                                        <On Platform="iOS" Value="osl_logo.png" />
+                                        <On Platform="Android" Value="osl_logo.png" />
+                                        <On Platform="UWP" Value="Assets\osl_logo.png" />
+                                    </OnPlatform>
+                                </Image.Source>
+                            </Image>
+                        </ContentView>
+                    </StackLayout>
+                    <Label
               Grid.Column="1"
               Grid.Row="2"
               Text="Second Helping"

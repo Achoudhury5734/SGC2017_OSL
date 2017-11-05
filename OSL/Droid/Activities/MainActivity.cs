@@ -10,7 +10,7 @@ using Xamarin.Forms;
 namespace OSL.Droid
 {
     [Activity(Label = "@string/app_name", Icon = "@drawable/osl_icon", 
-        Theme = "@style/MyTheme", MainLauncher = true, 
+        Theme = "@style/MyTheme", MainLauncher = false, 
         LaunchMode = LaunchMode.SingleInstance,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         ScreenOrientation = ScreenOrientation.Portrait)]
