@@ -186,17 +186,17 @@
     <ImageAsset Include="Assets.xcassets\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_87.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_180.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_58.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_40.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_80.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_120.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_87.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_180.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_1024.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_29.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_76.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_152.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_1024.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_29.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\tab_about.png" />

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.Views.RootPageMaster"
@@ -9,7 +9,7 @@
               HasUnevenRows="true"
               ItemsSource="{Binding MenuItems}">
       <ListView.Header>
-          <Grid BackgroundColor="#0aafab">
+          <Grid BackgroundColor="#3aafab">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
