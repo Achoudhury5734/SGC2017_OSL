@@ -19,6 +19,12 @@ namespace OSL.Services
             return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
+        public async Task<IEnumerable<Donation>> GetDonationsByRecipientAsync()
+        {
+            var json = await App.ApiClient.GetStringAsync("api/donations/recipient/me");
+            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
+        }
+
         public async Task SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
         {
             var filebytes = ReadFully(mediaFile.GetStream());
@@ -38,6 +44,12 @@ namespace OSL.Services
 
             var response = await App.ApiClient.SendAsync(message);
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<bool> CancelDonationAsync(int donationId)
+        {
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/cancel", null);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task CompleteDonationAsync(int donationId)

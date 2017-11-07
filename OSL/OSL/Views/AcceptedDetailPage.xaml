@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="using:OSL.ViewModels"
+             x:Class="OSL.Views.AcceptedDetailPage"
+             Title="{Binding Title}">
+	<ContentPage.Content>
+        <ScrollView>
+        <StackLayout>
+            <Image Source="{Binding Item.PictureUrl}" />
+                
+            <!--<Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>-->
+            <Label Text="{Binding Item.Amount, StringFormat='Amount: {0} lbs'}" Margin="20,0,0,0"/>
+            <Label Text="{Binding Item.Type, StringFormat='Type: {0}'}" Margin="20,0,0,0"/>
+            <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,0,0"/>
+
+            <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
+            <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
+            <Label Text="{Binding Item.Donor.Phone_Number, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
+                
+            <Label Text="Organization: " FontAttributes="Bold" Margin="10,0,0,0"/>    
+            <Label Text="{Binding Item.Donor.Organization_Name}" Margin="20,0,0,0"/>
+            <Label Text="{Binding Address}" Margin="20,0,0,0"/>
+            
+            <Button Text="Cancel" Command="{Binding CancelCommand}"/>
+        </StackLayout>
+        </ScrollView>
+	</ContentPage.Content>
+</ContentPage>
