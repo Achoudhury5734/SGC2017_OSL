@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using OSL.Models;
 using OSL.ViewModels;
 using Xamarin.Forms;

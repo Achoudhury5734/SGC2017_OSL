@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using OSL.Models;
 using OSL.Services;
 using Xamarin.Forms;
@@ -21,7 +22,7 @@ namespace OSL.ViewModels
 
             donationRep = new DonationRepository();
 
-            CancelCommand = new Command(async () => await ExecuteCancelCommand());
+            CancelCommand = new Command(async () => await ExecuteCancelCommand(),() => CanCancel());
         }
 
         public string Address
@@ -52,8 +53,25 @@ namespace OSL.ViewModels
 
         private async Task ExecuteCancelCommand()
         {
-            await donationRep.CancelDonationAsync(Item.Id); 
-            await Page.Navigation.PopAsync();
+            var res = await donationRep.CancelDonationAsync(Item.Id);
+            if (!res)
+            {
+                var alertConfig = new AlertConfig();
+                alertConfig.Title = "Unable to Cancel Donation";
+                alertConfig.Message = "Please try again later.";
+                await UserDialogs.Instance.AlertAsync(alertConfig);
+            }
+            else
+            {
+                await Page.Navigation.PopAsync();
+            }
+        }
+
+        private bool CanCancel()
+        {
+            // Completed and Wasted for an accepted item would be set by donor, don't want the 
+            // recipient relisting something that is gone/expired
+            return Item.Status != DonationStatus.Completed && Item.Status != DonationStatus.Wasted;
         }
     }
 }

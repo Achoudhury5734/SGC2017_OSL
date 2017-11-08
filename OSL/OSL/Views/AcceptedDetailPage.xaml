@@ -9,7 +9,7 @@
         <StackLayout>
             <Image Source="{Binding Item.PictureUrl}" />
                 
-            <!--<Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>-->
+            <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>
             <Label Text="{Binding Item.Amount, StringFormat='Amount: {0} lbs'}" Margin="20,0,0,0"/>
             <Label Text="{Binding Item.Type, StringFormat='Type: {0}'}" Margin="20,0,0,0"/>
             <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,0,0"/>
