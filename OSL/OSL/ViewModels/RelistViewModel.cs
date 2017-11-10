@@ -41,18 +41,33 @@ namespace OSL.ViewModels
                 Amount = Quantity,
                 Expiration = ExpirationDate.Add(ExpirationTime)
             };
+            var okToProceed = await CheckRemoveRecipient();
+            if (okToProceed)
+            {
+                IsBusy = true;
+                EnterCommand.ChangeCanExecute();
+                var res = await donationRep.RelistDonationAsync(capture, donation.Id, mediaFile);
+                IsBusy = false;
+                EnterCommand.ChangeCanExecute();
 
-            IsBusy = true;
-            EnterCommand.ChangeCanExecute();
-            var res = await donationRep.RelistDonationAsync(capture, donation.Id, mediaFile);
-            IsBusy = false;
-            EnterCommand.ChangeCanExecute();
+                if (!res)
+                    ShowFailureDialog("Unable to Relist");
+                else
+                    await Page.Navigation.PopToRootAsync();
+            }
+        }
 
-            if (!res)
-                ShowFailureDialog("Unable to Relist");
-            else
-                await Page.Navigation.PopToRootAsync();
-                
+        private async Task<bool> CheckRemoveRecipient() {
+            var res = true;
+            if (donation.Recipient != null) {
+                var confirmConfig = new ConfirmConfig();
+                confirmConfig.CancelText = "Cancel";
+                confirmConfig.OkText = "Relist anyway";
+                confirmConfig.Message = "This donation has been accepted. If you relist the recipient will be removed.";
+                confirmConfig.Title = "Warning";
+                res = await UserDialogs.Instance.ConfirmAsync(confirmConfig);
+            }
+            return res;
         }
 
         private MediaFile mediaFile;
@@ -68,14 +83,14 @@ namespace OSL.ViewModels
 
             if (mediaFile == null)
                 return;
-
+            
             ImageSource = ImageSource.FromStream(() =>
             {
                 var stream = mediaFile.GetStream();
+                OnPropertyChanged("ImageSource");
                 return stream;
             });
             OnPropertyChanged("ImageSource");
-
             return;
         }
 

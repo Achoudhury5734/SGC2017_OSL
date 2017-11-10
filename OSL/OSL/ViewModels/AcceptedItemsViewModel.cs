@@ -37,19 +37,15 @@ namespace OSL.ViewModels
                 var items = await donationRep.GetDonationsByRecipientAsync();
                 var pending = new Group("Pending Pickup");
                 var completed = new Group("Completed");
-                var wasted = new Group("Wasted");
                 foreach (var item in items)
                 {
                     if (item.Status == DonationStatus.PendingPickup)
                         pending.Add(item);
-                    if (item.Status == DonationStatus.Completed)
+                    else if (item.Status == DonationStatus.Completed)
                         completed.Add(item);
-                    if (item.Status == DonationStatus.Wasted)
-                        wasted.Add(item);
                 }
                 GroupedItems.Add(pending);
                 GroupedItems.Add(completed);
-                GroupedItems.Add(wasted);
             }
             catch (Exception ex)
             {

@@ -66,15 +66,12 @@ namespace OSL.MobileAppService.Services
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var container = blobClient.GetContainerReference(Configuration["BlobStorage:ContainerName"]);
 
-                if (await container.CreateIfNotExistsAsync())
+                /*await container.SetPermissionsAsync(new BlobContainerPermissions
                 {
-                    await container.SetPermissionsAsync(new BlobContainerPermissions
-                    {
-                        PublicAccess = BlobContainerPublicAccessType.Blob
-                    });
-                }
-
-                CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(imagePath);
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                });*/
+                var shortened = imagePath.Substring(imagePath.LastIndexOf('/') + 1);
+                CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(shortened);
                 await cloudBlockBlob.DeleteIfExistsAsync();
             }
             catch

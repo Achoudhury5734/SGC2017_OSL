@@ -67,11 +67,6 @@ namespace OSL.ViewModels
             }
         }
 
-        private bool CanCancel()
-        {
-            // Completed and Wasted for an accepted item would be set by donor, don't want the 
-            // recipient relisting something that is gone/expired
-            return Item.Status != DonationStatus.Completed && Item.Status != DonationStatus.Wasted;
-        }
+        private bool CanCancel() => Item.Status == DonationStatus.PendingPickup;
     }
 }

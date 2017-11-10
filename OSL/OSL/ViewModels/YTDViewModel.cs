@@ -13,18 +13,19 @@ namespace OSL.ViewModels
 {
     public class YTDViewModel : ViewModelBase
     {
-        public string YearWasted { get; set; }
-        public string YearDonated { get; set; }
-        public string Listed { get; set; }
-        public string Pending { get; set; }
         public Command LoadAmountsCommand { get; set; }
         public Command AddWasteCommand { get; set; }
         public PlotModel Model { get; set; }
 
-        private double yearWasted;
-        private double yearDonated;
-        private double listed;
-        private double pending;
+        private int yearWasted;
+        private int yearDonated;
+        private int listed;
+        private int pending;
+
+        public string YearWasted { get { return yearWasted + " lbs"; } }
+        public string YearDonated { get { return yearDonated + " lbs"; } }
+        public string Listed { get { return listed + " lbs"; } }
+        public string Pending { get { return pending + " lbs"; } }
 
         private readonly WasteRepository wasteRep;
 
@@ -56,19 +57,15 @@ namespace OSL.ViewModels
                 var userStats = await wasteRep.GetDonorStats();
 
                 listed = userStats[(int)DonationStatus.Listed];
-                Listed = listed + " lbs";
                 OnPropertyChanged("Listed");
 
                 pending = userStats[(int)DonationStatus.PendingPickup];
-                Pending = pending + " lbs";
                 OnPropertyChanged("Pending");
 
                 yearDonated = userStats[(int)DonationStatus.Completed];
-                YearDonated = yearDonated + " lbs";
                 OnPropertyChanged("YearDonated");
 
                 yearWasted = userStats[(int)DonationStatus.Wasted];
-                YearWasted = yearWasted + " lbs";
                 OnPropertyChanged("YearWasted");
 
                 Model = generatePlotModel();
@@ -131,7 +128,12 @@ namespace OSL.ViewModels
                 if (!result)
                     UserDialogs.Instance.Alert("Something went wrong.\nPlease try again later.");
                 else
-                    await ExecuteLoadAmounts();
+                {
+                    yearWasted += amount.Value;
+                    OnPropertyChanged("YearWasted");
+                    Model = generatePlotModel();
+                    OnPropertyChanged("Model");
+                }
             }
         }
 
