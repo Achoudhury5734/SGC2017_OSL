@@ -53,5 +53,34 @@ namespace OSL.MobileAppService.Services
             }  
             return imageFullPath;  
         }
+
+        public async Task DeleteImageAsync(string imagePath)
+        {
+            try
+            {
+                var credentials = new StorageCredentials(
+                    Configuration["BlobStorage:AccountName"],
+                    Configuration["BlobStorage:AccessKey"]
+                );
+                var storageAccount = new CloudStorageAccount(credentials, useHttps: true);
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                var container = blobClient.GetContainerReference(Configuration["BlobStorage:ContainerName"]);
+
+                if (await container.CreateIfNotExistsAsync())
+                {
+                    await container.SetPermissionsAsync(new BlobContainerPermissions
+                    {
+                        PublicAccess = BlobContainerPublicAccessType.Blob
+                    });
+                }
+
+                CloudBlockBlob cloudBlockBlob = container.GetBlockBlobReference(imagePath);
+                await cloudBlockBlob.DeleteIfExistsAsync();
+            }
+            catch
+            {
+                
+            }
+        }
     }
 }

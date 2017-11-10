@@ -81,7 +81,7 @@ namespace OSL.MobileAppService.Controllers
         // POST: api/donations/nearby/
         [Authorize]
         [HttpPost("nearby/")]
-        public IActionResult GetDonationsWithinDistance([FromBody] NearbyRequest request)
+        public IActionResult GetListedWithinDistance([FromBody] NearbyRequest request)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
@@ -120,7 +120,6 @@ namespace OSL.MobileAppService.Controllers
             var donations = donationRepository.GetByDonorId(user.Id);
             foreach (var donation in donations)
             {
-                donation.Donor = userRepository.GetById(donation.DonorId);
                 if (donation.RecipientId.HasValue)
                 {
                     donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
@@ -144,10 +143,6 @@ namespace OSL.MobileAppService.Controllers
             foreach (var donation in donations)
             {
                 donation.Donor = userRepository.GetById(donation.DonorId);
-                if (donation.RecipientId.HasValue)
-                {
-                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
-                }
             }
             return Ok(donations);
         }
@@ -390,6 +385,7 @@ namespace OSL.MobileAppService.Controllers
                 return BadRequest("Cannot relist completed donation");
             }
 
+            string oldUrl = originalDonation.PictureUrl;
             if (donation.Image != null)
             {
                 originalDonation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
@@ -399,8 +395,20 @@ namespace OSL.MobileAppService.Controllers
             originalDonation.Title = donation.Title;
             originalDonation.Expiration = donation.Expiration;
             originalDonation.Amount = donation.Amount;
-            donationRepository.RelistDonation(originalDonation);
-            return Ok();
+            var res = donationRepository.RelistDonation(originalDonation);
+            if (res)
+            {
+                if (!String.IsNullOrEmpty(oldUrl) && !String.Equals(oldUrl, "Empty"))
+                    await imageService.DeleteImageAsync(oldUrl);
+                return Ok();
+            }
+            else
+            {
+                // If database update failed delete new image upload, since reference will be to old
+                if (originalDonation.PictureUrl != null)
+                    await imageService.DeleteImageAsync(originalDonation.PictureUrl);
+                return BadRequest();
+            }
         }
     }
 }

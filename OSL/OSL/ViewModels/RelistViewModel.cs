@@ -21,17 +21,15 @@ namespace OSL.ViewModels
         public Page Page;
 
         private Donation donation;
-        private bool canTakePicture;
 
         public RelistViewModel(int id)
         {
-            canTakePicture = false;
             donationRep = new DonationRepository();
             PageTitle = "Edit Item";
             EnterText = "Relist";
             EnterCommand = new Command(async () => await ExecuteRelistCommand(id), ()=> !IsBusy);
             LoadDonationCommand = new Command(async () => await ExecuteLoadDonations(id));
-            TakePictureCommand = new Command(async () => await ExecuteTakePicture(), () => canTakePicture);
+            TakePictureCommand = new Command(async () => await ExecuteTakePicture());
         }
 
         private async Task ExecuteRelistCommand(int id)
@@ -123,16 +121,8 @@ namespace OSL.ViewModels
                 OnPropertyChanged("ExpirationDate");
                 OnPropertyChanged("ExpirationTime");
 
-                if (String.IsNullOrEmpty(donation.PictureUrl) || donation.PictureUrl.Equals("Empty"))
-                {
-                    canTakePicture = true;
-                    TakePictureCommand.ChangeCanExecute();
-                }
-                else 
-                {
-                    ImageSource = donation.PictureUrl;
-                    OnPropertyChanged("ImageSource");
-                }
+                ImageSource = donation.PictureUrl;
+                OnPropertyChanged("ImageSource");
             }
             catch
             {
