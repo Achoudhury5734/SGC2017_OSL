@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using OSL.Models;
 using Xamarin.Forms;
 using OSL.Services;
+using OSL.Views;
 
 namespace OSL.ViewModels
 {
@@ -19,8 +18,9 @@ namespace OSL.ViewModels
 
             donationRepository = new DonationRepository();
 
-            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => item.Status != DonationStatus.Completed);
-            WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => item.Status != DonationStatus.Wasted);
+            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation(item.Status));
+            WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation(item.Status));
+            RelistCommand = new Command(async () => await RelistDonationAsync(item.Id), () => CanRelistDonation(item.Status));
 
         }
         public Donation Item { get; set; }
@@ -37,6 +37,11 @@ namespace OSL.ViewModels
             await Page.Navigation.PopAsync();
         }
 
+        private async Task RelistDonationAsync(int donationId)
+        {
+            await Page.Navigation.PushAsync(new DonationPage(donationId));
+        }
+
         private Page page;
         public Page Page
         {
@@ -46,5 +51,21 @@ namespace OSL.ViewModels
 
         public Command CompleteCommand { get; set; }
         public Command WasteCommand { get; set; }
+        public Command RelistCommand { get; set; }
+
+        private bool CanCompleteDonation(DonationStatus status)
+        {
+            return status == DonationStatus.PendingPickup;
+        }
+
+        private bool CanWasteDonation(DonationStatus status)
+        {
+            return status != DonationStatus.Wasted && status != DonationStatus.Completed; 
+        }
+
+        private bool CanRelistDonation(DonationStatus status)
+        {
+            return status != DonationStatus.Completed;
+        }
     }
 }

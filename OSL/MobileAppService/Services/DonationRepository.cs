@@ -52,7 +52,8 @@ namespace OSL.MobileAppService.Services
 
         public IEnumerable<Donation> GetListed()
         {
-            var query = $"SELECT * FROM [Donation] WHERE [Status] = {(int)DonationStatus.Listed}";
+            var query = $"SELECT * FROM [Donation] WHERE [Status] = {(int)DonationStatus.Listed} " +
+                        "ORDER BY [Created] DESC";
             var donations = new List<Donation>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -74,7 +75,8 @@ namespace OSL.MobileAppService.Services
 
         public IEnumerable<Donation> GetByDonorId(int DonorId)
         {
-            var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId";
+            var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId " +
+                        "AND [Title] != @UserEnteredWaste ORDER BY [Created] DESC";
             var donations = new List<Donation>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -84,6 +86,7 @@ namespace OSL.MobileAppService.Services
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@DonorId", DonorId);
+                    command.Parameters.AddWithValue("@UserEnteredWaste", "UserEnteredWaste");
                     SqlDataReader reader = command.ExecuteReader();
                     command.Parameters.Clear();
                     while (reader.Read())
@@ -98,7 +101,8 @@ namespace OSL.MobileAppService.Services
 
         public IEnumerable<Donation> GetByRecipientId(int RecipientId)
         {
-            var query = "SELECT * FROM [Donation] WHERE [RecipientId] = @RecipientId";
+            var query = "SELECT * FROM [Donation] WHERE [RecipientId] = @RecipientId " +
+                        "ORDER BY [Updated] DESC";
             var donations = new List<Donation>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -329,7 +333,8 @@ namespace OSL.MobileAppService.Services
         {
             var query = "UPDATE Donation " +
                         $"SET Status = {(int)DonationStatus.Wasted}, " +
-                        "Updated = @Updated, StatusUpdated = @StatusUpdated " +
+                        "Updated = @Updated, StatusUpdated = @StatusUpdated, " +
+                        "RecipientId = @RecipientId " +
                         "WHERE [Id] = @Id;";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -341,6 +346,7 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Id", donationId);
                     command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
                     command.Parameters.AddWithValue("@Updated", DateTime.Now);
+                    command.Parameters.AddWithValue("@RecipientId", DBNull.Value);
                     command.ExecuteScalar();
                     command.Parameters.Clear();
                 }
@@ -371,13 +377,15 @@ namespace OSL.MobileAppService.Services
             }
         }
 
-        public void RelistDonation(Donation donation)
+        public bool RelistDonation(Donation donation)
         {
             var query = "UPDATE [Donation] " + 
-                        $"SET RecipientId = @RecipientId, Status = {(int)DonationStatus.Listed}," +
-                        $"[Title] = @Title, [Type] = @Type, [Updated] = @Updated, " +
-                        $"[Expiration] = @Expiration, [Amount] = @Amount, [StatusUpdated] = @StatusUpdated " +
-                        $"WHERE [Id] = @Id";
+                        "SET [RecipientId] = @RecipientId, " +
+                        $"[Status] = {(int)DonationStatus.Listed}, " +
+                        "[Title] = @Title, [Type] = @Type, [Updated] = @Updated, " +
+                        "[Expiration] = @Expiration, [Amount] = @Amount, " +
+                        "[StatusUpdated] = @StatusUpdated, [PictureUrl] = @PictureUrl " +
+                        "WHERE [Id] = @Id";
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
@@ -391,8 +399,10 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Expiration", donation.Expiration);
                     command.Parameters.AddWithValue("@Amount", donation.Amount);
                     command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
-                    command.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("@PictureUrl", donation.PictureUrl);
+                    var res = command.ExecuteNonQuery();
                     command.Parameters.Clear();
+                    return res == 1; //should affect exactly one row
                 }
             }
         }

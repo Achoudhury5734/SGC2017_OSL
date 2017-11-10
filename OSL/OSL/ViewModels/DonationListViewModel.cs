@@ -16,7 +16,7 @@ namespace OSL
         public DonationListViewModel()
         {
             this.donationRepository = new DonationRepository();
-            Title = "My donations";
+            Title = "My Donations";
             Items = new ObservableCollection<Donation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsAsync(), () => !IsBusy);
         }

@@ -79,6 +79,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\YTDViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\WasteRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RegistrationViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RelistViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\AcceptedItemsPage.cs">
+      <DependentUpon>AcceptedItemsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AcceptedItemsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AcceptedDetailViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\AcceptedDetailPage.xaml.cs">
+      <DependentUpon>AcceptedDetailPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml">
@@ -106,6 +115,14 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\DonationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AcceptedItemsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AcceptedDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
