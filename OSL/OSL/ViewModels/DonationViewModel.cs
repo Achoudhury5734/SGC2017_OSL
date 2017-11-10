@@ -1,5 +1,4 @@
-﻿using OSL.Models;
-using OSL.Services;
+﻿using OSL.Services;
 using OSL.Views;
 using Plugin.Media;
 using System;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Plugin.Media.Abstractions;
-using System.Net.Http;
 
 namespace OSL.ViewModels
 {
@@ -17,7 +15,9 @@ namespace OSL.ViewModels
 
         public DonationViewModel()
         {
-            SaveCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
+            PageTitle = "New Item";
+            EnterText = "Save";
+            EnterCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
             TakePictureCommand = new Command(async () => await TakePictureAsync());
 
             ExpirationDate = DateTime.Now;
@@ -81,16 +81,18 @@ namespace OSL.ViewModels
             set { SetProperty(ref page, value); }
         }
 
-        public Command SaveCommand { get; }
+        public string PageTitle { get; set; }
+        public string EnterText { get; set; }
+        public Command EnterCommand { get; }
         public ICommand TakePictureCommand { get; }
 
         public async Task SaveDonationAsync()
         {
             IsBusy = true;
-            SaveCommand.ChangeCanExecute();
+            EnterCommand.ChangeCanExecute();
             await donationRepository.SaveDonationAsync(DonationTitle, mediaFile, Quantity, DonationType, ExpirationDate, ExpirationTime);
             IsBusy = false;
-            SaveCommand.ChangeCanExecute();
+            EnterCommand.ChangeCanExecute();
 
             await page.Navigation.PushAsync(new DonationListPage());
         }
@@ -119,7 +121,6 @@ namespace OSL.ViewModels
                 var stream = mediaFile.GetStream();
                 return stream;
             });
-
         }
     }
 }

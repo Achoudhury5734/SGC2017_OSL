@@ -5,9 +5,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="OSL.Views.DonationPage" 
              xmlns:vm="using:OSL.ViewModels"
-             Title="New Item" >
+             Title="{Binding PageTitle}" >
     <ContentPage.ToolbarItems>
-		<ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
+		<ToolbarItem Text="{Binding EnterText}" Command="{Binding EnterCommand}" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <ScrollView>
@@ -29,11 +29,11 @@
                 </Picker>
                 <Label Text="Deadline" FontSize="Medium" Margin="0" />
                 <StackLayout Orientation="Horizontal">
-                    <DatePicker x:Name="expirationDate" Date="{Binding ExpirationDate}" />
-                    <TimePicker x:Name="expirationTime" Time="{Binding ExpirationTime}" />
+                    <DatePicker x:Name="expirationDate" Date="{Binding ExpirationDate}" HorizontalOptions="FillAndExpand"/>
+                    <TimePicker x:Name="expirationTime" Time="{Binding ExpirationTime}" HorizontalOptions="FillAndExpand"/>
                 </StackLayout>
                 <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
-                <Button Text="Save" Command="{Binding SaveCommand}" />
+                <Button Text="{Binding EnterText}" Command="{Binding EnterCommand}" />
             </StackLayout>
         </ScrollView>
 	</ContentPage.Content>
