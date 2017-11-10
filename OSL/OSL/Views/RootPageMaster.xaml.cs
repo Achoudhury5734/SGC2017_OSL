@@ -28,7 +28,7 @@ namespace OSL.Views
         class RootPageMasterViewModel : INotifyPropertyChanged
         {
             public ObservableCollection<RootPageMenuItem> MenuItems { get; set; }
-            
+
             public RootPageMasterViewModel()
             {
                 MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
@@ -38,10 +38,13 @@ namespace OSL.Views
                     new RootPageMenuItem { Id = 1, Title = "Pickup", TargetType=typeof(PickupItemsPage) },
                     new RootPageMenuItem { Id = 4, Title="Accepted", TargetType=typeof(AcceptedItemsPage)},
                     new RootPageMenuItem { Id = 2, Title = "YTD Tally", TargetType=typeof(YTDTallyPage) },
-                    new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) } 
+                    new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) },
+                    new RootPageMenuItem { Id = 4, Title = ""},
+                    new RootPageMenuItem { Id = 5, Title = ""},
+                    new RootPageMenuItem { Id = 6, Title = "About", TargetType=typeof(AboutPage) }
                 });
             }
-            
+
             #region INotifyPropertyChanged Implementation
             public event PropertyChangedEventHandler PropertyChanged;
             void OnPropertyChanged([CallerMemberName] string propertyName = "")

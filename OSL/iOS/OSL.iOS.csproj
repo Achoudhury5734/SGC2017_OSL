@@ -107,6 +107,12 @@
     <Reference Include="Plugin.Connectivity.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xam.Plugin.Connectivity.3.0.3\lib\Xamarin.iOS10\Plugin.Connectivity.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.VersionTracking, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Plugin.VersionTracking.2.1.0\lib\Xamarin.iOS10\Plugin.VersionTracking.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.VersionTracking.Abstractions, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Plugin.VersionTracking.2.1.0\lib\Xamarin.iOS10\Plugin.VersionTracking.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -180,6 +186,17 @@
     <ImageAsset Include="Assets.xcassets\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_87.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_180.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_58.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_80.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_152.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_1024.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\sackLunch_icon_29.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\tab_about.png" />
@@ -191,6 +208,8 @@
     <BundleResource Include="Resources\xamarin_logo.png" />
     <BundleResource Include="Resources\xamarin_logo%402x.png" />
     <BundleResource Include="Resources\xamarin_logo%403x.png" />
+    <BundleResource Include="Resources\sackLunch_startscreen.png" />
+    <BundleResource Include="Resources\osl_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
@@ -203,6 +222,9 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets.xcassets\.launchimage\" />
   </ItemGroup>
   <Import Project="..\OSL\OSL.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
