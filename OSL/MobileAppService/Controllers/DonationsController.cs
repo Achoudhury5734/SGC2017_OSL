@@ -37,6 +37,10 @@ namespace OSL.MobileAppService.Controllers
                 return new UnauthorizedResult();
             }
 
+            if (!userRepository.IsRecipient(user) && !userRepository.IsActiveAdmin(user)) {
+                return BadRequest("You don't have priveleges to view all donations.");
+            }
+
             var donations = donationRepository.GetAll();
             foreach (var donation in donations)
             {
@@ -57,6 +61,10 @@ namespace OSL.MobileAppService.Controllers
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
+            }
+
+            if (!userRepository.IsRecipient(user) && !userRepository.IsActiveAdmin(user)) {
+                return BadRequest("You don't have priveleges to view all listed donations.");
             }
 
             var donations = donationRepository.GetListed();
@@ -88,6 +96,11 @@ namespace OSL.MobileAppService.Controllers
             {
                 return new UnauthorizedResult();
             }
+
+            if (!userRepository.IsRecipient(user) && !userRepository.IsActiveAdmin(user)) {
+                return BadRequest("You don't have priveleges to view all listed donations.");
+            }
+
             double meters = request.Miles * 1609.34;
 
             // If no location given, use organization location
@@ -257,6 +270,11 @@ namespace OSL.MobileAppService.Controllers
             if (!userRepository.IsActiveUser(user))
             {
                 return new UnauthorizedResult();
+            }
+
+            if (!userRepository.IsRecipient(user))
+            {
+                return BadRequest("You are not authorized to pickup donations.");
             }
 
             var donation = donationRepository.GetById(id);
