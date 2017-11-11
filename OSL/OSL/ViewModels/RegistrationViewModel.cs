@@ -48,7 +48,7 @@ namespace OSL.ViewModels
         {
             foreach (var pi in User.GetType().GetProperties())
             {
-                if (pi.Name.Equals(User.Recipient) || pi.Name.Equals(User.Verified))
+                if (pi.Name.Equals("Recipient") || pi.Name.Equals("Verified"))
                     continue;
 
                 if (String.IsNullOrEmpty((string)pi.GetValue(User)))
