@@ -99,10 +99,10 @@ namespace OSL.ViewModels
                 InnerDiameter = 0.4
             };
 
-            ps.Slices.Add(new PieSlice("", listed) { Fill = OxyColors.DarkOrange });
-            ps.Slices.Add(new PieSlice("", pending) { Fill = OxyColors.Yellow });
-            ps.Slices.Add(new PieSlice("", yearDonated) {Fill = OxyColors.LimeGreen });
-            ps.Slices.Add(new PieSlice("", yearWasted) {Fill = OxyColors.Red });
+            ps.Slices.Add(new PieSlice("", listed) { Fill = OxyColor.Parse("#eb851d") });
+            ps.Slices.Add(new PieSlice("", pending) { Fill = OxyColor.Parse("#f9e255") });
+            ps.Slices.Add(new PieSlice("", yearDonated) {Fill = OxyColor.Parse("#42b858") });
+            ps.Slices.Add(new PieSlice("", yearWasted) {Fill = OxyColor.Parse("#e33033") });
             ps.FontSize = 15.5;
 
             ps.TickHorizontalLength = 0.0;
