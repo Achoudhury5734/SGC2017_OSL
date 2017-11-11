@@ -81,6 +81,15 @@ namespace OSL.MobileAppService.Services
             }
         }
 
+        public bool IsRecipient(User user)
+        {
+            if (user != null && user.Recipient && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public bool IsActiveUser(User user)
         {
             if (user != null && user.Status == UserStatus.Active) {
