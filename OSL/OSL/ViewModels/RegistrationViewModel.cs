@@ -24,6 +24,8 @@ namespace OSL.ViewModels
         private async Task RegisterUserAsync()
         {
             User.Organization_Country = "USA";
+            User.Verified = false;
+            User.Recipient = false;
             var full = CheckFullRegistration();
             if (full)
             {
