@@ -51,7 +51,6 @@ namespace OSL
                         wasted.Add(item);
                     else
                         listed.Add(item);
-                    //Items.Add(item);
                 }
                 Items.Add(pending);
                 Items.Add(listed);
