@@ -31,17 +31,34 @@ namespace OSL.Views
 
             public RootPageMasterViewModel()
             {
-                MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
+                if (App.User.Recipient)
                 {
-                    new RootPageMenuItem { Id = 0, Title = "Donate", TargetType=typeof(DonationPage) },
-                    new RootPageMenuItem { Id = 0, Title = "My Donations", TargetType=typeof(DonationListPage) },
-                    new RootPageMenuItem { Id = 1, Title = "Pickup", TargetType=typeof(PickupItemsPage) },
-                    new RootPageMenuItem { Id = 4, Title="Accepted", TargetType=typeof(AcceptedItemsPage)},
-                    new RootPageMenuItem { Id = 2, Title = "YTD Tally", TargetType=typeof(YTDTallyPage) },
-                    new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) },
-                    new RootPageMenuItem { Id = 4, Title = ""},
-                    new RootPageMenuItem { Id = 5, Title = "About", TargetType=typeof(AboutPage) }
-                });
+                    MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
+                    {
+                        new RootPageMenuItem { Id = 0, Title = "Pickup", TargetType=typeof(PickupItemsPage) },
+                        new RootPageMenuItem { Id = 1, Title="Accepted", TargetType=typeof(AcceptedItemsPage)},
+                        new RootPageMenuItem { Id = 2, Title = "Logout", TargetType=typeof(MainPage) },
+                        new RootPageMenuItem { Id = 3, Title = ""},
+                        new RootPageMenuItem { Id = 4, Title = ""},
+                        new RootPageMenuItem { Id = 5, Title = ""},
+                        new RootPageMenuItem { Id = 6, Title = ""},
+                        new RootPageMenuItem { Id = 7, Title = "About", TargetType=typeof(AboutPage) }
+                    });
+                }
+                else
+                {
+                    MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
+                    {
+                        new RootPageMenuItem { Id = 0, Title = "Donate", TargetType=typeof(DonationPage) },
+                        new RootPageMenuItem { Id = 1, Title = "My Donations", TargetType=typeof(DonationListPage) },
+                        new RootPageMenuItem { Id = 2, Title = "YTD Tally", TargetType=typeof(YTDTallyPage) },
+                        new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) },
+                        new RootPageMenuItem { Id = 4, Title = ""},
+                        new RootPageMenuItem { Id = 5, Title = ""},
+                        new RootPageMenuItem { Id = 6, Title = ""},
+                        new RootPageMenuItem { Id = 7, Title = "About", TargetType=typeof(AboutPage) }
+                    });
+                }
             }
 
             #region INotifyPropertyChanged Implementation

@@ -12,5 +12,7 @@ namespace OSL.Models
         public string Organization_State { get; set; }
         public string Organization_PostalCode { get; set; }
         public string Organization_Country { get; set; }
+        public bool Recipient { get; set; }
+        public bool Verified { get; set; }
     }
 }
