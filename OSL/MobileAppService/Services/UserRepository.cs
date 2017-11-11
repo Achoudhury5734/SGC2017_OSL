@@ -83,7 +83,7 @@ namespace OSL.MobileAppService.Services
 
         public bool IsRecipient(User user)
         {
-            if (user != null && user.Recipient && user.Status == UserStatus.Active) {
+            if (user != null && user.Recipient) {
                 return true;
             } else {
                 return false;
@@ -93,6 +93,15 @@ namespace OSL.MobileAppService.Services
         public bool IsActiveUser(User user)
         {
             if (user != null && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool IsVerifiedUser(User user)
+        {
+            if (user != null && user.Verified) {
                 return true;
             } else {
                 return false;
