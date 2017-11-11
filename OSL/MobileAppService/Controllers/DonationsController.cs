@@ -98,7 +98,7 @@ namespace OSL.MobileAppService.Controllers
             }
 
             if (!userRepository.IsRecipient(user) && !userRepository.IsActiveAdmin(user)) {
-                return BadRequest("You don't have priveleges to view all listed donations.");
+                return BadRequest("You don't have priveleges to view all nearby donations.");
             }
 
             double meters = request.Miles * 1609.34;
@@ -203,25 +203,27 @@ namespace OSL.MobileAppService.Controllers
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user)) {
                 return new UnauthorizedResult();
+            }
+            if (!userRepository.IsVerifiedUser(user)) {
+                return BadRequest("Your account has not been verified yet. Please try again later.");
+            }
+            donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
+            donation.DonorId = user.Id;
+            donation.Created = DateTime.Now;
+            donation.Updated = DateTime.Now;
+            donation.StatusUpdated = DateTime.Now;
+            if (donation.PictureUrl == null) {
+                donation.PictureUrl = "Empty";
+            }
+            if (donation.Expiration == null) {
+                var expires = DateTime.Now;
+                donation.Expiration = expires.AddHours(2);
+            }
+            var insertedDonation = donationRepository.Create(donation);
+            if (insertedDonation != null) {
+                return Ok(insertedDonation);
             } else {
-                donation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
-                donation.DonorId = user.Id;
-                donation.Created = DateTime.Now;
-                donation.Updated = DateTime.Now;
-                donation.StatusUpdated = DateTime.Now;
-                if (donation.PictureUrl == null) {
-                    donation.PictureUrl = "Empty";
-                }
-                if (donation.Expiration == null) {
-                    var expires = DateTime.Now;
-                    donation.Expiration = expires.AddHours(2);
-                }
-                var insertedDonation = donationRepository.Create(donation);
-                if (insertedDonation != null) {
-                    return Ok(insertedDonation);
-                } else {
-                    return BadRequest("Invalid donation data.");
-                }
+                return BadRequest("Invalid donation data.");
             }
         }
 
