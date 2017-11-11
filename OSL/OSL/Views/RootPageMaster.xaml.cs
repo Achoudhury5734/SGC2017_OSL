@@ -40,8 +40,7 @@ namespace OSL.Views
                     new RootPageMenuItem { Id = 2, Title = "YTD Tally", TargetType=typeof(YTDTallyPage) },
                     new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) },
                     new RootPageMenuItem { Id = 4, Title = ""},
-                    new RootPageMenuItem { Id = 5, Title = ""},
-                    new RootPageMenuItem { Id = 6, Title = "About", TargetType=typeof(AboutPage) }
+                    new RootPageMenuItem { Id = 5, Title = "About", TargetType=typeof(AboutPage) }
                 });
             }
 
