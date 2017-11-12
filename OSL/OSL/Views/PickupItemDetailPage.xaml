@@ -7,9 +7,16 @@
         <ScrollView>
             <StackLayout Spacing="5" HorizontalOptions="FillAndExpand"
                     WidthRequest="1000">
-                <Image Source="{Binding Item.PictureUrl}" />
+                <!--<Image Source="{Binding Item.PictureUrl}" />-->
+                <Image Source="{Binding Item.PictureUrl}" WidthRequest="150" Aspect="AspectFill" HorizontalOptions="FillAndExpand"/>
                 <Label Text="{Binding Item.Title}" FontSize="Medium" />
-		        <Label Text="{Binding Item.Description}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.OrganizationName}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.OrganizationAddressLine1}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.OrganizationAddressLine2}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.OrganizationPostalCode}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.OrganizationCity}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.OrganizationState}" FontSize="Small" />
+                <Label Text="{Binding Item.Donor.PhoneNumber}" FontSize="Small" />
 
                 <Button Text="Accept" x:Name="Accept"/>
                 <Button Text="Go to Website" x:Name="ButtonWebsite"/>
