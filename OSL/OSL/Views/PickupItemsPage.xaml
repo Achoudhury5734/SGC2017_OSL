@@ -6,33 +6,33 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Filter" Command="{Binding FilterItemsCommand}"/>
     </ContentPage.ToolbarItems>
-	<ContentPage.Content>
-		<StackLayout>
-			<ListView x:Name="PickupItemsListView"
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="PickupItemsListView"
                       ItemsSource="{Binding Items}"
                       VerticalOptions="FillAndExpand"
                       HasUnevenRows="true" RefreshCommand="{Binding LoadItemsCommand}"
                       IsPullToRefreshEnabled="true"
                       IsRefreshing="{Binding IsBusy, Mode=OneWay}" CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<ViewCell>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
                             <StackLayout Padding="10" Orientation="Horizontal">
                                 <Image Source="{Binding PictureUrl}" WidthRequest="150" Aspect="AspectFill" HorizontalOptions="FillAndExpand"/>
                                 <StackLayout Orientation="Vertical">
                                     <Label Text="{Binding Title}"
                                        LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-								
+
                                     <Label Text="{Binding Description}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
-                                <Label Text="{Binding Type}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
+                                    <Label Text="{Binding Type}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
                                     <Label Text="{Binding Expiration}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
-                                <Label Text="{Binding Donor.PersonName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
+                                    <Label Text="{Binding Donor.OrganizationName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
                                 </StackLayout>
                             </StackLayout>
-						</ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
-	</ContentPage.Content>
+    </ContentPage.Content>
 </ContentPage>
