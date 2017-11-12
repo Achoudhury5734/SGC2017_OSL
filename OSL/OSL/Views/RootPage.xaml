@@ -6,11 +6,4 @@
   <MasterDetailPage.Master>
     <pages:RootPageMaster x:Name="MasterPage" />
   </MasterDetailPage.Master>
-  <MasterDetailPage.Detail>
-    <NavigationPage>
-      <x:Arguments>
-        <pages:DonationPage />
-      </x:Arguments>
-    </NavigationPage>
-  </MasterDetailPage.Detail>
 </MasterDetailPage>
