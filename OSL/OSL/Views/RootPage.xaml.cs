@@ -16,6 +16,10 @@ namespace OSL.Views
         {
             InitializeComponent();
             MasterPage.ListView.ItemSelected += ListView_ItemSelected;
+            if (App.User.Recipient)
+                Detail = new NavigationPage(new PickupItemsPage());
+            else
+                Detail = new NavigationPage(new DonationPage());
         }
 
         private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
