@@ -52,10 +52,10 @@ namespace OSL
                     else
                         listed.Add(item);
                 }
-                if (listed.Count != 0)
-                    Items.Add(listed);
                 if (pending.Count != 0)
                     Items.Add(pending);
+                if (listed.Count != 0)
+                    Items.Add(listed);
                 if (completed.Count != 0)
                     Items.Add(completed);
                 if (wasted.Count != 0)
