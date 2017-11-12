@@ -1,7 +1,7 @@
 ﻿@model OSL.MobileAppService.Models.User
 @{
     ViewBag.Title = "Edit User";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
 
 <img src="http://i1378.photobucket.com/albums/ah104/christinedestiny/sackLunch_icon_zpssdqik6ew.png" height="250" width="250"align="middle">
@@ -59,6 +59,10 @@
             <li>
                 <label for="Admin">Admin</label>
                 @Html.CheckBoxFor(model => model.Admin)
+            </li>
+			<li>
+                <label for="Recipient">Recipient</label>
+                @Html.CheckBoxFor(model => model.Recipient)
             </li>
             <li>
                 <label for="Status">Status</label>

@@ -14,6 +14,7 @@ namespace OSL.MobileAppService.Models
         public string Person_Name { get; set; }
         public bool Verified { get; set; }
         public bool Admin { get; set; }
+        public bool Recipient { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public UserStatus Status { get; set; }
@@ -40,6 +41,7 @@ namespace OSL.MobileAppService.Models
             Person_Name = reader["Person_Name"].ToString();
             Verified = reader["Verified"].ToString() == "True";
             Admin = reader["Admin"].ToString() == "True";
+            Recipient = reader["Recipient"].ToString() == "True";
             Status = Enum.Parse<UserStatus>(reader["Status"].ToString());
             Phone_GUID = reader["Phone_GUID"].ToString();
             Phone_Number = reader["Phone_Number"].ToString();

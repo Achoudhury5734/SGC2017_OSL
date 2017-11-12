@@ -44,8 +44,10 @@ namespace OSL.ViewModels
                     else if (item.Status == DonationStatus.Completed)
                         completed.Add(item);
                 }
-                GroupedItems.Add(pending);
-                GroupedItems.Add(completed);
+                if (pending.Count != 0)
+                    GroupedItems.Add(pending);
+                if (completed.Count != 0)
+                    GroupedItems.Add(completed);
             }
             catch (Exception ex)
             {

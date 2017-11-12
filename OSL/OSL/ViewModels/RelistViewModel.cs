@@ -75,6 +75,12 @@ namespace OSL.ViewModels
         {
             await CrossMedia.Current.Initialize();
 
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                UserDialogs.Instance.Alert("","No Camera Available");
+                return;
+            }
+
             mediaFile = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 Directory = "Sample",

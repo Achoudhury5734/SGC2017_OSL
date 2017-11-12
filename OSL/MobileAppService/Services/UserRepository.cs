@@ -81,9 +81,27 @@ namespace OSL.MobileAppService.Services
             }
         }
 
+        public bool IsRecipient(User user)
+        {
+            if (user != null && user.Recipient) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public bool IsActiveUser(User user)
         {
             if (user != null && user.Status == UserStatus.Active) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool IsVerifiedUser(User user)
+        {
+            if (user != null && user.Verified) {
                 return true;
             } else {
                 return false;
@@ -102,11 +120,12 @@ namespace OSL.MobileAppService.Services
                 Console.WriteLine("Error geocoding: " + ex.StackTrace);
             }
 
-            var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Status, Phone_Number, Organization_Name, Organization_Address_Line1, " +
+            var query = $"INSERT INTO [User] (Oid, Email, Person_Name, Verified, Admin, Recipient, Status, Phone_Number, Organization_Name, Organization_Address_Line1, " +
                 "Organization_Address_Line2, Organization_City, Organization_State, Organization_PostalCode, Organization_Country, Lat, Long) VALUES " +
                     $"(@Oid, " +
                     $"@Email, " +
                     $"@Person_Name, " +
+                    "0, " +
                     "0, " +
                     "0, " +
                     $"'{UserStatus.Active.ToString()}', " +
@@ -224,6 +243,7 @@ namespace OSL.MobileAppService.Services
         public async Task<bool> UpdateUser(int id, User user)
         {
             var admin = user.Admin ? 1 : 0;
+            var recipient = user.Recipient ? 1 : 0;
             var verified = user.Verified ? 1 : 0;
 
             IEnumerable<GoogleAddress> addresses = null;
@@ -242,6 +262,7 @@ namespace OSL.MobileAppService.Services
                     $"[Person_Name] = @Person_Name, " +
                     $"[Verified] = @Verified, " +
                     $"[Admin] = @Admin, " +
+                    $"[Recipient] = @Recipient, " +
                     $"[Status] = @Status, " +
                     $"[Phone_Number] = @Phone_Number, " +
                     $"[Organization_Name] = @Organization_Name, " +
@@ -264,6 +285,7 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Person_Name", user.Person_Name ?? "");
                     command.Parameters.AddWithValue("@Verified", verified);
                     command.Parameters.AddWithValue("@Admin", admin);
+                    command.Parameters.AddWithValue("@Recipient", recipient);
                     command.Parameters.AddWithValue("@Status", user.Status.ToString("F"));
                     command.Parameters.AddWithValue("@Phone_Number", user.Phone_Number ?? "");
                     command.Parameters.AddWithValue("@Organization_Name", user.Organization_Name ?? "");

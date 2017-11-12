@@ -26,21 +26,21 @@
                     <ColumnDefinition Width="6*"/>
                     <ColumnDefinition Width="6*"/>
                 </Grid.ColumnDefinitions>
-                    
+
+                <Label BackgroundColor="#42b858" Grid.Row="0" Grid.Column="0"/>
                 <Label Text="Donated" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label BackgroundColor="Color.LimeGreen" Grid.Row="0" Grid.Column="0"/>
                 <Label Text="{Binding YearDonated}" Grid.Row="0" Grid.Column="2" HorizontalTextAlignment="End"/>
 
+                <Label BackgroundColor="#f9e255" Grid.Row="1" Grid.Column="0"/>    
                 <Label Text="Pending" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label BackgroundColor="Color.Yellow" Grid.Row="1" Grid.Column="0"/>
                 <Label Text="{Binding Pending}" Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="End"/>
 
+                <Label BackgroundColor="#eb851d" Grid.Row="2" Grid.Column="0"/>
                 <Label Text="Listed" Grid.Row="2" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label BackgroundColor="Color.DarkOrange" Grid.Row="2" Grid.Column="0"/>
                 <Label Text="{Binding Listed}" Grid.Row="2" Grid.Column="2" HorizontalTextAlignment="End"/>
 
+                <Label BackgroundColor="#e33033" Grid.Row="3" Grid.Column="0"/>    
                 <Label Text="Wasted" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="End"/>
-                <Label BackgroundColor="Color.Red" Grid.Row="3" Grid.Column="0"/>
                 <Label Text="{Binding YearWasted}" Grid.Row="3" Grid.Column="2" HorizontalTextAlignment="End"/>
             </Grid>
        </StackLayout>
