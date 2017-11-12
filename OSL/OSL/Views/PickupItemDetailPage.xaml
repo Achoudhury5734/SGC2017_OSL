@@ -16,7 +16,7 @@
                 <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,0,0"/>
 
                 <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
-                <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Item.Donor.PersonName, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
                 <Label Text="{Binding Item.Donor.PhoneNumber, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
 
                 <Label Text="Organization: " FontAttributes="Bold" Margin="10,0,0,0"/>
