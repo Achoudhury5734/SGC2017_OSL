@@ -3,7 +3,7 @@ using System.Globalization;
 using OSL.Models;
 using Xamarin.Forms;
 
-namespace OSL.ViewModels
+namespace OSL.Helpers
 {
     public class ExpirationColorConverter :IValueConverter
     {
