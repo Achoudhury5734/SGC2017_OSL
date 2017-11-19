@@ -26,7 +26,6 @@ namespace OSL
 
         public PickupItemsViewModel()
         {
-            //Title = "Browse";
             Items = new ObservableCollection<PickupItem>();
             LoadItemsCommand = new Command(async (range) => await ExecuteLoadItemsCommand((int?)range));
             FilterItemsCommand = new Command(() => ExecuteFilterItemsCommand());
@@ -34,13 +33,6 @@ namespace OSL
             SearchCommand = new Command(() => ExecuteSearchCommand());
             SearchEnabled = false;
             allItems = new List<PickupItem>();
-
-            MessagingCenter.Subscribe<NewPickupItemPage, PickupItem>(this, "AddItem", async (obj, item) =>
-            {
-                var _item = item as PickupItem;
-                Items.Add(_item);
-                await DataStore.AddPickupItemAsync(_item);
-            });
         }
 
         public string ToolbarText
@@ -96,7 +88,7 @@ namespace OSL
             }
         }
 
-        async Task ExecuteSearchCommand()
+        void ExecuteSearchCommand()
         {
             if (IsBusy)
                 return;
@@ -105,7 +97,6 @@ namespace OSL
 
             try
             {
-                //Items.Clear();
                 IEnumerable<PickupItem> items = new List<PickupItem>(allItems);
                 Items.Clear();
                 var searched = Text.ToLower();
