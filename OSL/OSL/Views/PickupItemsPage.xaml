@@ -5,7 +5,8 @@
              x:Class="OSL.PickupItemsPage"
              Title="{Binding Title}" x:Name="BrowseItemsPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Filter" Command="{Binding FilterItemsCommand}"/>
+        <ToolbarItem Text="{Binding ToolbarText}" Command="{Binding EnableSearchCommand}"/>
+        <ToolbarItem Text="Nearby" Command="{Binding FilterItemsCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -14,6 +15,8 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
+            <SearchBar Placeholder="Item/Donor/Organization" SearchCommand="{Binding SearchCommand}" Text="{Binding Text}"
+                       TextChanged="OnTextChanged" IsVisible="{Binding SearchEnabled}" />
             <ListView x:Name="PickupItemsListView"
                       ItemsSource="{Binding Items}"
                       VerticalOptions="FillAndExpand"

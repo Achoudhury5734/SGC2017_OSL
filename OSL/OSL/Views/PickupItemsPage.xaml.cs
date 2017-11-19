@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace OSL
 {
@@ -23,6 +24,15 @@ namespace OSL
 
             // Manually deselect item
             PickupItemsListView.SelectedItem = null;
+        }
+
+        public void OnTextChanged(object s, EventArgs e)
+        {
+            var bar = s as SearchBar;
+            if (String.IsNullOrWhiteSpace(bar.Text))
+            {
+                viewModel.SearchCommand.Execute(null);
+            }
         }
 
         protected override void OnAppearing()
