@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Plugin.Media.Abstractions;
+using Acr.UserDialogs;
 
 namespace OSL.ViewModels
 {
@@ -88,24 +89,33 @@ namespace OSL.ViewModels
 
         public async Task SaveDonationAsync()
         {
+            if (!App.User.Verified)
+            {
+                UserDialogs.Instance.Alert("", "You can't post until you are verified as a donor.");
+                return;
+            }
+
             IsBusy = true;
             EnterCommand.ChangeCanExecute();
-            await donationRepository.SaveDonationAsync(DonationTitle, mediaFile, Quantity, DonationType, ExpirationDate, ExpirationTime);
+            var res = await donationRepository.SaveDonationAsync(DonationTitle, mediaFile, Quantity, DonationType, ExpirationDate, ExpirationTime);
             IsBusy = false;
             EnterCommand.ChangeCanExecute();
 
-            await page.Navigation.PushAsync(new DonationListPage());
+            if (res)
+                await page.Navigation.PushAsync(new DonationListPage());
+            else
+                UserDialogs.Instance.Alert("Please check all of your entries.", "Unable to process your request");
         }
 
         public async Task TakePictureAsync()
         {
             await CrossMedia.Current.Initialize();
 
-            //if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-            //{
-            //    DisplayAlert("No Camera", ":( No camera available.", "OK");
-            //    return;
-            //}
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                UserDialogs.Instance.Alert("No camera available.", "Unable to take picture.");
+                return;
+            }
 
             mediaFile = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {

@@ -128,11 +128,13 @@ namespace OSL.MobileAppService.Services
         {
             var query = "DECLARE @g geography;" +
                         "SET @g = geography::Point(@Lat, @Long, 4326);" +
-                        "SELECT* FROM [Donation] WHERE " +
-                       $"[Status] = {(int)DonationStatus.Listed} " +
-                        "AND Donation.DonorId IN " +
-                        "(SELECT[Id] FROM [User] WHERE @Distance >= " +
-                            "(SELECT @g.STDistance(geography::Point([Lat], [Long], 4326))));";
+                        "SELECT Donation.* FROM [Donation] " +
+                        "INNER JOIN " +
+                            "(SELECT [Id], @g.STDistance(geography::Point([Lat], [Long], 4326)) as Distance " +
+                             "FROM [User]) as T " +
+                        "ON Donation.DonorId = T.Id AND T.Distance <= @Distance " +
+                        $"WHERE Donation.Status = {(int)DonationStatus.Listed} " +
+                        "ORDER BY T.Distance;";
             var donations = new List<Donation>();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {

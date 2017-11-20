@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="using:OSL.ViewModels"
+             xmlns:local="clr-namespace:OSL.Helpers"
              x:Class="OSL.Views.AcceptedDetailPage"
              Title="{Binding Title}">
+     <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ExpirationColorConverter x:Key="colorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 	<ContentPage.Content>
         <ScrollView>
         <StackLayout>
@@ -12,7 +18,8 @@
             <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>
             <Label Text="{Binding Item.Amount, StringFormat='Amount: {0} lbs'}" Margin="20,0,0,0"/>
             <Label Text="{Binding Item.Type, StringFormat='Type: {0}'}" Margin="20,0,0,0"/>
-            <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,0,0"/>
+            <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,0,0"
+                   TextColor="{Binding Item, Converter={StaticResource colorConverter}}"/>
 
             <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
             <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>

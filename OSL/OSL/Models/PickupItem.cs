@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace OSL
 {
@@ -23,7 +24,7 @@ namespace OSL
         public long Id { get; set; }
 
         [JsonProperty("expiration")]
-        public string Expiration { get; set; }
+        public DateTime? Expiration { get; set; }
 
         [JsonProperty("PictureUrl")]
         public string PictureUrl { get; set; }

@@ -14,12 +14,12 @@ namespace OSL
             items = new List<PickupItem>();
             var mockItems = new List<PickupItem>
             {
-                new PickupItem { Id = 10, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Bellevue"},
-                new PickupItem { Id = 11, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg",Expiration = "Seattle"},
-                new PickupItem { Id = 12, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Auburn"},
-                new PickupItem { Id = 13, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Tacoma"},
-                new PickupItem { Id = 14, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Bellevue"},
-                new PickupItem { Id = 15, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg", Expiration = "Seattle"},
+                new PickupItem { Id = 10, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg"},
+                new PickupItem { Id = 11, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg"},
+                new PickupItem { Id = 12, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg"},
+                new PickupItem { Id = 13, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg"},
+                new PickupItem { Id = 14, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg"},
+                new PickupItem { Id = 15, PictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Foods_%28cropped%29.jpg/220px-Foods_%28cropped%29.jpg"},
             };
 
             foreach (var item in mockItems)

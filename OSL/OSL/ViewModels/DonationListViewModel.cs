@@ -17,11 +17,11 @@ namespace OSL
         {
             this.donationRepository = new DonationRepository();
             Title = "My Donations";
-            Items = new ObservableCollection<Donation>();
+            Items = new ObservableCollection<Group>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsAsync(), () => !IsBusy);
         }
 
-        public ObservableCollection<Donation> Items { get; set; }
+        public ObservableCollection<Group> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
         async Task ExecuteLoadItemsAsync()
@@ -34,12 +34,32 @@ namespace OSL
             try
             {
                 Items.Clear();
+                var pending = new Group("Pending Pickup");
+                var completed = new Group("Completed");
+                var wasted = new Group("Wasted");
+                var listed = new Group("Listed");
+                Items.Clear();
                 var items = await donationRepository.GetDonationsByUserAsync();
 
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    if (item.Status == DonationStatus.PendingPickup)
+                        pending.Add(item);
+                    else if (item.Status == DonationStatus.Completed)
+                        completed.Add(item);
+                    else if (item.Status == DonationStatus.Wasted)
+                        wasted.Add(item);
+                    else
+                        listed.Add(item);
                 }
+                if (pending.Count != 0)
+                    Items.Add(pending);
+                if (listed.Count != 0)
+                    Items.Add(listed);
+                if (completed.Count != 0)
+                    Items.Add(completed);
+                if (wasted.Count != 0)
+                    Items.Add(wasted);
             }
             catch (Exception ex)
             {
@@ -56,6 +76,16 @@ namespace OSL
         {
             get { return page; }
             set { SetProperty(ref page, value); }
+        }
+
+        public class Group : ObservableCollection<Donation>
+        {
+            public string Key { get; set; }
+
+            public Group(string key)
+            {
+                Key = key;
+            }
         }
     }
 }

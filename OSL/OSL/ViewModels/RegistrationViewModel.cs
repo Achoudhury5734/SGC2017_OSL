@@ -24,6 +24,8 @@ namespace OSL.ViewModels
         private async Task RegisterUserAsync()
         {
             User.Organization_Country = "USA";
+            User.Verified = false;
+            User.Recipient = false;
             var full = CheckFullRegistration();
             if (full)
             {
@@ -48,6 +50,9 @@ namespace OSL.ViewModels
         {
             foreach (var pi in User.GetType().GetProperties())
             {
+                if (pi.Name.Equals("Recipient") || pi.Name.Equals("Verified"))
+                    continue;
+
                 if (String.IsNullOrEmpty((string)pi.GetValue(User)))
                 {
                     if (!pi.Name.Equals("Organization_Address_Line2"))

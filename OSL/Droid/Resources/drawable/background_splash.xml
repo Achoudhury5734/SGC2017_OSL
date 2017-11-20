@@ -6,7 +6,7 @@
   <item>
     <bitmap
         
-        android:src="@drawable/osl_logo"/>
+        android:src="@drawable/sackLunch_startscreen"/>
   </item>
 
 </layer-list>

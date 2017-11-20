@@ -73,6 +73,7 @@ namespace OSL.MobileAppService.Controllers
             {
                 value.Verified = user.Verified;
                 value.Admin = user.Admin;
+                value.Recipient = user.Recipient;
                 value.Status = user.Status;
 
                 return Ok(await userRepository.UpdateUser(user.Id, value));

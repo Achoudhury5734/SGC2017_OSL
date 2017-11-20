@@ -25,7 +25,7 @@ namespace OSL.Services
             return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
-        public async Task SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
+        public async Task<bool> SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
         {
             byte[] filebytes = null;
             if (mediaFile != null)
@@ -45,8 +45,8 @@ namespace OSL.Services
             var message = new HttpRequestMessage(HttpMethod.Post, App.BackendUrl + "/api/donations");
             message.Content = new StringContent(serializedDonationCapture, Encoding.UTF8, "application/json");
 
-            var response = await App.ApiClient.SendAsync(message);
-            response.EnsureSuccessStatusCode();
+            var response= await App.ApiClient.SendAsync(message);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> CancelDonationAsync(int donationId)
