@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Plugin.Media.Abstractions;
 using Acr.UserDialogs;
+using OSL.Models;
 
 namespace OSL.ViewModels
 {
@@ -102,7 +103,7 @@ namespace OSL.ViewModels
             EnterCommand.ChangeCanExecute();
 
             if (res)
-                await page.Navigation.PushAsync(new DonationListPage());
+                App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationListPage(DonationStatus.Listed)) };
             else
                 UserDialogs.Instance.Alert("Please check all of your entries.", "Unable to process your request");
         }
