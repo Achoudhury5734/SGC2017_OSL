@@ -1,0 +1,52 @@
+﻿@model IEnumerable<OSL.AdminPortal.Models.vwUserList>
+
+@{
+    ViewBag.Title = "ListUsers";
+}
+
+<h2>Users</h2>
+
+<p>
+    @Html.ActionLink("Create New User", "CreateUser", "Security")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Super User?
+        </th>
+        <th>
+            Delete?
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @if (item.IsSuperUser == 1)
+            {
+                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+            }
+            else
+            {
+                <i class="fa fa-square-o" aria-hidden="true"></i>
+            }
+        </td>
+        <td>
+            @Html.ActionLink("Delete User", "DeleteUser", "Security", new { id=item.Id }, null)
+        </td>
+    </tr>
+}
+</table>
+
+<div class="panel">
+    <div class="panel-body">
+        @Html.ActionLink("Back to Home Page", "Index", "Home")
+    </div>
+</div>
+

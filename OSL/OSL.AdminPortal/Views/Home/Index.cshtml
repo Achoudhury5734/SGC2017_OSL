@@ -1,0 +1,43 @@
+﻿@using OSL.AdminPortal.Infrastructure
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Operation Sack Lunch</h1>
+    <ul class="lead">
+        <li>To provide dignity, care and compassion through action, with the example that each person can make a difference.</li>
+        <li>To educate and advocate acceptance and understanding of each other’s differences.</li>
+        <li>To ultimately bring about the realization that we are all a vital part of this world and with extended effort put an end to homelessness, hunger and hatred.</li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Purpose of this website</h2>
+        <p>
+            This website can be used for maintaining Donations and Users and related data for the
+            Operation Sack Lunch mobile app.
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Getting Access to this website </h2>
+        <ul>
+            @if (!Request.IsAuthenticated)
+            {
+                <li>Click on the "Log in" link in the upper right-hand corner of the page to login.</li>
+            }
+            <li>If you don't have an account, contact OSL for one.</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        @if (ManageRoles.IsUserInRole(User.Identity.Name, App_Role.SuperUsers))
+        {
+            <h2>Manage Users</h2>
+            <i>Only SuperUsers see &amp; can use this feature!</i>
+            <ul>
+                <li>@Html.ActionLink("Manage Users", "ListUsers", "Security")</li>
+            </ul>
+        }
+    </div>
+</div>

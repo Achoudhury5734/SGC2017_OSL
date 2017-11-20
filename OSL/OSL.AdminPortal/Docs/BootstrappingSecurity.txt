@@ -1,0 +1,17 @@
+﻿User this when you need to add logins to a brand new database
+
+﻿==================
+Brand New Database
+==================
+1. Duplicate all the AspNet tables.
+2. Add the two roles to the AspNetRoles table by running this script in a Query Window:
+	INSERT INTO AspNetRoles (Id, Name)
+	VALUES (1, 'Users'), (2, 'SuperUsers')
+
+===========
+Source Code
+===========
+1. Comment out the AuthorizeRoles attribute on the SecurityController class.
+2. Run code locally.Navigate to http://localhost:xxxxx/Security/CreateUser.
+3. Register yourself as a SuperUser.
+4. Undo #1.

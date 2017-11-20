@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "UserAlreadyExists";
+}
+
+<h2>User Creation Error</h2>
+
+<span class="bg-danger text-white">The @ViewBag.FullName user account already exists.</span>
+
+<div class="panel">
+    <div class="panel-body">
+        @Html.ActionLink("Back to User List", "ListUsers", "Security")
+    </div>
+</div>
+

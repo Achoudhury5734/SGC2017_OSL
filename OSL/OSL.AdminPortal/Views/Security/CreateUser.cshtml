@@ -1,0 +1,84 @@
+﻿@model OSL.AdminPortal.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Create User";
+}
+
+<h2>Create User</h2>
+
+<div style="clear:both;"></div>
+<div class="container">
+    @using (Html.BeginForm("CreateUser", "Security", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        if (!String.IsNullOrEmpty(ViewBag.ErrorText))
+        {
+            <h4>
+                Error:
+            </h4>
+            <h5 class="well well-lg text-danger">@ViewBag.ErrorText</h5>
+        }
+        else
+        {
+            <div class="well well-sm">
+                <h4>This page can be used to create a new user.</h4>
+                <b>Please note in order to properly secure user accounts, we are asking that passwords conform to all of the following rules:</b>
+                <ul>
+                    <li>At least 8 characters in length.</li>
+                    <li>Contain at least one lowercase character (abc...).</li>
+                    <li>Contain at least one uppercase character (ABC...).</li>
+                    <li>Contain at least one numeric digit (0123456789).</li>
+                    <li>@Html.Raw("Contain at least one special character including any of the following ([]{}!@#$%^&*()_-).")</li>
+                </ul>
+            </div>
+            <hr />
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control, boxMedium" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control, boxMedium" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control, boxMedium" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.MakeSuperUser)
+                        @Html.LabelFor(m => m.MakeSuperUser)
+                        <br />
+                        <i>SuperUsers can create other user accounts.</i>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Create User Account" />
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        @Html.ActionLink("Back to User List", "ListUsers", "Security")
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

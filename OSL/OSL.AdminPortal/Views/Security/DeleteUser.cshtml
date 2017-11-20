@@ -1,0 +1,27 @@
+﻿@model OSL.AdminPortal.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Delete User";
+}
+
+<h2>Delete User</h2>
+
+<div style="clear:both;"></div>
+<div class="container">
+    @using (Html.BeginForm("DeleteUser", "Security", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.Email)
+
+        <span><b>@Model.Email</b> will be deleted.</span>
+        <br /><br/><input type="submit" value="Delete User" class="btn btn-danger" />
+    }
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        @Html.ActionLink("Back to User List", "ListUsers", "Security")
+    </div>
+</div>
+

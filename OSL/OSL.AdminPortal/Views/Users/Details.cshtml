@@ -1,0 +1,178 @@
+﻿@model OSL.AdminPortal.Models.User
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Oid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Oid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Admin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Admin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_Address_Line1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_Address_Line1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_Address_Line2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_Address_Line2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_State)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_PostalCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_PostalCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Organization_Country)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organization_Country)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Verified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Verified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone_GUID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone_GUID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Person_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Person_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Geolocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Geolocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Long)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Long)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Recipient)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recipient)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
