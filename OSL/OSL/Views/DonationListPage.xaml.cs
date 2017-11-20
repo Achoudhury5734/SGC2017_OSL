@@ -14,7 +14,12 @@ namespace OSL.Views
 		public DonationListPage()
 		{
 			InitializeComponent();
-            this.BindingContext = viewModel = new DonationListViewModel
+        }
+
+        public DonationListPage(DonationStatus status)
+        {
+            InitializeComponent();
+            this.BindingContext = viewModel = new DonationListViewModel(status)
             {
                 Page = this
             };

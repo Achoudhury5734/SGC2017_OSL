@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using OSL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -34,6 +30,17 @@ namespace OSL.Views
             }
 
             var page = (Page)Activator.CreateInstance(item.TargetType);
+
+            if (item.Title == "Completed")
+            {
+                page = (Page)Activator.CreateInstance(item.TargetType, DonationStatus.Completed);
+            } else if (item.Title == "Pending") {
+                page = (Page)Activator.CreateInstance(item.TargetType, DonationStatus.PendingPickup);   
+            } else if (item.Title == "Wasted") {
+                page = (Page)Activator.CreateInstance(item.TargetType, DonationStatus.Wasted);
+            } else if (item.Title == "Listed") {
+                page = (Page)Activator.CreateInstance(item.TargetType, DonationStatus.Listed);
+            }
 
             Detail = new NavigationPage(page);
             IsPresented = false;

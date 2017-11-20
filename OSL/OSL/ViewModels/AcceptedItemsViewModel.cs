@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -12,19 +11,20 @@ namespace OSL.ViewModels
     public class AcceptedItemsViewModel : ViewModelBase
     {
         public Command LoadItemsCommand { get; set; }
-        public ObservableCollection<Group> GroupedItems { get; set; }
+        public ObservableCollection<Donation> Items { get; set; }
 
         private readonly DonationRepository donationRep;
 
-        public AcceptedItemsViewModel()
+        public AcceptedItemsViewModel(DonationStatus status)
         {
-            LoadItemsCommand = new Command(async() => await ExecuteLoadItemsCommand());
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand(status));
             donationRep = new DonationRepository();
-            GroupedItems = new ObservableCollection<Group>();
-            Title = "Accepted Donations";
+            Items = new ObservableCollection<Donation>();
+            string statusString = status == DonationStatus.PendingPickup ? "Pending Pickup" : status.ToString("G");
+            Title = statusString;
         }
 
-        async Task ExecuteLoadItemsCommand()
+        async Task ExecuteLoadItemsCommand(DonationStatus status)
         {
             if (IsBusy)
                 return;
@@ -33,21 +33,12 @@ namespace OSL.ViewModels
 
             try
             {
-                GroupedItems.Clear();
-                var items = await donationRep.GetDonationsByRecipientAsync();
-                var pending = new Group("Pending Pickup");
-                var completed = new Group("Completed");
+                Items.Clear();
+                var items = await donationRep.GetDonationsByRecipientAsync(status);
                 foreach (var item in items)
                 {
-                    if (item.Status == DonationStatus.PendingPickup)
-                        pending.Add(item);
-                    else if (item.Status == DonationStatus.Completed)
-                        completed.Add(item);
+                    Items.Add(item);
                 }
-                if (pending.Count != 0)
-                    GroupedItems.Add(pending);
-                if (completed.Count != 0)
-                    GroupedItems.Add(completed);
             }
             catch (Exception ex)
             {
@@ -56,16 +47,6 @@ namespace OSL.ViewModels
             finally
             {
                 IsBusy = false;
-            } 
-        }
-
-        public class Group: ObservableCollection<Donation>
-        {
-            public string Key { get; set; }
-
-            public Group (string key)
-            {
-                Key = key;
             }
         }
     }

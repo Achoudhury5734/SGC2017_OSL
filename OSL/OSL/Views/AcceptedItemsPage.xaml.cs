@@ -12,7 +12,12 @@ namespace OSL.Views
         public AcceptedItemsPage()
         {
             InitializeComponent();
-            viewModel = new AcceptedItemsViewModel();
+        }
+
+        public AcceptedItemsPage(DonationStatus status)
+        {
+            InitializeComponent();
+            viewModel = new AcceptedItemsViewModel(status);
             this.BindingContext = viewModel;
         }
 

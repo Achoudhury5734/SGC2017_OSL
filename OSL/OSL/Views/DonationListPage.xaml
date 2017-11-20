@@ -16,8 +16,6 @@
                       VerticalOptions="FillAndExpand"
                       HasUnevenRows="true" RefreshCommand="{Binding LoadItemsCommand}"
                       IsPullToRefreshEnabled="true"
-                      IsGroupingEnabled="true"
-                      GroupDisplayBinding="{Binding Key}"
                       IsRefreshing="{Binding IsBusy, Mode=OneWay}" CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>

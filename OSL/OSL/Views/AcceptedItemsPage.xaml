@@ -12,9 +12,8 @@
 	<ContentPage.Content>
         <StackLayout>
             <ListView x:Name="AcceptedItemsListView"
-                      ItemsSource="{Binding GroupedItems}"
+                      ItemsSource="{Binding Items}"
                       VerticalOptions="FillAndExpand"
-                      IsGroupingEnabled="true" GroupDisplayBinding="{Binding Key}"
                       HasUnevenRows="true"
                       RefreshCommand="{Binding LoadItemsCommand}"
                       IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 

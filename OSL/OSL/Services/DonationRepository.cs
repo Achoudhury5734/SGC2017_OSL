@@ -13,16 +13,18 @@ namespace OSL.Services
 {
     public class DonationRepository
     {
-        public async Task<IEnumerable<Donation>> GetDonationsByUserAsync()
+        public async Task<IEnumerable<Donation>> GetDonationsByDonorAsync(DonationStatus status)
         {
             var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
-            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
+            var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
+            return items.Where(item => item.Status == status);
         }
 
-        public async Task<IEnumerable<Donation>> GetDonationsByRecipientAsync()
+        public async Task<IEnumerable<Donation>> GetDonationsByRecipientAsync(DonationStatus status)
         {
             var json = await App.ApiClient.GetStringAsync("api/donations/recipient/me");
-            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
+            var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
+            return items.Where(item => item.Status == status);
         }
 
         public async Task<bool> SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)
