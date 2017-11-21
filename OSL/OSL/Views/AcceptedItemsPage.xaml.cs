@@ -2,9 +2,11 @@
 using OSL.Models;
 using OSL.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AcceptedItemsPage : ContentPage
     {
         AcceptedItemsViewModel viewModel;

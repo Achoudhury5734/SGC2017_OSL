@@ -103,7 +103,7 @@ namespace OSL.ViewModels
             EnterCommand.ChangeCanExecute();
 
             if (res)
-                App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationListPage(DonationStatus.Listed)) };
+                App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage())};
             else
                 UserDialogs.Instance.Alert("Please check all of your entries.", "Unable to process your request");
         }
