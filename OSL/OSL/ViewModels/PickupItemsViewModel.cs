@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Plugin.Geolocator;
@@ -15,23 +16,33 @@ namespace OSL
         public ObservableCollection<PickupItem> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
         public Command FilterItemsCommand { get; set; }
+        public Command SearchCommand { get; set; }
+        public bool SearchEnabled { get; set; }
+        public Command EnableSearchCommand { get; set; } 
+        public string Text { get; set; }
+        public string ToolbarText { get; set; }
 
         private readonly int[] distances = new int[] { 5, 10, 15 };
+        private IEnumerable<PickupItem> allItems;
 
         public PickupItemsViewModel()
         {
-            Title = "Browse";
             Items = new ObservableCollection<PickupItem>();
             LoadItemsCommand = new Command(async (range) => await ExecuteLoadItemsCommand((int?)range));
             FilterItemsCommand = new Command(() => ExecuteFilterItemsCommand());
-
-            MessagingCenter.Subscribe<NewPickupItemPage, PickupItem>(this, "AddItem", async (obj, item) =>
-            {
-                var _item = item as PickupItem;
-                Items.Add(_item);
-                await DataStore.AddPickupItemAsync(_item);
-            });
+            EnableSearchCommand = new Command(() => EnableSearch());
+            SearchCommand = new Command(() => ExecuteSearchCommand());
+            SearchEnabled = false;
+            allItems = new List<PickupItem>();
+            ToolbarText = "Search";
         }
+
+        private void EnableSearch()
+        {
+            SearchEnabled = !SearchEnabled;
+            OnPropertyChanged("SearchEnabled");
+        }
+
 
         // null range for all
         async Task ExecuteLoadItemsCommand(int? range)
@@ -54,6 +65,45 @@ namespace OSL
                 foreach (var item in items)
                 {
                     Items.Add(item);
+                }
+                allItems = Items.ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        void ExecuteSearchCommand()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
+            try
+            {
+                Items.Clear();
+                if (!String.IsNullOrEmpty(Text))
+                {
+                    var searched = Text.ToLower();
+                    var items = allItems.Where(item => item.Title.ToLower().Contains(searched) ||
+                                        item.Donor.PersonName.ToLower().Contains(searched) ||
+                                        item.Donor.OrganizationName.ToLower().Contains(searched));
+
+                    foreach (var item in items)
+                    {
+                        Items.Add(item);
+                    }
+                } else {
+                    foreach (var item in allItems) 
+                    {
+                        Items.Add(item);
+                    }
                 }
             }
             catch (Exception ex)
@@ -92,7 +142,7 @@ namespace OSL
         void ExecuteFilterItemsCommand()
         {
             var actionConfig = new ActionSheetConfig();
-            actionConfig.Title = "Filter Items By Distance";
+            actionConfig.Title = "Distance:";
 
             foreach (int distance in distances)
             {

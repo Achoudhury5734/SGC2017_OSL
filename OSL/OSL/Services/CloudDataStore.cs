@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using Plugin.Connectivity;
-using System.Net.Http.Headers;
 
 namespace OSL
 {
     public class CloudDataStore : IDataStore<PickupItem>
     {
-        HttpClient client;
         IEnumerable<PickupItem> items;
-
-        public CloudDataStore()
-        {
-        }
 
         public async Task<IEnumerable<PickupItem>> GetPickupItemsAsync(bool forceRefresh = false)
         {
@@ -49,25 +42,14 @@ namespace OSL
 
         public async Task<PickupItem> GetPickupItemAsync(string id)
         {
-            if (id != null && CrossConnectivity.Current.IsConnected)
-            {
-                var json = await client.GetStringAsync($"api/pickupitem/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<PickupItem>(json));
-            }
-
-            return null;
+            await Task.FromResult<PickupItem>(null);
+            throw new NotSupportedException();
         }
 
         public async Task<bool> AddPickupItemAsync(PickupItem item)
         {
-            if (item == null || !CrossConnectivity.Current.IsConnected)
-                return false;
-
-            var serializedItem = JsonConvert.SerializeObject(item);
-
-            var response = await client.PostAsync($"api/pickupitem", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
-
-            return response.IsSuccessStatusCode;
+            await Task.FromResult(false);
+            throw new NotSupportedException();
         }
 
         public async Task<bool> AcceptPickupItemAsync(PickupItem item)
@@ -79,26 +61,14 @@ namespace OSL
 
         public async Task<bool> UpdatePickupItemAsync(PickupItem item)
         {
-            if (item == null || item.Id == 0L || !CrossConnectivity.Current.IsConnected)
-                return false;
-
-            var serializedItem = JsonConvert.SerializeObject(item);
-            var buffer = Encoding.UTF8.GetBytes(serializedItem);
-            var byteContent = new ByteArrayContent(buffer);
-
-            var response = await client.PutAsync(new Uri($"api/pickupitem/{item.Id}"), byteContent);
-
-            return response.IsSuccessStatusCode;
+            await Task.FromResult(0);
+            throw new NotSupportedException();
         }
 
         public async Task<bool> DeletePickupItemAsync(string id)
         {
-            if (string.IsNullOrEmpty(id) && !CrossConnectivity.Current.IsConnected)
-                return false;
-
-            var response = await client.DeleteAsync($"api/pickupitem/{id}");
-
-            return response.IsSuccessStatusCode;
+            await Task.FromResult(0);
+            throw new NotSupportedException();
         }
     }
 }
