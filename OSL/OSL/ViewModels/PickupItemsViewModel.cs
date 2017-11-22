@@ -20,6 +20,7 @@ namespace OSL
         public bool SearchEnabled { get; set; }
         public Command EnableSearchCommand { get; set; } 
         public string Text { get; set; }
+        public string ToolbarText { get; set; }
 
         private readonly int[] distances = new int[] { 5, 10, 15 };
         private IEnumerable<PickupItem> allItems;
@@ -33,24 +34,13 @@ namespace OSL
             SearchCommand = new Command(() => ExecuteSearchCommand());
             SearchEnabled = false;
             allItems = new List<PickupItem>();
-        }
-
-        public string ToolbarText
-        {
-            get
-            {
-                if (SearchEnabled)
-                    return "Hide Search";
-                else
-                    return "Search";
-            }
+            ToolbarText = "Search";
         }
 
         private void EnableSearch()
         {
             SearchEnabled = !SearchEnabled;
             OnPropertyChanged("SearchEnabled");
-            OnPropertyChanged("ToolbarText");
         }
 
 
@@ -97,15 +87,23 @@ namespace OSL
 
             try
             {
-                IEnumerable<PickupItem> items = new List<PickupItem>(allItems);
                 Items.Clear();
-                var searched = Text.ToLower();
-                items = items.Where(item => item.Title.ToLower().Contains(searched) ||
-                                    item.Donor.PersonName.ToLower().Contains(searched) ||
-                                    item.Donor.OrganizationName.ToLower().Contains(searched));
-                foreach (var item in items)
+                if (!String.IsNullOrEmpty(Text))
                 {
-                    Items.Add(item);
+                    var searched = Text.ToLower();
+                    var items = allItems.Where(item => item.Title.ToLower().Contains(searched) ||
+                                        item.Donor.PersonName.ToLower().Contains(searched) ||
+                                        item.Donor.OrganizationName.ToLower().Contains(searched));
+
+                    foreach (var item in items)
+                    {
+                        Items.Add(item);
+                    }
+                } else {
+                    foreach (var item in allItems) 
+                    {
+                        Items.Add(item);
+                    }
                 }
             }
             catch (Exception ex)
