@@ -19,8 +19,10 @@ namespace OSL
             Title = "";
 
             OpenWebCommand = new Command(() => Device.OpenUri(new Uri("https://www.oslserves.org/")));
+            LinkCommand = new Command(() => Device.OpenUri(new Uri("https://icons8.com")));
         }
 
         public ICommand OpenWebCommand { get; }
+        public Command LinkCommand { get;}
     }
 }

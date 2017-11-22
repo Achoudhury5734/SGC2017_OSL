@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.Views.RootPageMaster"
              Title="Menu">
+    <ContentPage.Icon>
+        <OnPlatform x:TypeArguments="FileImageSource" iOS="icons8_menu"/>
+    </ContentPage.Icon>
   <StackLayout>
     <ListView x:Name="MenuItemsListView"
               SeparatorVisibility="None"

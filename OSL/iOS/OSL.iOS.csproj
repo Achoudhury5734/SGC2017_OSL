@@ -238,6 +238,21 @@
     <BundleResource Include="Resources\xamarin_logo%403x.png" />
     <BundleResource Include="Resources\sackLunch_startscreen.png" />
     <BundleResource Include="Resources\osl_logo.png" />
+    <BundleResource Include="Resources\icons8_clock.png" />
+    <BundleResource Include="Resources\icons8_clock%402x.png" />
+    <BundleResource Include="Resources\icons8_clock%403x.png" />
+    <BundleResource Include="Resources\icons8_list.png" />
+    <BundleResource Include="Resources\icons8_list%402x.png" />
+    <BundleResource Include="Resources\icons8_list%403x.png" />
+    <BundleResource Include="Resources\icons8_menu.png" />
+    <BundleResource Include="Resources\icons8_menu%402x.png" />
+    <BundleResource Include="Resources\icons8_menu%403x.png" />
+    <BundleResource Include="Resources\icons8_ok.png" />
+    <BundleResource Include="Resources\icons8_ok%402x.png" />
+    <BundleResource Include="Resources\icons8_ok%4075.png" />
+    <BundleResource Include="Resources\icons8_trash.png" />
+    <BundleResource Include="Resources\icons8_trash%402x.png" />
+    <BundleResource Include="Resources\icons8_trash%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />

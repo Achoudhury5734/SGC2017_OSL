@@ -19,6 +19,11 @@ namespace OSL.Views
             var completed = new AcceptedItemsPage(DonationStatus.Completed);
             completed.Title = "Completed";
 
+#if __IOS__
+            completed.Icon = "icons8_ok";
+            pending.Icon = "icons8_clock";
+#endif
+
             this.Children.Add(pending);
             this.Children.Add(completed);
         }

@@ -15,7 +15,6 @@ namespace OSL.Views
 
             var listed = new DonationListPage(DonationStatus.Listed);
             listed.Title = "Listed";
-            listed.Icon = null;
 
             var pending = new DonationListPage(DonationStatus.PendingPickup);
             pending.Title = "Pending";
@@ -25,6 +24,13 @@ namespace OSL.Views
 
             var wasted = new DonationListPage(DonationStatus.Wasted);
             wasted.Title = "Wasted";
+
+#if __IOS__
+            listed.Icon = "icons8_list";
+            pending.Icon = "icons8_clock";
+            completed.Icon = "icons8_ok";
+            wasted.Icon = "icons8_trash";
+#endif
 
             this.Children.Add(listed);
             this.Children.Add(pending);
