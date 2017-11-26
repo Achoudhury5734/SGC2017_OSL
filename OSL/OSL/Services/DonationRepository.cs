@@ -82,12 +82,6 @@ namespace OSL.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<Donation> GetDonationAsync(int donationId)
-        {
-            var json = await App.ApiClient.GetStringAsync($"api/donations/{donationId}");
-            return JsonConvert.DeserializeObject<Donation>(json);
-        }
-
         public static byte[] ReadFully(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];

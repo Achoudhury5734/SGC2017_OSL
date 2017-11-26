@@ -20,10 +20,19 @@ namespace OSL.ViewModels
 
             CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation(item.Status));
             WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation(item.Status));
-            RelistCommand = new Command(async () => await RelistDonationAsync(item.Id), () => CanRelistDonation(item.Status));
+            RelistCommand = new Command(async () => await RelistDonationAsync(item), () => CanRelistDonation(item.Status));
 
         }
         public Donation Item { get; set; }
+        public bool HasRecipient { get { return Item.Recipient != null; } }
+        public bool HasNoRecipient { get { return Item.Recipient == null; }}
+
+        public bool HasImage { 
+            get 
+            {
+                return !String.IsNullOrWhiteSpace(Item.PictureUrl) && !String.Equals(Item.PictureUrl, "Empty");
+            }
+        }
 
         private async Task CompleteDonationAsync(int donationId)
         {
@@ -37,9 +46,9 @@ namespace OSL.ViewModels
             await Page.Navigation.PopAsync();
         }
 
-        private async Task RelistDonationAsync(int donationId)
+        private async Task RelistDonationAsync(Donation donation)
         {
-            await Page.Navigation.PushAsync(new DonationPage(donationId));
+            await Page.Navigation.PushAsync(new DonationPage(donation));
         }
 
         private Page page;

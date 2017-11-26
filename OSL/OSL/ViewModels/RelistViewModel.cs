@@ -16,20 +16,48 @@ namespace OSL.ViewModels
         public string PageTitle { get; set; }
         public string EnterText { get; set; }
         public Command EnterCommand { get; }
-        public Command LoadDonationCommand { get; }
         public Command TakePictureCommand { get; }
         public Page Page;
 
         private Donation donation;
 
-        public RelistViewModel(int id)
+        public RelistViewModel(Donation donation)
         {
             donationRep = new DonationRepository();
             PageTitle = "Edit Item";
             EnterText = "Relist";
-            EnterCommand = new Command(async () => await ExecuteRelistCommand(id), ()=> !IsBusy);
-            LoadDonationCommand = new Command(async () => await ExecuteLoadDonations(id));
+            EnterCommand = new Command(async () => await ExecuteRelistCommand(donation.Id), () => !IsBusy);
             TakePictureCommand = new Command(async () => await ExecuteTakePicture());
+
+            ImageSource = donation.PictureUrl;
+            DonationTitle = donation.Title;
+            Quantity = donation.Amount;
+            DonationType = donation.Type.ToString();
+            var expiration = getExpiration(donation.Expiration.Value);
+            ExpirationDate = expiration.Date;
+            ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
+            this.donation = donation;
+        }
+
+        public ImageSource ImageSource { get; set; }
+        public string DonationTitle { get; set; }
+        public int Quantity { get; set; }
+        public string DonationType { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public TimeSpan ExpirationTime { get; set; }
+
+        private DateTime getExpiration(DateTime oldExpiration) {
+            DateTime expiration;
+            if (oldExpiration < DateTime.Now)
+            {
+                // If expired, set new expiration to two hours from now
+                expiration = DateTime.Now.AddHours(2);
+            }
+            else
+            {
+                expiration = oldExpiration;
+            }
+            return expiration;
         }
 
         private async Task ExecuteRelistCommand(int id)
@@ -93,66 +121,10 @@ namespace OSL.ViewModels
             ImageSource = ImageSource.FromStream(() =>
             {
                 var stream = mediaFile.GetStream();
-                OnPropertyChanged("ImageSource");
                 return stream;
             });
             OnPropertyChanged("ImageSource");
             return;
-        }
-
-        public ImageSource ImageSource { get; set; }
-        public string DonationTitle { get; set; }
-        public int Quantity { get; set; }
-        public string DonationType { get; set; }
-        public DateTime ExpirationDate { get; set; }
-        public TimeSpan ExpirationTime { get; set; }
-
-        private async Task ExecuteLoadDonations(int id)
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            try
-            {
-                donation = await donationRep.GetDonationAsync(id);
-
-                DonationTitle = donation.Title;
-                OnPropertyChanged("DonationTitle");
-
-                Quantity = donation.Amount;
-                OnPropertyChanged("Quantity");
-
-                DonationType = donation.Type.ToString();
-                OnPropertyChanged("DonationType");
-
-                DateTime expiration;
-                if (donation.Expiration < DateTime.Now)
-                {
-                    // If expired, set new expiration to two hours from now
-                    expiration = DateTime.Now.AddHours(2);
-                }
-                else
-                {
-                    expiration = donation.Expiration.Value;
-                }
-                ExpirationDate = expiration.Date;
-                ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
-                OnPropertyChanged("ExpirationDate");
-                OnPropertyChanged("ExpirationTime");
-
-                ImageSource = donation.PictureUrl;
-                OnPropertyChanged("ImageSource");
-            }
-            catch
-            {
-                ShowFailureDialog("Unable to Load Donation");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
         }
 
         private void ShowFailureDialog(string message)

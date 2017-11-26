@@ -105,8 +105,8 @@ namespace OSL.ViewModels
             ps.Slices.Add(new PieSlice("", yearWasted) {Fill = OxyColor.Parse("#e33033") });
             ps.FontSize = 15.5;
 
-            ps.TickHorizontalLength = 0.0;
-            ps.TickRadialLength = 0.0;
+            ps.TickHorizontalLength = 0.00;
+            ps.TickRadialLength = 0.00;
             ps.OutsideLabelFormat = "";
 
             model.Series.Add(ps);

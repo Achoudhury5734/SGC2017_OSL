@@ -13,7 +13,6 @@ namespace OSL.Views
 			InitializeComponent ();
             donationDetailViewModel.Page = this;
             this.BindingContext = donationDetailViewModel;
-
         }
     }
 }
