@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:OSL.Helpers"
+    xmlns:local="clr-namespace:OSL.Views"
     x:Class="OSL.Views.AcceptedItemsPage"
     Title="{Binding Title}">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:ExpirationColorConverter x:Key="colorConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 	<ContentPage.Content>
         <StackLayout>
             <ListView x:Name="AcceptedItemsListView"
@@ -22,26 +17,7 @@
                       ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>  
-                                <Image Source="{Binding PictureUrl}" WidthRequest="150" Grid.Column="0"
-                                       Aspect="AspectFill" HorizontalOptions="FillAndExpand"/>
-
-                                <StackLayout Orientation="Vertical" WidthRequest="150" HorizontalOptions="FillAndExpand" Grid.Column="1">
-                                    <Label Text="{Binding Title}" LineBreakMode="WordWrap" 
-                                           Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                    <Label Text="{Binding Expiration, StringFormat='Expiration: {0}'}" FontSize="10"
-                                           LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}"
-                                           TextColor="{Binding Path=., Converter={StaticResource colorConverter}}"/>
-                                    <Label Text="{Binding Donor.Person_Name, StringFormat='Donor: {0}'}" LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10"/>
-                                    <Label Text="{Binding Donor.Organization_Name, StringFormat='Organization: {0}'}" LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10"/>
-                                </StackLayout>
-                            </Grid>
-                        </ViewCell>
+                        <local:AcceptedViewCell/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

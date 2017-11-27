@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using FFImageLoading.Forms.Droid;
 using Microsoft.Identity.Client;
 using Plugin.Permissions;
 using Xamarin.Forms;
@@ -26,6 +27,7 @@ namespace OSL.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
             UserDialogs.Init(() => (Activity)Forms.Context);
+            CachedImageRenderer.Init();
 
             App.UiParent = new UIParent(Xamarin.Forms.Forms.Context as Activity);
 

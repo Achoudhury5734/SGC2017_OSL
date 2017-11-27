@@ -2,6 +2,7 @@
 using Foundation;
 using Microsoft.Identity.Client;
 using UIKit;
+using FFImageLoading.Forms.Touch;
 
 namespace OSL.iOS
 {
@@ -12,6 +13,7 @@ namespace OSL.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             OxyPlot.Xamarin.Forms.Platform.iOS.PlotViewRenderer.Init();
+            CachedImageRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
