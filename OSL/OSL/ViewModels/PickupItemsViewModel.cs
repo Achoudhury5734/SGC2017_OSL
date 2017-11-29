@@ -43,7 +43,6 @@ namespace OSL
             OnPropertyChanged("SearchEnabled");
         }
 
-
         // null range for all
         async Task ExecuteLoadItemsCommand(int? range)
         {

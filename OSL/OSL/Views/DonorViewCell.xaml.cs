@@ -20,7 +20,9 @@ namespace OSL.Views
             if (item == null)
                 return;
 
-            cachedImage.Source = item.PictureUrl;
+            if (!String.IsNullOrEmpty(item.PictureUrl) && !String.Equals(item.PictureUrl, "Empty"))
+                cachedImage.Source = item.PictureUrl;
+            
             base.OnBindingContextChanged();
         }
     }
