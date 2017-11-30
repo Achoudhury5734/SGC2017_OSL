@@ -6,8 +6,6 @@ namespace OSL.Views
 {
     public partial class AcceptedDetailPage : ContentPage
     {
-        AcceptedDetailViewModel viewModel;
-
         public AcceptedDetailPage()
         {
             InitializeComponent();
@@ -16,7 +14,6 @@ namespace OSL.Views
         public AcceptedDetailPage(AcceptedDetailViewModel viewModel)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             viewModel.Page = this;
             this.BindingContext = viewModel;
         }

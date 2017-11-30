@@ -22,7 +22,7 @@
                       CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <local:RecipientViewCell/>
+                        <local:PickupViewCell/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

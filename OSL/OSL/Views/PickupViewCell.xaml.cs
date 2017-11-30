@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace OSL.Views
 {
-    public partial class RecipientViewCell : ViewCell
+    public partial class PickupViewCell : ViewCell
     {
-        public RecipientViewCell()
+        public PickupViewCell()
         {
             InitializeComponent();
         }

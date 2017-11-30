@@ -14,7 +14,7 @@
                          DownsampleToViewSize="true" Grid.Column="0">
         </ffimageloading:CachedImage>
 
-        <StackLayout Orientation="Vertical" WidthRequest="150" HorizontalOptions="FillAndExpand" Grid.Column="1" Margin="10,0,0,0">
+        <StackLayout Orientation="Vertical" WidthRequest="150" HorizontalOptions="FillAndExpand" Grid.Column="1" Margin="5,0,0,0">
             <StackLayout.Resources>
                 <ResourceDictionary>
                     <help:ExpirationColorConverter x:Key="colorConverter"/>

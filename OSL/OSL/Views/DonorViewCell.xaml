@@ -9,7 +9,7 @@
                          Aspect="AspectFill" WidthRequest="150" HeightRequest="150"
                         DownsampleToViewSize="true">
         </ffimageloading:CachedImage>
-        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" WidthRequest="150" Margin="10,0,0,0">
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" WidthRequest="150" Margin="5,0,0,0">
             <StackLayout.Resources>
                 <ResourceDictionary>
                     <help:ExpirationColorConverter x:Key="colorConverter"/>

@@ -92,8 +92,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\AcceptedTabPage.xaml.cs">
       <DependentUpon>AcceptedTabPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\RecipientViewCell.xaml.cs">
-      <DependentUpon>RecipientViewCell.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PickupViewCell.xaml.cs">
+      <DependentUpon>PickupViewCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\DonorViewCell.xaml.cs">
       <DependentUpon>DonorViewCell.xaml</DependentUpon>
@@ -143,7 +143,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\RecipientViewCell.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PickupViewCell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

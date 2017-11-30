@@ -27,7 +27,7 @@ namespace OSL.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
             UserDialogs.Init(() => (Activity)Forms.Context);
-            CachedImageRenderer.Init();
+            CachedImageRenderer.Init(false);
 
             App.UiParent = new UIParent(Xamarin.Forms.Forms.Context as Activity);
 
