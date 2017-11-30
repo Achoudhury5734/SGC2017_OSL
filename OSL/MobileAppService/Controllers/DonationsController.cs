@@ -141,6 +141,26 @@ namespace OSL.MobileAppService.Controllers
             return Ok(donations);
         }
 
+        // GET: api/donations/donor/me/status/1
+        [Authorize]
+        [HttpGet("donor/me/status/{status}")]
+        public IActionResult GetDonorDonations(DonationStatus status) 
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donations = donationRepository.GetByDonorIdWithStatus(user.Id, (int)status);
+            foreach (var donation in donations)
+            {
+                if (donation.RecipientId.HasValue)
+                    donation.Recipient = userRepository.GetById(donation.RecipientId.Value);
+            }
+            return Ok(donations);
+        }
+
         //GET: api/donations/recipient/me
         [Authorize]
         [HttpGet("recipient/me")]
@@ -153,6 +173,29 @@ namespace OSL.MobileAppService.Controllers
             }
 
             var donations = donationRepository.GetByRecipientId(user.Id);
+            foreach (var donation in donations)
+            {
+                donation.Donor = userRepository.GetById(donation.DonorId);
+            }
+            return Ok(donations);
+        }
+
+        //GET: api/donations/recipient/me/status/1
+        [Authorize]
+        [HttpGet("recipient/me/status/{status}")]
+        public IActionResult GetRecipientDonations(DonationStatus status)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            // Recipients can only have pending and completed donations
+            if (status == DonationStatus.Wasted || status == DonationStatus.Listed)
+                return BadRequest();
+
+            var donations = donationRepository.GetByRecipientIdWithStatus(user.Id, (int)status);
             foreach (var donation in donations)
             {
                 donation.Donor = userRepository.GetById(donation.DonorId);

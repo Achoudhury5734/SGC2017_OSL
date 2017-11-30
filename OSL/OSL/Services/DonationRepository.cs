@@ -15,16 +15,22 @@ namespace OSL.Services
     {
         public async Task<IEnumerable<Donation>> GetDonationsByDonorAsync(DonationStatus status)
         {
-            var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
+            /*var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
             var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
-            return items.Where(item => item.Status == status);
+            return items.Where(item => item.Status == status);*/
+
+            var json = await App.ApiClient.GetStringAsync($"api/donations/donor/me/status/{status}");
+            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
         public async Task<IEnumerable<Donation>> GetDonationsByRecipientAsync(DonationStatus status)
         {
-            var json = await App.ApiClient.GetStringAsync("api/donations/recipient/me");
+            /*var json = await App.ApiClient.GetStringAsync("api/donations/recipient/me");
             var items = JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
-            return items.Where(item => item.Status == status);
+            return items.Where(item => item.Status == status);*/
+
+            var json = await App.ApiClient.GetStringAsync($"api/donations/recipient/me/status/{status}");
+            return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
         public async Task<bool> SaveDonationAsync(string donationTitle, MediaFile mediaFile, int quantity, string donationType, DateTime expirationDate, TimeSpan expirationTime)

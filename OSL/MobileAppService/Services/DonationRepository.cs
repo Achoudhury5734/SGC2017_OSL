@@ -99,6 +99,33 @@ namespace OSL.MobileAppService.Services
             return donations;
         }
 
+        public IEnumerable<Donation> GetByDonorIdWithStatus(int DonorId, int Status)
+        {
+            var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId " +
+                        "AND [Status] = @Status AND [Title] != @UserEnteredWaste " +
+                        "ORDER BY [Created] DESC";
+            var donations = new List<Donation>();
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DonorId", DonorId);
+                    command.Parameters.AddWithValue("@Status", Status);
+                    command.Parameters.AddWithValue("@UserEnteredWaste", "UserEnteredWaste");
+                    SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
+                    while (reader.Read())
+                    {
+                        var donation = new Donation(reader);
+                        donations.Add(donation);
+                    }
+                }
+            }
+            return donations;   
+        }
+
         public IEnumerable<Donation> GetByRecipientId(int RecipientId)
         {
             var query = "SELECT * FROM [Donation] WHERE [RecipientId] = @RecipientId " +
@@ -112,6 +139,31 @@ namespace OSL.MobileAppService.Services
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@RecipientId", RecipientId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    command.Parameters.Clear();
+                    while (reader.Read())
+                    {
+                        var donation = new Donation(reader);
+                        donations.Add(donation);
+                    }
+                }
+            }
+            return donations;
+        }
+
+        public IEnumerable<Donation> GetByRecipientIdWithStatus(int RecipientId, int Status)
+        {
+            var query = "SELECT * FROM [Donation] WHERE [RecipientId] = @RecipientId " +
+                        "AND [Status] = @Status ORDER BY [Updated] DESC";
+            var donations = new List<Donation>();
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@RecipientId", RecipientId);
+                    command.Parameters.AddWithValue("@Status", Status);
                     SqlDataReader reader = command.ExecuteReader();
                     command.Parameters.Clear();
                     while (reader.Read())
