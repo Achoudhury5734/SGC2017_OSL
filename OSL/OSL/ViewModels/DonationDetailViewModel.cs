@@ -4,6 +4,8 @@ using OSL.Models;
 using Xamarin.Forms;
 using OSL.Services;
 using OSL.Views;
+using Acr.UserDialogs;
+using Plugin.Messaging;
 
 namespace OSL.ViewModels
 {
@@ -21,11 +23,24 @@ namespace OSL.ViewModels
             CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation(item.Status));
             WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation(item.Status));
             RelistCommand = new Command(async () => await RelistDonationAsync(item), () => CanRelistDonation(item.Status));
+            OpenDialerCommand = new Command(() => ExecuteOpenDialer());
+            OptionsCommand = new Command(() => ExecuteOptions());
 
         }
         public Donation Item { get; set; }
         public bool HasRecipient { get { return Item.Recipient != null; } }
         public bool HasNoRecipient { get { return Item.Recipient == null; }}
+        public Command OpenDialerCommand { get; }
+        public Command OptionsCommand { get; }
+
+        private void ExecuteOpenDialer()
+        {
+            var phoneDialer = CrossMessaging.Current.PhoneDialer;
+            if (phoneDialer.CanMakePhoneCall)
+                phoneDialer.MakePhoneCall(Item.Recipient.Phone_Number);
+            else
+                UserDialogs.Instance.Alert("Unable to Make Calls");
+        }
 
         public bool HasImage { 
             get 
@@ -75,6 +90,15 @@ namespace OSL.ViewModels
         private bool CanRelistDonation(DonationStatus status)
         {
             return status != DonationStatus.Completed;
+        }
+
+        void ExecuteOptions()
+        {
+            var actionConfig = new ActionSheetConfig();
+            actionConfig.Title = "Additional Options";
+            actionConfig.Add("Contact Recipient", () => ExecuteOpenDialer());
+            actionConfig.SetCancel();
+            UserDialogs.Instance.ActionSheet(actionConfig);
         }
     }
 }

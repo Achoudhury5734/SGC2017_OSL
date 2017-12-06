@@ -9,11 +9,14 @@
             <local:ExpirationColorConverter x:Key="colorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Options" Command="{Binding OptionsCommand}" IsEnabled="{Binding HasRecipient}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
         <StackLayout Padding="5" VerticalOptions="Fill">
             <Image Source="{Binding Item.PictureUrl}" Aspect="AspectFit" VerticalOptions="FillAndExpand"
-                   IsVisible="{Binding HasImage}"/>
+                   IsVisible="{Binding HasImage}" HeightRequest="250"/>
                 
             <StackLayout VerticalOptions="FillAndExpand">
                 <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>

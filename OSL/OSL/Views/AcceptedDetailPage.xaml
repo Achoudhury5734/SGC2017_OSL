@@ -10,6 +10,9 @@
             <local:ExpirationColorConverter x:Key="colorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Options" Command="{Binding OptionsCommand}" IsEnabled="{Binding HasRecipient}"/>
+    </ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <ScrollView>
         <Grid Padding="5,5,5,20" VerticalOptions="Fill">
@@ -40,8 +43,7 @@
                 <Label Text="{Binding Item.Donor.Organization_Name}" Margin="20,0,10,0"/>
                 <Label Text="{Binding Address}" Margin="20,0,0,0"/>
             </StackLayout>
-            
-            <Button Text="Cancel" Grid.Row="2" Command="{Binding CancelCommand}" VerticalOptions="End"/>
+            <Button Text="Options" Grid.Row="2" Command="{Binding OptionsCommand}" VerticalOptions="End"/>
         </Grid>
         </ScrollView>
 	</ContentPage.Content>

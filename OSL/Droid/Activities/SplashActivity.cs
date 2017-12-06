@@ -15,7 +15,7 @@ using Xamarin.Forms;
 namespace OSL.Droid.Activities
 {
     [Activity(Label = "@string/app_name", Icon = "@drawable/osl_icon", Theme = "@style/SplashTheme", MainLauncher = true,
-        NoHistory = true, ScreenOrientation = ScreenOrientation.Portrait)]
+              NoHistory = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class SplashActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
