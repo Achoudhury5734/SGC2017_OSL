@@ -254,6 +254,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable-xxhdpi\sackLunch_startscreen.png" />
+    <AndroidResource Include="Resources\drawable\osl_feature.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\xml\file_paths.xml">

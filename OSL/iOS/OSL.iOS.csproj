@@ -280,6 +280,7 @@
     <BundleResource Include="Resources\icons8_trash.png" />
     <BundleResource Include="Resources\icons8_trash%402x.png" />
     <BundleResource Include="Resources\icons8_trash%403x.png" />
+    <BundleResource Include="Resources\osl_feature.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
