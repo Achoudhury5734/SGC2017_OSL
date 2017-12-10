@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="using:OSL.ViewModels"
              xmlns:local="clr-namespace:OSL.Helpers"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="OSL.Views.AcceptedDetailPage"
              Title="{Binding Title}">
      <ContentPage.Resources>
@@ -25,7 +26,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="{Binding Item.PictureUrl}" Aspect="AspectFit" Grid.Row="0" VerticalOptions="FillAndExpand"/>
+            <ffimageloading:CachedImage Aspect="AspectFit" Grid.Row="0"
+                DownsampleToViewSize="true" DownsampleHeight="300" HeightRequest="275" 
+                Source = "{Binding Item.PictureUrl}" ErrorPlaceholder="fadedapple.png" IsVisible="{Binding HasImage}">
+            </ffimageloading:CachedImage>
 
             <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">        
                 <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>

@@ -1,8 +1,10 @@
 ﻿using System;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace OSL
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PickupItemDetailPage : ContentPage
     {
         PickupItemDetailViewModel viewModel;
@@ -38,6 +40,7 @@ namespace OSL
             if (res)
             {
                 await DisplayAlert("Information", "Thank you for accepting the donation", "OK");
+                MessagingCenter.Send(this, "ItemAccepted", viewModel.Item);
             }
             else
             {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using OSL.Models;
 using OSL.Services;
+using OSL.Views;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Xamarin.Forms;
@@ -33,9 +34,11 @@ namespace OSL.ViewModels
             DonationTitle = donation.Title;
             Quantity = donation.Amount;
             DonationType = donation.Type.ToString();
+
             var expiration = getExpiration(donation.Expiration.Value);
             ExpirationDate = expiration.Date;
             ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
+
             this.donation = donation;
         }
 
@@ -81,7 +84,7 @@ namespace OSL.ViewModels
                 if (!res)
                     ShowFailureDialog("Unable to Relist");
                 else
-                    await Page.Navigation.PopToRootAsync();
+                    App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage()) };
             }
         }
 

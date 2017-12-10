@@ -6,8 +6,7 @@
     <bitmap
         android:src="@drawable/sackLunch_startscreen"
         android:tileMode="disabled"
-        android:gravity="center"
-        android:layout_gravity="center"/>
+        android:gravity="top|fill_horizontal"/>
   </item>
 
 </layer-list>

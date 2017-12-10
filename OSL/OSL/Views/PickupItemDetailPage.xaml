@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.PickupItemDetailPage"
              xmlns:local="clr-namespace:OSL.Helpers"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -13,7 +14,10 @@
         <ScrollView>
             <StackLayout Spacing="5" HorizontalOptions="FillAndExpand"
                     WidthRequest="1000">
-                <Image Source="{Binding Item.PictureUrl}" />
+                <ffimageloading:CachedImage Aspect="AspectFit"
+                    DownsampleToViewSize="true" DownsampleWidth="600"
+                    Source = "{Binding Item.PictureUrl}">
+                </ffimageloading:CachedImage>
 
                 <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>
                 <Label Text="{Binding Item.Title}" Margin="20,0,0,0"/>

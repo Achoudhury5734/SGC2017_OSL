@@ -23,7 +23,7 @@ namespace OSL
         public string ToolbarText { get; set; }
 
         private readonly int[] distances = new int[] { 5, 10, 15 };
-        private IEnumerable<PickupItem> allItems;
+        private ICollection<PickupItem> allItems;
 
         public PickupItemsViewModel()
         {
@@ -35,6 +35,10 @@ namespace OSL
             SearchEnabled = false;
             allItems = new List<PickupItem>();
             ToolbarText = "Search";
+
+            MessagingCenter.Subscribe<PickupItemDetailPage, PickupItem>(this, "ItemAccepted", (sender, item) =>{
+                allItems.Remove(item);
+            });
         }
 
         private void EnableSearch()

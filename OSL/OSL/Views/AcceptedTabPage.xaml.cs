@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using OSL.Models;
 
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AcceptedTabPage : TabbedPage
     {
         public AcceptedTabPage()

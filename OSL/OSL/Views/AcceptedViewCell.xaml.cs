@@ -1,9 +1,11 @@
 ﻿using System;
 using OSL.Models;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AcceptedViewCell : ViewCell
     {
         public AcceptedViewCell()

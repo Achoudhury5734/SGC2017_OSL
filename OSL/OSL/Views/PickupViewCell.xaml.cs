@@ -1,8 +1,10 @@
 ﻿using System;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PickupViewCell : ViewCell
     {
         public PickupViewCell()

@@ -14,6 +14,7 @@ namespace OSL
             InitializeComponent();
 
             BindingContext = viewModel = new PickupItemsViewModel();
+            MessagingCenter.Subscribe<PickupItemDetailPage,PickupItem>(this, "ItemAccepted", OnItemAccepted);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -26,6 +27,10 @@ namespace OSL
 
             // Manually deselect item
             PickupItemsListView.SelectedItem = null;
+        }
+
+        private void OnItemAccepted(PickupItemDetailPage sender, PickupItem item) {
+            viewModel.Items.Remove(item);
         }
 
         public void OnTextChanged(object s, EventArgs e)

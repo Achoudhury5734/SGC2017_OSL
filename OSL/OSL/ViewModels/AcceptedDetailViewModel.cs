@@ -14,6 +14,7 @@ namespace OSL.ViewModels
         public Donation Item { get; set; }
         public Command OptionsCommand { get; }
         public Page Page { get; set; }
+        public bool HasImage { get; set; }
 
         DonationRepository donationRep;
 
@@ -24,6 +25,16 @@ namespace OSL.ViewModels
 
             donationRep = new DonationRepository();
             OptionsCommand = new Command(() => ExecuteOptionsCommand());
+
+            if (String.IsNullOrWhiteSpace(item.PictureUrl) || String.Equals(item.PictureUrl, "Empty"))
+            {
+                item.PictureUrl = null;
+                HasImage = false;
+            }
+            else
+            {
+                HasImage = true;
+            }
         }
 
         void ExecuteOptionsCommand()
@@ -31,7 +42,8 @@ namespace OSL.ViewModels
             var actionConfig = new ActionSheetConfig();
             actionConfig.Add("Contact Donor", () => ExecuteOpenDialer());
             actionConfig.Add("View in Maps", async () => await ExecuteOpenMaps());
-            actionConfig.Add("Cancel Pickup", (async () => await ExecuteCancelCommand()));
+            if (Item.Status != DonationStatus.Completed)
+                actionConfig.Add("Cancel Pickup", (async () => await ExecuteCancelCommand()));
             actionConfig.SetCancel("Close");
 
             UserDialogs.Instance.ActionSheet(actionConfig);
@@ -75,6 +87,7 @@ namespace OSL.ViewModels
             }
             else
             {
+                MessagingCenter.Send(this, "PickupCancelled", Item);
                 await Page.Navigation.PopAsync();
             }
         }

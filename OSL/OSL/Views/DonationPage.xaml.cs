@@ -2,9 +2,11 @@
 using Xamarin.Forms;
 using OSL.ViewModels;
 using OSL.Models;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DonationPage : ContentPage
     {
         public DonationPage()

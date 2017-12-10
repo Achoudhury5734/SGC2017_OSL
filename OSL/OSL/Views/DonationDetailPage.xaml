@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.Views.DonationDetailPage"
              xmlns:local="clr-namespace:OSL.Helpers"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -15,8 +16,10 @@
     <ContentPage.Content>
         <ScrollView>
         <StackLayout Padding="5" VerticalOptions="Fill">
-            <Image Source="{Binding Item.PictureUrl}" Aspect="AspectFit" VerticalOptions="FillAndExpand"
-                   IsVisible="{Binding HasImage}" HeightRequest="250"/>
+            <ffimageloading:CachedImage Aspect="AspectFit"
+                DownsampleToViewSize="true" DownsampleHeight="300" HeightRequest="250" VerticalOptions="FillAndExpand"
+                Source = "{Binding Item.PictureUrl}" IsVisible="{Binding HasImage}">
+            </ffimageloading:CachedImage>
                 
             <StackLayout VerticalOptions="FillAndExpand">
                 <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>

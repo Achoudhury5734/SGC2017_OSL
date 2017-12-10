@@ -52,12 +52,14 @@ namespace OSL.ViewModels
         private async Task CompleteDonationAsync(int donationId)
         {
             await donationRepository.CompleteDonationAsync(donationId);
+            MessagingCenter.Send(this, "StatusChanged", Item);
             await Page.Navigation.PopAsync();
         }
 
         private async Task WasteDonationAsync(int donationId)
         {
             await donationRepository.WasteDonationAsync(donationId);
+            MessagingCenter.Send(this, "StatusChanged", Item);
             await Page.Navigation.PopAsync();
         }
 

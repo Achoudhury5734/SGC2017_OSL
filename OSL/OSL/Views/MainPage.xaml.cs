@@ -6,9 +6,11 @@ using System.Net.Http.Headers;
 using OSL.Services;
 using System.Linq;
 using System.Text;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
         private bool loggingOut;

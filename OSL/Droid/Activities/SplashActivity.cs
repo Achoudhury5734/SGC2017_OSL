@@ -11,12 +11,13 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using Xamarin.Forms;
+using Android.Support.V7.App;
 
 namespace OSL.Droid.Activities
 {
     [Activity(Label = "@string/app_name", Icon = "@drawable/osl_icon", Theme = "@style/SplashTheme", MainLauncher = true,
               NoHistory = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class SplashActivity : Activity
+    public class SplashActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {

@@ -21,6 +21,7 @@ namespace OSL.Views
             InitializeComponent();
             viewModel = new AcceptedItemsViewModel(status);
             this.BindingContext = viewModel;
+            MessagingCenter.Subscribe<AcceptedDetailViewModel, Donation>(this, "PickupCancelled", OnItemCancelled);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -35,10 +36,16 @@ namespace OSL.Views
             AcceptedItemsListView.SelectedItem = null;
         }
 
+        private void OnItemCancelled(AcceptedDetailViewModel sender, Donation item) {
+            viewModel.Items.Remove(item);
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            viewModel.LoadItemsCommand.Execute(null);
+
+            if (viewModel.Items.Count == 0)
+                viewModel.LoadItemsCommand.Execute(null);
         }
     }
 }
