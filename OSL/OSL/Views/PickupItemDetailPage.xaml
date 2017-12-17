@@ -12,8 +12,7 @@
     </ContentPage.Resources>
 	<StackLayout Spacing="10" Padding="10" Orientation="Vertical">
         <ScrollView>
-            <StackLayout Spacing="5" HorizontalOptions="FillAndExpand"
-                    WidthRequest="1000">
+            <StackLayout Spacing="5" HorizontalOptions="FillAndExpand">
                 <ffimageloading:CachedImage Aspect="AspectFit"
                     DownsampleToViewSize="true" DownsampleWidth="600"
                     Source = "{Binding Item.PictureUrl}">

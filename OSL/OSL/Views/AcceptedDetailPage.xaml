@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Options" Command="{Binding OptionsCommand}" IsEnabled="{Binding HasRecipient}"/>
+        <ToolbarItem Text="Options" Command="{Binding OptionsCommand}"/>
     </ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <ScrollView>
@@ -28,7 +28,7 @@
 
             <ffimageloading:CachedImage Aspect="AspectFit" Grid.Row="0"
                 DownsampleToViewSize="true" DownsampleHeight="300" HeightRequest="275" 
-                Source = "{Binding Item.PictureUrl}" ErrorPlaceholder="fadedapple.png" IsVisible="{Binding HasImage}">
+                Source = "{Binding Item.PictureUrl}" IsVisible="{Binding HasImage}">
             </ffimageloading:CachedImage>
 
             <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">        

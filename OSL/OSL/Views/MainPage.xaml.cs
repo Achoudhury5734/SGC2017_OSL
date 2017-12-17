@@ -7,6 +7,7 @@ using OSL.Services;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms.Xaml;
+using System.Threading.Tasks;
 
 namespace OSL.Views
 {
@@ -14,28 +15,38 @@ namespace OSL.Views
     public partial class MainPage : ContentPage
     {
         private bool loggingOut;
+        private bool loggingIn;
         private UserRepository userRepository;
 
         public MainPage(bool logout = false)
         {
             loggingOut = logout;
             userRepository = new UserRepository();
+            loggingIn = false;
 
             InitializeComponent();
         }
 
         protected override async void OnAppearing()
         {
+            base.OnAppearing();
+
             if (loggingOut) {
                 OnClickLogout(null, null);
                 return;
             }
 
+            // Login window will redirect to OnAppearing and then continue in OnClickSignup
+            // Just want to continue sign in there instead of starting over here.
+            if (loggingIn) {
+                UpdateButtonState(true);
+                return;
+            }
+
             try
             {
-                UpdateButtonState(true);
-
                 // Check to see if we have a User in the cache already.
+                UpdateButtonState(true);
                 AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
                 App.AccessToken = ar.AccessToken;
                 App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
@@ -68,8 +79,11 @@ namespace OSL.Views
             try
             {
                 UpdateButtonState(true);
-
+                loggingIn = true;
                 AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
+                // For some reason updates before getting AuthResult don't work on iOS...
+                UpdateButtonState(true);
+                loggingIn = false;
                 App.AccessToken = ar.AccessToken;
                 App.ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ar.AccessToken);
                 App.User = await userRepository.GetUserFromIdentityToken(ar.IdToken);
@@ -83,6 +97,7 @@ namespace OSL.Views
             catch (Exception ex)
             {
                 UpdateButtonState(false);
+                loggingIn = false;
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
                 {
                     // Alert if any exception excludig user cancelling sign-in dialog

@@ -16,7 +16,7 @@
    
         <ffimageloading:CachedImage HorizontalOptions="FillAndExpand" x:Name="cachedImage"
                         Grid.Row="0" Grid.Column="0" Aspect="AspectFill"
-                        DownsampleToViewSize="true">
+                        DownsampleToViewSize="true" DownsampleWidth="200">
         </ffimageloading:CachedImage>
         
         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0" Margin="5,0,0,0">
