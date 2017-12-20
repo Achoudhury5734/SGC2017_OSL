@@ -7,7 +7,6 @@ using OSL.Services;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms.Xaml;
-using System.Threading.Tasks;
 
 namespace OSL.Views
 {

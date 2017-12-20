@@ -1,4 +1,5 @@
 ﻿using System;
+using OSL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +16,7 @@ namespace OSL.Views
         protected override void OnBindingContextChanged()
         {
             cachedImage.Source = null;
-            var item = BindingContext as PickupItem;
+            var item = BindingContext as Donation;
 
             if (item == null)
                 return;

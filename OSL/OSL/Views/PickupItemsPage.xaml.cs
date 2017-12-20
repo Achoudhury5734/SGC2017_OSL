@@ -1,5 +1,6 @@
 using System;
-﻿using Xamarin.Forms;
+using OSL.Models;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace OSL
@@ -14,12 +15,12 @@ namespace OSL
             InitializeComponent();
 
             BindingContext = viewModel = new PickupItemsViewModel();
-            MessagingCenter.Subscribe<PickupItemDetailPage,PickupItem>(this, "ItemAccepted", OnItemAccepted);
+            MessagingCenter.Subscribe<PickupItemDetailPage,Donation>(this, "ItemAccepted", OnItemAccepted);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as PickupItem;
+            var item = args.SelectedItem as Donation;
             if (item == null)
                 return;
 
@@ -29,7 +30,7 @@ namespace OSL
             PickupItemsListView.SelectedItem = null;
         }
 
-        private void OnItemAccepted(PickupItemDetailPage sender, PickupItem item) {
+        private void OnItemAccepted(PickupItemDetailPage sender, Donation item) {
             viewModel.Items.Remove(item);
         }
 

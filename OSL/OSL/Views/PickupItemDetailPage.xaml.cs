@@ -1,4 +1,5 @@
 ﻿using System;
+using OSL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +16,7 @@ namespace OSL
         {
             InitializeComponent();
 
-            var item = new PickupItem
+            var item = new Donation
             {
                 Title = "New Item posted"
             };

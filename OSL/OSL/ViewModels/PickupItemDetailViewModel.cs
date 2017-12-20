@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using OSL.Models;
 using Plugin.ExternalMaps;
 using Plugin.Messaging;
 using Xamarin.Forms;
@@ -9,9 +10,9 @@ namespace OSL
 {
     public class PickupItemDetailViewModel : ViewModelBase
     {
-        public PickupItem Item { get; set; }
+        public Donation Item { get; set; }
         public Command OptionsCommand { get; }
-        public PickupItemDetailViewModel(PickupItem item = null)
+        public PickupItemDetailViewModel(Donation item = null)
         {
             Title = item?.Title;
             Item = item;
@@ -22,36 +23,36 @@ namespace OSL
         {
             get
             {
-                if (!String.IsNullOrWhiteSpace(Item.Donor.OrganizationAddressLine2))
+                if (!String.IsNullOrWhiteSpace(Item.Donor.Organization_Address_Line2))
                 {
                     return string.Format("{0}\n{1}\n{2}, {3} {4}",
-                                         Item.Donor.OrganizationAddressLine1,
-                                         Item.Donor.OrganizationAddressLine2,
-                                         Item.Donor.OrganizationCity,
-                                         Item.Donor.OrganizationState,
-                                         Item.Donor.OrganizationPostalCode
+                                         Item.Donor.Organization_Address_Line1,
+                                         Item.Donor.Organization_Address_Line2,
+                                         Item.Donor.Organization_City,
+                                         Item.Donor.Organization_State,
+                                         Item.Donor.Organization_PostalCode
                                         );
                 }
                 else
                 {
                     return string.Format("{0}\n{1}, {2} {3}",
-                                         Item.Donor.OrganizationAddressLine1,
-                                         Item.Donor.OrganizationCity,
-                                         Item.Donor.OrganizationState,
-                                         Item.Donor.OrganizationPostalCode
+                                         Item.Donor.Organization_Address_Line1,
+                                         Item.Donor.Organization_City,
+                                         Item.Donor.Organization_State,
+                                         Item.Donor.Organization_PostalCode
                                         );
                 }
             }
         }
 
         private async Task ExecuteOpenMaps() {
-            var success = await CrossExternalMaps.Current.NavigateTo(Item.Donor.OrganizationName, 
-                                                                     Item.Donor.OrganizationAddressLine1, 
-                                                                     Item.Donor.OrganizationCity, 
-                                                                     Item.Donor.OrganizationState,
-                                                                     Item.Donor.OrganizationPostalCode,
-                                                                     Item.Donor.OrganizationCountry, 
-                                                                     Item.Donor.OrganizationCountry);
+            var success = await CrossExternalMaps.Current.NavigateTo(Item.Donor.Organization_Name, 
+                                                                     Item.Donor.Organization_Address_Line1, 
+                                                                     Item.Donor.Organization_City, 
+                                                                     Item.Donor.Organization_State,
+                                                                     Item.Donor.Organization_PostalCode,
+                                                                     Item.Donor.Organization_Country, 
+                                                                     Item.Donor.Organization_Country);
             if (!success) {
                 UserDialogs.Instance.Alert("Unable to Open Map");
             }
@@ -60,7 +61,7 @@ namespace OSL
         private void ExecuteOpenDialer() {
             var phoneDialer = CrossMessaging.Current.PhoneDialer;
             if (phoneDialer.CanMakePhoneCall)
-                phoneDialer.MakePhoneCall(Item.Donor.PhoneNumber);
+                phoneDialer.MakePhoneCall(Item.Donor.Phone_Number);
             else
                 UserDialogs.Instance.Alert("Unable to Make Calls");
         }

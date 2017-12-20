@@ -26,11 +26,11 @@
                        TextColor="{Binding Item.Expiration, Converter={StaticResource colorConverter}}"/>
 
                 <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
-                <Label Text="{Binding Item.Donor.PersonName, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.PhoneNumber, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Item.Donor.Phone_Number, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
                 
                 <Label Text="Organization: " FontAttributes="Bold" Margin="10,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationName}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Item.Donor.Organization_Name}" Margin="20,0,0,0"/>
                 <Label Text="{Binding Address}" Margin="20,0,0,0"/>
 
                 <Button Text="Accept Item" x:Name="Accept"/>

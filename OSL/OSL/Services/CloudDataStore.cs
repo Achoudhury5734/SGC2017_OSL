@@ -5,26 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using OSL.Models;
 using Plugin.Connectivity;
 
 namespace OSL
 {
-    public class CloudDataStore : IDataStore<PickupItem>
+    public class CloudDataStore : IDataStore<Donation>
     {
-        IEnumerable<PickupItem> items;
+        IEnumerable<Donation> items;
 
-        public async Task<IEnumerable<PickupItem>> GetPickupItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Donation>> GetPickupItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
                 var json = await App.ApiClient.GetStringAsync($"api/donations/status/listed"); 
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<PickupItem>>(json));
+                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Donation>>(json));
             }
 
             return items;
         }
 
-        public async Task<IEnumerable<PickupItem>> GetFilteredItemsAsync(int range, double? Lat, double? Long, bool forceRefresh = true)
+        public async Task<IEnumerable<Donation>> GetFilteredItemsAsync(int range, double? Lat, double? Long, bool forceRefresh = true)
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
@@ -34,32 +35,32 @@ namespace OSL
                 var response = await App.ApiClient.PostAsync("api/donations/nearby/", content);
                 var results = response.Content.ReadAsStringAsync().Result;
 
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<PickupItem>>(results));
+                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Donation>>(results));
             }
 
             return items;
         }
 
-        public async Task<PickupItem> GetPickupItemAsync(string id)
+        public async Task<Donation> GetPickupItemAsync(string id)
         {
-            await Task.FromResult<PickupItem>(null);
+            await Task.FromResult<Donation>(null);
             throw new NotSupportedException();
         }
 
-        public async Task<bool> AddPickupItemAsync(PickupItem item)
+        public async Task<bool> AddPickupItemAsync(Donation item)
         {
             await Task.FromResult(false);
             throw new NotSupportedException();
         }
 
-        public async Task<bool> AcceptPickupItemAsync(PickupItem item)
+        public async Task<bool> AcceptPickupItemAsync(Donation item)
         {
             var response = await App.ApiClient.PutAsync($"api/donations/{item.Id}/accept", null);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdatePickupItemAsync(PickupItem item)
+        public async Task<bool> UpdatePickupItemAsync(Donation item)
         {
             await Task.FromResult(0);
             throw new NotSupportedException();

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using OSL.Models;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace OSL
 {
     public class PickupItemsViewModel : ViewModelBase
     {
-        public ObservableCollection<PickupItem> Items { get; set; }
+        public ObservableCollection<Donation> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
         public Command FilterItemsCommand { get; set; }
         public Command SearchCommand { get; set; }
@@ -23,20 +24,20 @@ namespace OSL
         public string ToolbarText { get; set; }
 
         private readonly int[] distances = new int[] { 5, 10, 15 };
-        private ICollection<PickupItem> allItems;
+        private ICollection<Donation> allItems;
 
         public PickupItemsViewModel()
         {
-            Items = new ObservableCollection<PickupItem>();
+            Items = new ObservableCollection<Donation>();
             LoadItemsCommand = new Command(async (range) => await ExecuteLoadItemsCommand((int?)range));
             FilterItemsCommand = new Command(() => ExecuteFilterItemsCommand());
             EnableSearchCommand = new Command(() => EnableSearch());
             SearchCommand = new Command(() => ExecuteSearchCommand());
             SearchEnabled = false;
-            allItems = new List<PickupItem>();
+            allItems = new List<Donation>();
             ToolbarText = "Search";
 
-            MessagingCenter.Subscribe<PickupItemDetailPage, PickupItem>(this, "ItemAccepted", (sender, item) =>{
+            MessagingCenter.Subscribe<PickupItemDetailPage, Donation>(this, "ItemAccepted", (sender, item) =>{
                 allItems.Remove(item);
             });
         }
@@ -58,7 +59,7 @@ namespace OSL
             try
             {
                 Items.Clear();
-                IEnumerable<PickupItem> items;
+                IEnumerable<Donation> items;
 
                 if (range == null)
                     items = await DataStore.GetPickupItemsAsync(true);
@@ -95,8 +96,8 @@ namespace OSL
                 {
                     var searched = Text.ToLower();
                     var items = allItems.Where(item => item.Title.ToLower().Contains(searched) ||
-                                        item.Donor.PersonName.ToLower().Contains(searched) ||
-                                        item.Donor.OrganizationName.ToLower().Contains(searched));
+                                        item.Donor.Person_Name.ToLower().Contains(searched) ||
+                                        item.Donor.Organization_Name.ToLower().Contains(searched));
 
                     foreach (var item in items)
                     {
@@ -119,7 +120,7 @@ namespace OSL
             }
         }
 
-        async Task<IEnumerable<PickupItem>> GetItemsWithinRange(int range)
+        async Task<IEnumerable<Donation>> GetItemsWithinRange(int range)
         {
             var location = await GetCurrentLocation();
             if (location != null)
