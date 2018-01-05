@@ -10,14 +10,11 @@
             <local:ExpirationColorConverter x:Key="colorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Options" Command="{Binding OptionsCommand}" IsEnabled="{Binding HasRecipient}"/>
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
         <StackLayout Padding="5" VerticalOptions="Fill">
             <ffimageloading:CachedImage Aspect="AspectFit"
-                DownsampleToViewSize="true" DownsampleHeight="300" HeightRequest="250" VerticalOptions="FillAndExpand"
+                DownsampleToViewSize="true" DownsampleHeight="250" HeightRequest="250" VerticalOptions="FillAndExpand"
                 Source = "{Binding Item.PictureUrl}" IsVisible="{Binding HasImage}">
             </ffimageloading:CachedImage>
                 
@@ -30,21 +27,24 @@
                 <Label Text="{Binding Item.Created, StringFormat='Posted: {0}'}" Margin="20,10,10,0"/>
                 <Label Text="{Binding Item.Updated, StringFormat='Last Updated: {0}'}" Margin="20,0,10,0"/>
                 <Label Text="{Binding Item.StatusUpdated, StringFormat='Status Updated: {0}'}" Margin="20,0,10,0"/>
-                
-                <Label Text="Recipient: " FontAttributes="Bold" Margin="10,10,10,0"/>
-                <Label Text="None" Margin="20,0,10,0" IsVisible="{Binding HasNoRecipient}"/>
-                <Label Text="{Binding Item.Recipient.Person_Name, StringFormat='Name: {0}'}" 
-                       Margin="20,0,10,0" IsVisible="{Binding HasRecipient}"/>
-                <Label Text="{Binding Item.Recipient.Phone_Number, StringFormat='Phone: {0}'}" 
-                       Margin="20,0,10,0" IsVisible="{Binding HasRecipient}"/>
-                <Label Text="{Binding Item.Recipient.Organization_Name, StringFormat='Organization: {0}'}" 
-                       Margin="20,0,10,0" IsVisible="{Binding HasRecipient}"/>
+                <StackLayout Orientation="Horizontal" Padding="0, 10">
+                    <Button Text="Edit" Command="{Binding RelistCommand}" IsVisible="{Binding ShowEditButton}"
+                            HorizontalOptions="FillAndExpand"/>
+                    <Button Text="Complete" Command="{Binding CompleteCommand}" IsVisible="{Binding CanCompleteDonation}"
+                            HorizontalOptions="FillAndExpand"/>
+                    <Button Text="Waste" Command="{Binding WasteCommand}" IsVisible="{Binding CanWasteDonation}"
+                            HorizontalOptions="FillAndExpand"/>
+                    <Button Text="Relist" Command="{Binding RelistCommand}" IsVisible="{Binding ShowRelistButton}"
+                            HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
             </StackLayout>
-
-            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Padding="0, 10">
-                <Button Text="Complete" Command="{Binding CompleteCommand}" HorizontalOptions="FillAndExpand"/>
-                <Button Text="Waste" Command="{Binding WasteCommand}" HorizontalOptions="FillAndExpand"/>
-                <Button Text="Relist" Command="{Binding RelistCommand}" HorizontalOptions="FillAndExpand"/>
+            <StackLayout IsVisible="{Binding HasRecipient}">  
+                <Label Text="Recipient: " FontAttributes="Bold" Margin="10,10,10,0"/>
+                <Label Text="{Binding Item.Recipient.Person_Name, StringFormat='Name: {0}'}" 
+                       Margin="20,0,10,0"/>
+                <Label Text="{Binding Item.Recipient.Phone_Number, StringFormat='Phone: {0}'}" 
+                       Margin="20,0,10,0"/>
+                <Button Text="Contact" Command="{Binding OpenDialerCommand}"/>
             </StackLayout>
         </StackLayout>
         </ScrollView>

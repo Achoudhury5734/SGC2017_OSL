@@ -99,6 +99,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\AcceptedViewCell.xaml.cs">
       <DependentUpon>AcceptedViewCell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RecipientDetailBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\AboutPage.xaml">

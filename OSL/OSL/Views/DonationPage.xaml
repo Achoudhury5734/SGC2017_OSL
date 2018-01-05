@@ -7,7 +7,7 @@
              xmlns:vm="using:OSL.ViewModels"
              Title="{Binding PageTitle}" >
     <ContentPage.ToolbarItems>
-		<ToolbarItem Text="{Binding EnterText}" Command="{Binding EnterCommand}" />
+		<ToolbarItem Text="Save" Command="{Binding EnterCommand}" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <ScrollView>
@@ -33,7 +33,7 @@
                     <TimePicker x:Name="expirationTime" Time="{Binding ExpirationTime}" HorizontalOptions="FillAndExpand"/>
                 </StackLayout>
                 <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
-                <Button Text="{Binding EnterText}" Command="{Binding EnterCommand}" />
+                <Button Text="Save" Command="{Binding EnterCommand}" />
             </StackLayout>
         </ScrollView>
 	</ContentPage.Content>

@@ -23,23 +23,26 @@ namespace OSL
         public string Text { get; set; }
         public string ToolbarText { get; set; }
 
-        private readonly int[] distances = new int[] { 5, 10, 15 };
+        private readonly int[] distances = { 5, 10, 15 };
         private ICollection<Donation> allItems;
 
         public PickupItemsViewModel()
         {
             Items = new ObservableCollection<Donation>();
             LoadItemsCommand = new Command(async (range) => await ExecuteLoadItemsCommand((int?)range));
-            FilterItemsCommand = new Command(() => ExecuteFilterItemsCommand());
-            EnableSearchCommand = new Command(() => EnableSearch());
-            SearchCommand = new Command(() => ExecuteSearchCommand());
+            FilterItemsCommand = new Command(ExecuteFilterItemsCommand);
+            EnableSearchCommand = new Command(EnableSearch);
+            SearchCommand = new Command(ExecuteSearchCommand);
             SearchEnabled = false;
             allItems = new List<Donation>();
             ToolbarText = "Search";
 
-            MessagingCenter.Subscribe<PickupItemDetailPage, Donation>(this, "ItemAccepted", (sender, item) =>{
-                allItems.Remove(item);
-            });
+            MessagingCenter.Subscribe<PickupItemDetailViewModel, Donation>(this, "ItemAccepted", OnItemAccepted);
+        }
+
+        // Remove item from future search results
+        private void OnItemAccepted(PickupItemDetailViewModel sender, Donation item) {
+            allItems.Remove(item);
         }
 
         private void EnableSearch()
@@ -129,14 +132,14 @@ namespace OSL
             }
             else
             {
-                geolocationFailureToast();
+                GeolocationFailureToast();
                 return await DataStore.GetFilteredItemsAsync(range, null, null);
             }
         }
 
-        void geolocationFailureToast()
+        void GeolocationFailureToast()
         {
-            var message = "Unable to get your location. Using organization address instead";
+            var message = "Unable to get your current location.";
             var toastConfig = new ToastConfig(message);
             toastConfig.Duration = TimeSpan.FromSeconds(10);
 

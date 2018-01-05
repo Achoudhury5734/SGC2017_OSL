@@ -15,7 +15,6 @@ namespace OSL.ViewModels
         private readonly DonationRepository donationRep;
 
         public string PageTitle { get; set; }
-        public string EnterText { get; set; }
         public Command EnterCommand { get; }
         public Command TakePictureCommand { get; }
         public Page Page;
@@ -26,8 +25,7 @@ namespace OSL.ViewModels
         {
             donationRep = new DonationRepository();
             PageTitle = "Edit Item";
-            EnterText = "Relist";
-            EnterCommand = new Command(async () => await ExecuteRelistCommand(donation.Id), () => !IsBusy);
+            EnterCommand = new Command(async () => await ExecuteRelistCommand(), () => !IsBusy);
             TakePictureCommand = new Command(async () => await ExecuteTakePicture());
 
             ImageSource = donation.PictureUrl;
@@ -35,7 +33,7 @@ namespace OSL.ViewModels
             Quantity = donation.Amount;
             DonationType = donation.Type.ToString();
 
-            var expiration = getExpiration(donation.Expiration.Value);
+            var expiration = GetExpiration(donation.Expiration.Value);
             ExpirationDate = expiration.Date;
             ExpirationTime = new TimeSpan(expiration.Hour, expiration.Minute, expiration.Second);
 
@@ -49,7 +47,7 @@ namespace OSL.ViewModels
         public DateTime ExpirationDate { get; set; }
         public TimeSpan ExpirationTime { get; set; }
 
-        private DateTime getExpiration(DateTime oldExpiration) {
+        private DateTime GetExpiration(DateTime oldExpiration) {
             DateTime expiration;
             if (oldExpiration < DateTime.Now)
             {
@@ -63,7 +61,7 @@ namespace OSL.ViewModels
             return expiration;
         }
 
-        private async Task ExecuteRelistCommand(int id)
+        private async Task ExecuteRelistCommand()
         {
             DonationCapture capture = new DonationCapture()
             {
@@ -128,14 +126,6 @@ namespace OSL.ViewModels
             });
             OnPropertyChanged("ImageSource");
             return;
-        }
-
-        private void ShowFailureDialog(string message)
-        {
-            var alertConfig = new AlertConfig();
-            alertConfig.Title = message;
-            alertConfig.Message = "Please try again later.";
-            UserDialogs.Instance.Alert(alertConfig);
         }
     }
 }

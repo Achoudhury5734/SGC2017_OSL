@@ -68,7 +68,7 @@ namespace OSL.ViewModels
                 yearWasted = userStats[(int)DonationStatus.Wasted];
                 OnPropertyChanged("YearWasted");
 
-                Model = generatePlotModel();
+                Model = GeneratePlotModel();
                 OnPropertyChanged("Model");
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace OSL.ViewModels
             }
         }
 
-        private PlotModel generatePlotModel()
+        private PlotModel GeneratePlotModel()
         {
             var model = new PlotModel
             {
@@ -131,7 +131,7 @@ namespace OSL.ViewModels
                 {
                     yearWasted += amount.Value;
                     OnPropertyChanged("YearWasted");
-                    Model = generatePlotModel();
+                    Model = GeneratePlotModel();
                     OnPropertyChanged("Model");
                 }
             }

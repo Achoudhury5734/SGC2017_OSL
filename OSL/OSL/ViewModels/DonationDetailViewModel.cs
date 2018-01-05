@@ -13,6 +13,13 @@ namespace OSL.ViewModels
     {
         DonationRepository donationRepository;
 
+        public Donation Item { get; set; }
+
+        public Command OpenDialerCommand { get; }
+        public Command CompleteCommand { get; }
+        public Command WasteCommand { get; }
+        public Command RelistCommand { get; }
+
         public DonationDetailViewModel(Donation item)
         {
             Title = item?.Title;
@@ -20,18 +27,31 @@ namespace OSL.ViewModels
 
             donationRepository = new DonationRepository();
 
-            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation(item.Status));
-            WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation(item.Status));
-            RelistCommand = new Command(async () => await RelistDonationAsync(item), () => CanRelistDonation(item.Status));
-            OpenDialerCommand = new Command(() => ExecuteOpenDialer());
-            OptionsCommand = new Command(() => ExecuteOptions());
-
+            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation);
+            WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation);
+            RelistCommand = new Command(async () => await RelistDonationAsync(item), () => CanRelistDonation);
+            OpenDialerCommand = new Command(ExecuteOpenDialer);
         }
-        public Donation Item { get; set; }
+
+        // For XAML formatting
         public bool HasRecipient { get { return Item.Recipient != null; } }
         public bool HasNoRecipient { get { return Item.Recipient == null; }}
-        public Command OpenDialerCommand { get; }
-        public Command OptionsCommand { get; }
+        public bool ShowEditButton { get { return Item.Status == DonationStatus.Listed; } }
+        public bool ShowRelistButton
+        {
+            get
+            {
+                return Item.Status != DonationStatus.Listed && Item.Status != DonationStatus.Completed;
+            }
+        }
+
+        public bool HasImage
+        {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(Item.PictureUrl) && !String.Equals(Item.PictureUrl, "Empty");
+            }
+        }
 
         private void ExecuteOpenDialer()
         {
@@ -42,25 +62,29 @@ namespace OSL.ViewModels
                 UserDialogs.Instance.Alert("Unable to Make Calls");
         }
 
-        public bool HasImage { 
-            get 
-            {
-                return !String.IsNullOrWhiteSpace(Item.PictureUrl) && !String.Equals(Item.PictureUrl, "Empty");
-            }
-        }
-
         private async Task CompleteDonationAsync(int donationId)
         {
-            await donationRepository.CompleteDonationAsync(donationId);
-            MessagingCenter.Send(this, "StatusChanged", Item);
-            await Page.Navigation.PopAsync();
+            var res = await donationRepository.CompleteDonationAsync(donationId);
+            if (res)
+            {
+                MessagingCenter.Send(this, "StatusChanged", Item);
+                await Page.Navigation.PopAsync();
+            }
+            else
+            {
+                ShowFailureDialog("Unable to Complete Donation");
+            }
         }
 
         private async Task WasteDonationAsync(int donationId)
         {
-            await donationRepository.WasteDonationAsync(donationId);
-            MessagingCenter.Send(this, "StatusChanged", Item);
-            await Page.Navigation.PopAsync();
+            var res = await donationRepository.WasteDonationAsync(donationId);
+            if (res) {
+                MessagingCenter.Send(this, "StatusChanged", Item);
+                await Page.Navigation.PopAsync();
+            } else {
+                ShowFailureDialog("Unable to Waste Donation");
+            }
         }
 
         private async Task RelistDonationAsync(Donation donation)
@@ -75,32 +99,14 @@ namespace OSL.ViewModels
             set { SetProperty(ref page, value); }
         }
 
-        public Command CompleteCommand { get; set; }
-        public Command WasteCommand { get; set; }
-        public Command RelistCommand { get; set; }
-
-        private bool CanCompleteDonation(DonationStatus status)
+        public bool CanCompleteDonation { get { return Item.Status == DonationStatus.PendingPickup; } }
+        public bool CanRelistDonation { get { return Item.Status != DonationStatus.Completed; } }
+        public bool CanWasteDonation
         {
-            return status == DonationStatus.PendingPickup;
-        }
-
-        private bool CanWasteDonation(DonationStatus status)
-        {
-            return status != DonationStatus.Wasted && status != DonationStatus.Completed; 
-        }
-
-        private bool CanRelistDonation(DonationStatus status)
-        {
-            return status != DonationStatus.Completed;
-        }
-
-        void ExecuteOptions()
-        {
-            var actionConfig = new ActionSheetConfig();
-            actionConfig.Title = "Additional Options";
-            actionConfig.Add("Contact Recipient", () => ExecuteOpenDialer());
-            actionConfig.SetCancel();
-            UserDialogs.Instance.ActionSheet(actionConfig);
+            get
+            {
+                return Item.Status != DonationStatus.Wasted && Item.Status != DonationStatus.Completed;
+            }
         }
     }
 }

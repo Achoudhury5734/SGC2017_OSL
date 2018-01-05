@@ -18,8 +18,7 @@ namespace OSL.ViewModels
         public DonationViewModel()
         {
             PageTitle = "New Item";
-            EnterText = "Save";
-            EnterCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
+            EnterCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy && App.User.Verified);
             TakePictureCommand = new Command(async () => await TakePictureAsync());
 
             ExpirationDate = DateTime.Now;
@@ -84,7 +83,6 @@ namespace OSL.ViewModels
         }
 
         public string PageTitle { get; set; }
-        public string EnterText { get; set; }
         public Command EnterCommand { get; }
         public ICommand TakePictureCommand { get; }
 

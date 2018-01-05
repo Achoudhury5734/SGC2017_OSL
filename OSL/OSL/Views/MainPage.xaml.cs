@@ -28,8 +28,6 @@ namespace OSL.Views
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-
             if (loggingOut) {
                 OnClickLogout(null, null);
                 return;

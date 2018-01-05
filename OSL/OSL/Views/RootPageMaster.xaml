@@ -26,15 +26,7 @@
           </Grid.RowDefinitions>
             <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,0,0,0" VerticalOptions="FillAndExpand">
-                    <Image VerticalOptions="Center" HeightRequest="125">
-                        <Image.Source>
-                            <OnPlatform x:TypeArguments="ImageSource">
-                                <On Platform="iOS" Value="osl_feature.png" />
-                                <On Platform="Android" Value="osl_feature.png" />
-                                <On Platform="UWP" Value="Assets\osl_logo.png" />
-                            </OnPlatform>
-                        </Image.Source>
-                    </Image>
+                    <Image VerticalOptions="Center" HeightRequest="125" Source="osl_feature"/>
                 </ContentView>
             </StackLayout>
         </Grid>

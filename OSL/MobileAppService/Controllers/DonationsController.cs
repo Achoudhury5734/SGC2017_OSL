@@ -467,8 +467,8 @@ namespace OSL.MobileAppService.Controllers
             }
             else
             {
-                // If database update failed delete new image upload, since reference will be to old
-                if (originalDonation.PictureUrl != null)
+                // If database update failed delete new image upload (if any), since reference will be to old
+                if (originalDonation.PictureUrl != null && donation.Image != null)
                     await imageService.DeleteImageAsync(originalDonation.PictureUrl);
                 return BadRequest();
             }
