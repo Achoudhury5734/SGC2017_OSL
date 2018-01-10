@@ -7,11 +7,11 @@ using Xamarin.Forms;
 
 namespace OSL.ViewModels
 {
-    public class AcceptedDetailViewModel: ViewModelBase
+    public class AcceptedDetailViewModel: RecipientDetailBase
     {
-        public Donation Item { get; set; }
-        public Command CancelCommand { get; set; }
+        public Command OptionsCommand { get; }
         public Page Page { get; set; }
+        public bool HasImage { get; set; }
 
         DonationRepository donationRep;
 
@@ -21,34 +21,29 @@ namespace OSL.ViewModels
             Item = item;
 
             donationRep = new DonationRepository();
+            OptionsCommand = new Command(ExecuteOptionsCommand);
 
-            CancelCommand = new Command(async () => await ExecuteCancelCommand(),() => CanCancel());
+            if (String.IsNullOrWhiteSpace(item.PictureUrl) || String.Equals(item.PictureUrl, "Empty"))
+            {
+                item.PictureUrl = null;
+                HasImage = false;
+            }
+            else
+            {
+                HasImage = true;
+            }
         }
 
-        public string Address
+        void ExecuteOptionsCommand()
         {
-            get
-            {
-                if (!String.IsNullOrWhiteSpace(Item.Donor.Organization_Address_Line2))
-                {
-                    return string.Format("{0}\n{1}\n{2}, {3} {4}",
-                                         Item.Donor.Organization_Address_Line1,
-                                         Item.Donor.Organization_Address_Line2,
-                                         Item.Donor.Organization_City,
-                                         Item.Donor.Organization_State,
-                                         Item.Donor.Organization_PostalCode
-                                        );
-                }
-                else
-                {
-                    return string.Format("{0}\n{1}, {2} {3}",
-                                         Item.Donor.Organization_Address_Line1,
-                                         Item.Donor.Organization_City,
-                                         Item.Donor.Organization_State,
-                                         Item.Donor.Organization_PostalCode
-                                        );
-                }
-            }
+            var actionConfig = new ActionSheetConfig();
+            actionConfig.Add("Contact Donor", ExecuteOpenDialer);
+            actionConfig.Add("View in Maps", async () => await ExecuteOpenMaps());
+            if (Item.Status != DonationStatus.Completed)
+                actionConfig.Add("Cancel Pickup", (async () => await ExecuteCancelCommand()));
+            actionConfig.SetCancel("Close");
+
+            UserDialogs.Instance.ActionSheet(actionConfig);
         }
 
         private async Task ExecuteCancelCommand()
@@ -56,13 +51,11 @@ namespace OSL.ViewModels
             var res = await donationRep.CancelDonationAsync(Item.Id);
             if (!res)
             {
-                var alertConfig = new AlertConfig();
-                alertConfig.Title = "Unable to Cancel Donation";
-                alertConfig.Message = "Please try again later.";
-                await UserDialogs.Instance.AlertAsync(alertConfig);
+                ShowFailureDialog("Unable to Cancel Pickup");
             }
             else
             {
+                MessagingCenter.Send(this, "PickupCancelled", Item);
                 await Page.Navigation.PopAsync();
             }
         }

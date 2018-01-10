@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.PickupItemDetailPage"
              xmlns:local="clr-namespace:OSL.Helpers"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -11,9 +12,11 @@
     </ContentPage.Resources>
 	<StackLayout Spacing="10" Padding="10" Orientation="Vertical">
         <ScrollView>
-            <StackLayout Spacing="5" HorizontalOptions="FillAndExpand"
-                    WidthRequest="1000">
-                <Image Source="{Binding Item.PictureUrl}" />
+            <StackLayout Spacing="5" HorizontalOptions="FillAndExpand">
+                <ffimageloading:CachedImage Aspect="AspectFit"
+                    DownsampleToViewSize="true" DownsampleWidth="600"
+                    Source = "{Binding Item.PictureUrl}">
+                </ffimageloading:CachedImage>
 
                 <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>
                 <Label Text="{Binding Item.Title}" Margin="20,0,0,0"/>
@@ -23,18 +26,15 @@
                        TextColor="{Binding Item.Expiration, Converter={StaticResource colorConverter}}"/>
 
                 <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
-                <Label Text="{Binding Item.Donor.PersonName, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.PhoneNumber, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
-
+                <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Item.Donor.Phone_Number, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
+                
                 <Label Text="Organization: " FontAttributes="Bold" Margin="10,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationName}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationAddressLine1}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationAddressLine2}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationPostalCode}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationCity}" Margin="20,0,0,0"/>
-                <Label Text="{Binding Item.Donor.OrganizationState}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Item.Donor.Organization_Name}" Margin="20,0,0,0"/>
+                <Label Text="{Binding Address}" Margin="20,0,0,0"/>
 
-                <Button Text="Accept" x:Name="Accept"/>
+                <Button Text="Accept Item" Command="{Binding AcceptCommand}"/>
+                <Button Text="More Options" Command="{Binding OptionsCommand}"/>
             </StackLayout>
         </ScrollView>
     </StackLayout>

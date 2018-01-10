@@ -3,7 +3,7 @@
     <ContentPage.Content>
         <StackLayout>
             <BoxView Color="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-            <Label Text="Second Helping" FontSize="40" TextColor="Black" HorizontalTextAlignment="Center" />
+            <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source="osl_feature.png"/>
             <BoxView Color="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnLogin" Text="Log in" Clicked="OnClickSignup" IsVisible="false" VerticalOptions="End" HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnSignup" Text="Signup" Clicked="OnClickSignup" IsVisible="false" VerticalOptions="End" HorizontalOptions="FillAndExpand" />

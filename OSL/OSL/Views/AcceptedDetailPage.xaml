@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="using:OSL.ViewModels"
              xmlns:local="clr-namespace:OSL.Helpers"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="OSL.Views.AcceptedDetailPage"
              Title="{Binding Title}">
      <ContentPage.Resources>
@@ -10,27 +11,44 @@
             <local:ExpirationColorConverter x:Key="colorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Options" Command="{Binding OptionsCommand}"/>
+    </ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <ScrollView>
-        <StackLayout>
-            <Image Source="{Binding Item.PictureUrl}" />
-                
-            <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>
-            <Label Text="{Binding Item.Amount, StringFormat='Amount: {0} lbs'}" Margin="20,0,0,0"/>
-            <Label Text="{Binding Item.Type, StringFormat='Type: {0}'}" Margin="20,0,0,0"/>
-            <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,0,0"
-                   TextColor="{Binding Item, Converter={StaticResource colorConverter}}"/>
+        <Grid Padding="5,5,5,20" VerticalOptions="Fill">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>    
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
-            <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,0,0"/>
-            <Label Text="{Binding Item.Donor.Phone_Number, StringFormat='Phone: {0}'}" Margin="20,0,0,0"/>
-                
-            <Label Text="Organization: " FontAttributes="Bold" Margin="10,0,0,0"/>    
-            <Label Text="{Binding Item.Donor.Organization_Name}" Margin="20,0,0,0"/>
-            <Label Text="{Binding Address}" Margin="20,0,0,0"/>
-            
-            <Button Text="Cancel" Command="{Binding CancelCommand}"/>
-        </StackLayout>
+            <ffimageloading:CachedImage Aspect="AspectFit" Grid.Row="0"
+                DownsampleToViewSize="true" DownsampleHeight="300" HeightRequest="275" 
+                Source = "{Binding Item.PictureUrl}" IsVisible="{Binding HasImage}">
+            </ffimageloading:CachedImage>
+
+            <StackLayout VerticalOptions="FillAndExpand" Grid.Row="1">        
+                <Label Text="Item: " FontAttributes="Bold" Margin="10,0,0,0"/>
+                <Label Text="{Binding Item.Amount, StringFormat='Amount: {0} lbs'}" Margin="20,0,10,0"/>
+                <Label Text="{Binding Item.Type, StringFormat='Type: {0}'}" Margin="20,0,10,0"/>
+                <Label Text="{Binding Item.Created, StringFormat='Posted: {0}'}" Margin="20,0,10,0"/>
+                <Label Text="{Binding Item.Expiration, StringFormat='Expiration: {0}'}" Margin="20,0,10,0"
+                       TextColor="{Binding Item, Converter={StaticResource colorConverter}}"/>
+
+                <Label Text="Donor: " FontAttributes="Bold" Margin="10,0,0,0"/>
+                <Label Text="{Binding Item.Donor.Person_Name, StringFormat='Name: {0}'}" Margin="20,0,10,0"/>
+                <Label Text="{Binding Item.Donor.Phone_Number, StringFormat='Phone: {0}'}" Margin="20,0,10,0"/>
+                    
+                <Label Text="Organization: " FontAttributes="Bold" Margin="10,0,10,0"/>    
+                <Label Text="{Binding Item.Donor.Organization_Name}" Margin="20,0,10,0"/>
+                <Label Text="{Binding Address}" Margin="20,0,0,0"/>
+            </StackLayout>
+            <Button Text="Options" Grid.Row="2" Command="{Binding OptionsCommand}" VerticalOptions="End"/>
+        </Grid>
         </ScrollView>
 	</ContentPage.Content>
 </ContentPage>

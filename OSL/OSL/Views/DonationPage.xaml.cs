@@ -1,14 +1,14 @@
 ﻿using System;
 using Xamarin.Forms;
 using OSL.ViewModels;
+using OSL.Models;
+using Xamarin.Forms.Xaml;
 
 namespace OSL.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DonationPage : ContentPage
     {
-        private int? donationId;
-        private RelistViewModel viewModel;
-
         public DonationPage()
         {
             InitializeComponent();
@@ -18,19 +18,9 @@ namespace OSL.Views
             };
         }
 
-        public DonationPage(int id)
-        {
+        public DonationPage(Donation donation) {
             InitializeComponent();
-            donationId = id;
-            viewModel = new RelistViewModel(id) {Page = this};
-            this.BindingContext = viewModel;
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            if (donationId.HasValue)
-                viewModel.LoadDonationCommand.Execute(donationId.Value);
+            this.BindingContext = new RelistViewModel(donation) { Page = this };
         }
     }
 }

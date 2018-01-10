@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using OSL.Models;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
@@ -12,25 +14,41 @@ namespace OSL
 {
     public class PickupItemsViewModel : ViewModelBase
     {
-        public ObservableCollection<PickupItem> Items { get; set; }
+        public ObservableCollection<Donation> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
         public Command FilterItemsCommand { get; set; }
+        public Command SearchCommand { get; set; }
+        public bool SearchEnabled { get; set; }
+        public Command EnableSearchCommand { get; set; } 
+        public string Text { get; set; }
+        public string ToolbarText { get; set; }
 
-        private readonly int[] distances = new int[] { 5, 10, 15 };
+        private readonly int[] distances = { 5, 10, 15 };
+        private ICollection<Donation> allItems;
 
         public PickupItemsViewModel()
         {
-            Title = "Browse";
-            Items = new ObservableCollection<PickupItem>();
+            Items = new ObservableCollection<Donation>();
             LoadItemsCommand = new Command(async (range) => await ExecuteLoadItemsCommand((int?)range));
-            FilterItemsCommand = new Command(() => ExecuteFilterItemsCommand());
+            FilterItemsCommand = new Command(ExecuteFilterItemsCommand);
+            EnableSearchCommand = new Command(EnableSearch);
+            SearchCommand = new Command(ExecuteSearchCommand);
+            SearchEnabled = false;
+            allItems = new List<Donation>();
+            ToolbarText = "Search";
 
-            MessagingCenter.Subscribe<NewPickupItemPage, PickupItem>(this, "AddItem", async (obj, item) =>
-            {
-                var _item = item as PickupItem;
-                Items.Add(_item);
-                await DataStore.AddPickupItemAsync(_item);
-            });
+            MessagingCenter.Subscribe<PickupItemDetailViewModel, Donation>(this, "ItemAccepted", OnItemAccepted);
+        }
+
+        // Remove item from future search results
+        private void OnItemAccepted(PickupItemDetailViewModel sender, Donation item) {
+            allItems.Remove(item);
+        }
+
+        private void EnableSearch()
+        {
+            SearchEnabled = !SearchEnabled;
+            OnPropertyChanged("SearchEnabled");
         }
 
         // null range for all
@@ -44,7 +62,7 @@ namespace OSL
             try
             {
                 Items.Clear();
-                IEnumerable<PickupItem> items;
+                IEnumerable<Donation> items;
 
                 if (range == null)
                     items = await DataStore.GetPickupItemsAsync(true);
@@ -54,6 +72,45 @@ namespace OSL
                 foreach (var item in items)
                 {
                     Items.Add(item);
+                }
+                allItems = Items.ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        void ExecuteSearchCommand()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
+            try
+            {
+                Items.Clear();
+                if (!String.IsNullOrEmpty(Text))
+                {
+                    var searched = Text.ToLower();
+                    var items = allItems.Where(item => item.Title.ToLower().Contains(searched) ||
+                                        item.Donor.Person_Name.ToLower().Contains(searched) ||
+                                        item.Donor.Organization_Name.ToLower().Contains(searched));
+
+                    foreach (var item in items)
+                    {
+                        Items.Add(item);
+                    }
+                } else {
+                    foreach (var item in allItems) 
+                    {
+                        Items.Add(item);
+                    }
                 }
             }
             catch (Exception ex)
@@ -66,7 +123,7 @@ namespace OSL
             }
         }
 
-        async Task<IEnumerable<PickupItem>> GetItemsWithinRange(int range)
+        async Task<IEnumerable<Donation>> GetItemsWithinRange(int range)
         {
             var location = await GetCurrentLocation();
             if (location != null)
@@ -75,14 +132,14 @@ namespace OSL
             }
             else
             {
-                geolocationFailureToast();
+                GeolocationFailureToast();
                 return await DataStore.GetFilteredItemsAsync(range, null, null);
             }
         }
 
-        void geolocationFailureToast()
+        void GeolocationFailureToast()
         {
-            var message = "Unable to get your location. Using organization address instead";
+            var message = "Unable to get your current location.";
             var toastConfig = new ToastConfig(message);
             toastConfig.Duration = TimeSpan.FromSeconds(10);
 
@@ -92,7 +149,7 @@ namespace OSL
         void ExecuteFilterItemsCommand()
         {
             var actionConfig = new ActionSheetConfig();
-            actionConfig.Title = "Filter Items By Distance";
+            actionConfig.Title = "Distance:";
 
             foreach (int distance in distances)
             {

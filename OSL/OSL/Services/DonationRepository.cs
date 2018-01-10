@@ -13,15 +13,15 @@ namespace OSL.Services
 {
     public class DonationRepository
     {
-        public async Task<IEnumerable<Donation>> GetDonationsByUserAsync()
+        public async Task<IEnumerable<Donation>> GetDonationsByDonorAsync(DonationStatus status)
         {
-            var json = await App.ApiClient.GetStringAsync("api/donations/donor/me");
+            var json = await App.ApiClient.GetStringAsync($"api/donations/donor/me/status/{status}");
             return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
-        public async Task<IEnumerable<Donation>> GetDonationsByRecipientAsync()
+        public async Task<IEnumerable<Donation>> GetDonationsByRecipientAsync(DonationStatus status)
         {
-            var json = await App.ApiClient.GetStringAsync("api/donations/recipient/me");
+            var json = await App.ApiClient.GetStringAsync($"api/donations/recipient/me/status/{status}");
             return JsonConvert.DeserializeObject<IEnumerable<Donation>>(json);
         }
 
@@ -78,12 +78,6 @@ namespace OSL.Services
             var content = new StringContent(JsonConvert.SerializeObject(capture), Encoding.UTF8, "application/json");
             var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/relist", content);
             return response.IsSuccessStatusCode;
-        }
-
-        public async Task<Donation> GetDonationAsync(int donationId)
-        {
-            var json = await App.ApiClient.GetStringAsync($"api/donations/{donationId}");
-            return JsonConvert.DeserializeObject<Donation>(json);
         }
 
         public static byte[] ReadFully(Stream input)

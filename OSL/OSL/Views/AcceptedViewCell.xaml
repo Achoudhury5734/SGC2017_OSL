@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:help="clr-namespace:OSL.Helpers"
+    x:Class="OSL.Views.AcceptedViewCell">
+    <Grid Padding="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions> 
+        <ffimageloading:CachedImage HorizontalOptions="FillAndExpand" x:Name="cachedImage"
+                         Aspect="AspectFill" WidthRequest="150"
+                         DownsampleToViewSize="true" Grid.Column="0">
+        </ffimageloading:CachedImage>
+
+        <StackLayout Orientation="Vertical" WidthRequest="150" HorizontalOptions="FillAndExpand" Grid.Column="1" Margin="5,0,0,0">
+            <StackLayout.Resources>
+                <ResourceDictionary>
+                    <help:ExpirationColorConverter x:Key="colorConverter"/>
+                </ResourceDictionary>
+            </StackLayout.Resources>
+            <Label Text="{Binding Title}" LineBreakMode="WordWrap" 
+                   Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+            <Label Text="{Binding Expiration, StringFormat='Expires: {0}'}" FontSize="10"
+                   LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}"
+                   TextColor="{Binding Path=., Converter={StaticResource colorConverter}}"/>
+            <Label Text="{Binding Donor.Person_Name, StringFormat='Donor: {0}'}" LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10"/>
+            <Label Text="{Binding Donor.Organization_Name, StringFormat='Organization: {0}'}" LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10"/>
+        </StackLayout>
+    </Grid>
+</ViewCell>

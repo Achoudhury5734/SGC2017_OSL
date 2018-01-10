@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:help="clr-namespace:OSL.Helpers"
+    x:Class="OSL.Views.DonorViewCell">
+	<StackLayout Padding="5" Orientation="Horizontal">
+        <ffimageloading:CachedImage HorizontalOptions="FillAndExpand" x:Name="cachedImage"
+                         Aspect="AspectFill" WidthRequest="150" HeightRequest="150"
+                        DownsampleToViewSize="true">
+        </ffimageloading:CachedImage>
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" WidthRequest="150" Margin="5,0,0,0">
+            <StackLayout.Resources>
+                <ResourceDictionary>
+                    <help:ExpirationColorConverter x:Key="colorConverter"/>
+                </ResourceDictionary>
+            </StackLayout.Resources>
+            <Label Text="{Binding Title}" LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+
+            <Label Text="{Binding Type, StringFormat='Type: {0}'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
+            <Label Text="{Binding Amount, StringFormat='Amount: {0} lbs'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
+            <Label Text="{Binding Expiration, StringFormat='Expires: {0}'}" LineBreakMode="NoWrap" 
+                   Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" 
+                   TextColor="{Binding Path=., Converter={StaticResource colorConverter}}"/>
+            <Label Text="{Binding Recipient.Person_Name, StringFormat='Recipient: {0}'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
+            <Label Text="{Binding Recipient.Phone_Number, StringFormat='Phone: {0}'}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
+        </StackLayout>
+    </StackLayout>
+</ViewCell>

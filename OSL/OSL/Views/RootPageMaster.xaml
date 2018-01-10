@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OSL.Views.RootPageMaster"
              Title="Menu">
+    <ContentPage.Icon>
+        <OnPlatform x:TypeArguments="FileImageSource" iOS="icons8_menu"/>
+    </ContentPage.Icon>
   <StackLayout>
     <ListView x:Name="MenuItemsListView"
               SeparatorVisibility="None"
@@ -10,6 +13,7 @@
               ItemsSource="{Binding MenuItems}">
       <ListView.Header>
           <Grid BackgroundColor="#3aafab">
+             
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
@@ -17,28 +21,14 @@
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="80"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
           </Grid.RowDefinitions>
-                    <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                        <ContentView Padding="0,0,0,0" VerticalOptions="FillAndExpand">
-                            <Image VerticalOptions="Center" HeightRequest="64">
-                                <Image.Source>
-                                    <OnPlatform x:TypeArguments="ImageSource">
-                                        <On Platform="iOS" Value="osl_logo.png" />
-                                        <On Platform="Android" Value="osl_logo.png" />
-                                        <On Platform="UWP" Value="Assets\osl_logo.png" />
-                                    </OnPlatform>
-                                </Image.Source>
-                            </Image>
-                        </ContentView>
-                    </StackLayout>
-                    <Label
-              Grid.Column="1"
-              Grid.Row="2"
-              Text="Second Helping"
-              Style="{DynamicResource SubtitleStyle}"/>
+            <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                <ContentView Padding="0,0,0,0" VerticalOptions="FillAndExpand">
+                    <Image VerticalOptions="Center" HeightRequest="125" Source="osl_feature"/>
+                </ContentView>
+            </StackLayout>
         </Grid>
       </ListView.Header>
       <ListView.ItemTemplate>
@@ -48,7 +38,7 @@
               <Label VerticalOptions="FillAndExpand" 
                     VerticalTextAlignment="Center" 
                     Text="{Binding Title}" 
-                    FontSize="24"/>
+                    FontSize="20"/>
             </StackLayout>
           </ViewCell>
         </DataTemplate>

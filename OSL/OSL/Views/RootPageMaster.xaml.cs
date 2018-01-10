@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -36,7 +32,7 @@ namespace OSL.Views
                     MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
                     {
                         new RootPageMenuItem { Id = 0, Title = "Available", TargetType=typeof(PickupItemsPage) },
-                        new RootPageMenuItem { Id = 1, Title="Accepted", TargetType=typeof(AcceptedItemsPage)},
+                        new RootPageMenuItem { Id = 1, Title = "Accepted", TargetType=typeof(AcceptedTabPage)},
                         new RootPageMenuItem { Id = 2, Title = "Logout", TargetType=typeof(MainPage) },
                         new RootPageMenuItem { Id = 3, Title = ""},
                         new RootPageMenuItem { Id = 4, Title = ""},
@@ -50,7 +46,7 @@ namespace OSL.Views
                     MenuItems = new ObservableCollection<RootPageMenuItem>(new[]
                     {
                         new RootPageMenuItem { Id = 0, Title = "Donate", TargetType=typeof(DonationPage) },
-                        new RootPageMenuItem { Id = 1, Title = "My Donations", TargetType=typeof(DonationListPage) },
+                        new RootPageMenuItem { Id = 1, Title = "My Donations", TargetType=typeof(DonationTabPage) },
                         new RootPageMenuItem { Id = 2, Title = "YTD Tally", TargetType=typeof(YTDTallyPage) },
                         new RootPageMenuItem { Id = 3, Title = "Logout", TargetType=typeof(MainPage) },
                         new RootPageMenuItem { Id = 4, Title = ""},

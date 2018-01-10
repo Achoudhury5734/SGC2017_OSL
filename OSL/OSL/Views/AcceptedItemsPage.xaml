@@ -1,46 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:OSL.Helpers"
+    xmlns:local="clr-namespace:OSL.Views"
     x:Class="OSL.Views.AcceptedItemsPage"
     Title="{Binding Title}">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:ExpirationColorConverter x:Key="colorConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 	<ContentPage.Content>
         <StackLayout>
             <ListView x:Name="AcceptedItemsListView"
-                      ItemsSource="{Binding GroupedItems}"
+                      ItemsSource="{Binding Items}"
                       VerticalOptions="FillAndExpand"
-                      IsGroupingEnabled="true" GroupDisplayBinding="{Binding Key}"
-                      HasUnevenRows="true"
+                      HasUnevenRows="false"
+                      RowHeight="175"
                       RefreshCommand="{Binding LoadItemsCommand}"
                       IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
                       CachingStrategy="RecycleElement"
                       ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                
-                                <Image Source="{Binding PictureUrl}" WidthRequest="150" Grid.Column="0" 
-                                       Aspect="AspectFill" HorizontalOptions="FillAndExpand"/>
-
-                                <StackLayout Orientation="Vertical" Grid.Column="1" HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding Title}" LineBreakMode="WordWrap" 
-                                           Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                    <Label Text="{Binding Expiration, StringFormat='Expiration: {0}'}" FontSize="10"
-                                           LineBreakMode="WordWrap" Style="{DynamicResource ListItemTextStyle}"
-                                           TextColor="{Binding Path=., Converter={StaticResource colorConverter}}"/>
-                                </StackLayout>
-                            </Grid>
-                        </ViewCell>
+                        <local:AcceptedViewCell/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

@@ -9,9 +9,11 @@ using OSL.Views;
 using OSL.Models;
 using System.Net.Http;
 using System;
+using Xamarin.Forms.Xaml;
 
 namespace OSL
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class App : Application
     {
         public static PublicClientApplication PCA = null;

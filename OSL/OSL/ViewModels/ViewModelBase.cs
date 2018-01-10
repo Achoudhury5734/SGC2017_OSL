@@ -1,16 +1,24 @@
 ﻿using MvvmHelpers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 using Xamarin.Forms;
+using OSL.Models;
+using Acr.UserDialogs;
 
 namespace OSL
 {
     public class ViewModelBase : BaseViewModel
     {
-        public IDataStore<PickupItem> DataStore => DependencyService.Get<IDataStore<PickupItem>>() ?? new MockDataStore();
+        public IDataStore<Donation> DataStore => DependencyService.Get<IDataStore<Donation>>() ?? new MockDataStore();
 
+
+        public void ShowFailureDialog(string title)
+        {
+            var alertConfig = new AlertConfig
+            {
+                Title = title,
+                Message = "Please try again later."
+            };
+            UserDialogs.Instance.Alert(alertConfig);
+        }
     }
 }

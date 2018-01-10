@@ -14,10 +14,20 @@ namespace OSL.Views
 		public DonationListPage()
 		{
 			InitializeComponent();
-            this.BindingContext = viewModel = new DonationListViewModel
+        }
+
+        public DonationListPage(DonationStatus status)
+        {
+            InitializeComponent();
+            this.BindingContext = viewModel = new DonationListViewModel(status)
             {
                 Page = this
             };
+            MessagingCenter.Subscribe<DonationDetailViewModel, Donation>(this, "StatusChanged", OnStatusChanged);
+        }
+
+        private void OnStatusChanged(DonationDetailViewModel sender, Donation item) {
+            viewModel.Items.Remove(item);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -35,7 +45,8 @@ namespace OSL.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            viewModel.LoadItemsCommand.Execute(null);
+            if (viewModel.Items.Count == 0)
+                viewModel.LoadItemsCommand.Execute(null);
         }
     }
 }

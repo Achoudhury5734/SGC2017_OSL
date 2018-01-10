@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Plugin.Media.Abstractions;
 using Acr.UserDialogs;
+using OSL.Models;
 
 namespace OSL.ViewModels
 {
@@ -17,8 +18,7 @@ namespace OSL.ViewModels
         public DonationViewModel()
         {
             PageTitle = "New Item";
-            EnterText = "Save";
-            EnterCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy);
+            EnterCommand = new Command(async () => await SaveDonationAsync(), ()=>!IsBusy && App.User.Verified);
             TakePictureCommand = new Command(async () => await TakePictureAsync());
 
             ExpirationDate = DateTime.Now;
@@ -83,7 +83,6 @@ namespace OSL.ViewModels
         }
 
         public string PageTitle { get; set; }
-        public string EnterText { get; set; }
         public Command EnterCommand { get; }
         public ICommand TakePictureCommand { get; }
 
@@ -102,7 +101,7 @@ namespace OSL.ViewModels
             EnterCommand.ChangeCanExecute();
 
             if (res)
-                await page.Navigation.PushAsync(new DonationListPage());
+                App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage())};
             else
                 UserDialogs.Instance.Alert("Please check all of your entries.", "Unable to process your request");
         }
