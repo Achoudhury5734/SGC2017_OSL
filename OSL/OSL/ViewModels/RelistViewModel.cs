@@ -25,7 +25,7 @@ namespace OSL.ViewModels
         {
             donationRep = new DonationRepository();
             PageTitle = "Edit Item";
-            EnterCommand = new Command(async () => await ExecuteRelistCommand(), () => !IsBusy);
+            EnterCommand = new Command(async () => await ExecuteEditCommand(), () => !IsBusy);
             TakePictureCommand = new Command(async () => await ExecuteTakePicture());
 
             ImageSource = donation.PictureUrl;
@@ -61,7 +61,7 @@ namespace OSL.ViewModels
             return expiration;
         }
 
-        private async Task ExecuteRelistCommand()
+        private async Task ExecuteEditCommand()
         {
             DonationCapture capture = new DonationCapture()
             {
@@ -70,33 +70,19 @@ namespace OSL.ViewModels
                 Amount = Quantity,
                 Expiration = ExpirationDate.Add(ExpirationTime)
             };
-            var okToProceed = await CheckRemoveRecipient();
-            if (okToProceed)
-            {
-                IsBusy = true;
-                EnterCommand.ChangeCanExecute();
-                var res = await donationRep.RelistDonationAsync(capture, donation.Id, mediaFile);
-                IsBusy = false;
-                EnterCommand.ChangeCanExecute();
+            bool relisting = donation.Status == DonationStatus.Wasted;
+            IsBusy = true;
+            EnterCommand.ChangeCanExecute();
+            var res = await donationRep.EditDonationAsync(capture, donation.Id, mediaFile, relisting);
+            IsBusy = false;
+            EnterCommand.ChangeCanExecute();
 
-                if (!res)
-                    ShowFailureDialog("Unable to Relist");
-                else
-                    App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage()) };
-            }
-        }
-
-        private async Task<bool> CheckRemoveRecipient() {
-            var res = true;
-            if (donation.Recipient != null) {
-                var confirmConfig = new ConfirmConfig();
-                confirmConfig.CancelText = "Cancel";
-                confirmConfig.OkText = "Relist anyway";
-                confirmConfig.Message = "This donation has been accepted. If you relist the recipient will be removed.";
-                confirmConfig.Title = "Warning";
-                res = await UserDialogs.Instance.ConfirmAsync(confirmConfig);
-            }
-            return res;
+            if (!res)
+                ShowFailureDialog("Unable to Edit");
+            else if (relisting)
+                App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage()) };
+            else
+                App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage(donation.Status)) };
         }
 
         private MediaFile mediaFile;

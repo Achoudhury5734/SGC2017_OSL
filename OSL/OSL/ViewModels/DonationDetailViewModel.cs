@@ -18,7 +18,8 @@ namespace OSL.ViewModels
         public Command OpenDialerCommand { get; }
         public Command CompleteCommand { get; }
         public Command WasteCommand { get; }
-        public Command RelistCommand { get; }
+        public Command EditCommand { get; }
+        public Command RemoveCommand { get; }
 
         public DonationDetailViewModel(Donation item)
         {
@@ -29,20 +30,21 @@ namespace OSL.ViewModels
 
             CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation);
             WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation);
-            RelistCommand = new Command(async () => await RelistDonationAsync(item), () => CanRelistDonation);
+            EditCommand = new Command(async () => await EditDonationAsync(item), () => CanEditDonation);
+            RemoveCommand = new Command(async () => await RemoveRecipientAsync(item.Id), () => CanRemoveRecipient);
             OpenDialerCommand = new Command(ExecuteOpenDialer);
         }
 
         // For XAML formatting
         public bool HasRecipient { get { return Item.Recipient != null; } }
         public bool HasNoRecipient { get { return Item.Recipient == null; }}
-        public bool ShowEditButton { get { return Item.Status == DonationStatus.Listed; } }
-        public bool ShowRelistButton
-        {
-            get
+        public bool ShowRelistButton { get { return Item.Status == DonationStatus.Wasted; } }
+        public bool ShowEditButton 
+        { 
+            get 
             {
-                return Item.Status != DonationStatus.Listed && Item.Status != DonationStatus.Completed;
-            }
+                return Item.Status == DonationStatus.Listed || Item.Status == DonationStatus.PendingPickup; 
+            } 
         }
 
         public bool HasImage
@@ -87,7 +89,38 @@ namespace OSL.ViewModels
             }
         }
 
-        private async Task RelistDonationAsync(Donation donation)
+        private async Task RemoveRecipientAsync(int donationId)
+        {
+            var confirmed = await CheckRemoveRecipient();
+            if (confirmed)
+            {
+                var res = await donationRepository.RemoveRecipientAsync(donationId);
+                if (res)
+                {
+                    MessagingCenter.Send(this, "StatusChanged", Item);
+                    //App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage()) };
+                    await Page.Navigation.PopAsync();
+                }
+                else
+                {
+                    ShowFailureDialog("Unable to Remove Recipient");
+                }
+            }
+        }
+
+        private async Task<bool> CheckRemoveRecipient() {
+            var res = true;
+            if (Item.Recipient != null) {
+                var confirmConfig = new ConfirmConfig();
+                confirmConfig.OkText = "Yes";
+                confirmConfig.Message = "Are you sure you want to remove them?";
+                confirmConfig.Title = $"This means {Item.Recipient.Person_Name} won't pick up your donation.";
+                res = await UserDialogs.Instance.ConfirmAsync(confirmConfig);
+            }
+            return res;
+        }
+
+        private async Task EditDonationAsync(Donation donation)
         {
             await Page.Navigation.PushAsync(new DonationPage(donation));
         }
@@ -99,8 +132,9 @@ namespace OSL.ViewModels
             set { SetProperty(ref page, value); }
         }
 
+        public bool CanRemoveRecipient { get { return Item.Status == DonationStatus.PendingPickup; }}
         public bool CanCompleteDonation { get { return Item.Status == DonationStatus.PendingPickup; } }
-        public bool CanRelistDonation { get { return Item.Status != DonationStatus.Completed; } }
+        public bool CanEditDonation { get { return Item.Status != DonationStatus.Completed; } }
         public bool CanWasteDonation
         {
             get

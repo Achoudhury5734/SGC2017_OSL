@@ -12,6 +12,16 @@ namespace OSL.Views
     {
         public DonationTabPage()
         {
+            SetUp();
+        }
+
+        public DonationTabPage(DonationStatus status) {
+            SetUp();
+
+            this.CurrentPage = Children[(int)status];
+        }
+
+        private void SetUp() {
             InitializeComponent();
             this.Title = "My Donations";
 

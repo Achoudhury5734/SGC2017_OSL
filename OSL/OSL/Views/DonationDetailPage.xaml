@@ -28,13 +28,13 @@
                 <Label Text="{Binding Item.Updated, StringFormat='Last Updated: {0}'}" Margin="20,0,10,0"/>
                 <Label Text="{Binding Item.StatusUpdated, StringFormat='Status Updated: {0}'}" Margin="20,0,10,0"/>
                 <StackLayout Orientation="Horizontal" Padding="0, 10">
-                    <Button Text="Edit" Command="{Binding RelistCommand}" IsVisible="{Binding ShowEditButton}"
+                    <Button Text="Edit" Command="{Binding EditCommand}" IsVisible="{Binding ShowEditButton}"
                             HorizontalOptions="FillAndExpand"/>
                     <Button Text="Complete" Command="{Binding CompleteCommand}" IsVisible="{Binding CanCompleteDonation}"
                             HorizontalOptions="FillAndExpand"/>
                     <Button Text="Waste" Command="{Binding WasteCommand}" IsVisible="{Binding CanWasteDonation}"
                             HorizontalOptions="FillAndExpand"/>
-                    <Button Text="Relist" Command="{Binding RelistCommand}" IsVisible="{Binding ShowRelistButton}"
+                    <Button Text="Relist" Command="{Binding EditCommand}" IsVisible="{Binding ShowRelistButton}"
                             HorizontalOptions="FillAndExpand"/>
                 </StackLayout>
             </StackLayout>
@@ -44,7 +44,11 @@
                        Margin="20,0,10,0"/>
                 <Label Text="{Binding Item.Recipient.Phone_Number, StringFormat='Phone: {0}'}" 
                        Margin="20,0,10,0"/>
-                <Button Text="Contact" Command="{Binding OpenDialerCommand}"/>
+                <StackLayout Orientation="Horizontal" Padding="0,10">
+                    <Button Text="Contact" Command="{Binding OpenDialerCommand}" HorizontalOptions="FillAndExpand"/>
+                    <Button Text="Remove" Command="{Binding RemoveCommand}" HorizontalOptions="FillAndExpand"
+                            IsVisible="{Binding CanRemoveRecipient}"/>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
         </ScrollView>

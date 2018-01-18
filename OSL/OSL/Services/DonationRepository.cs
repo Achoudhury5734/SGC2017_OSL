@@ -67,7 +67,13 @@ namespace OSL.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> RelistDonationAsync(DonationCapture capture, int donationId, MediaFile mediaFile)
+        public async Task<bool> RemoveRecipientAsync(int donationId)
+        {
+            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/reset", null);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EditDonationAsync(DonationCapture capture, int donationId, MediaFile mediaFile, bool relist)
         {
             byte[] filebytes = null;
             if (mediaFile != null)
@@ -76,7 +82,11 @@ namespace OSL.Services
             capture.Image = filebytes;
 
             var content = new StringContent(JsonConvert.SerializeObject(capture), Encoding.UTF8, "application/json");
-            var response = await App.ApiClient.PutAsync($"api/donations/{donationId}/relist", content);
+            HttpResponseMessage response;
+            if (relist)
+                response = await App.ApiClient.PutAsync($"api/donations/{donationId}/relist", content);
+            else
+                response = await App.ApiClient.PutAsync($"api/donations/{donationId}", content);
             return response.IsSuccessStatusCode;
         }
 
