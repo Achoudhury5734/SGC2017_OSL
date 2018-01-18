@@ -103,7 +103,7 @@ namespace OSL.MobileAppService.Services
         {
             var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId " +
                         "AND [Status] = @Status AND [Title] != @UserEnteredWaste " +
-                        "ORDER BY [Created] DESC";
+                        "ORDER BY [Updated] DESC";
             var donations = new List<Donation>();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -427,29 +427,6 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Updated", DateTime.Now);
                     command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
                     command.ExecuteNonQuery();
-                    command.Parameters.Clear();
-                }
-            }
-        }
-
-        public void RelistDonation(int donationId)
-        {
-            var query = "UPDATE Donation " +
-                        $"SET RecipientId = @RecipientId, Status = {(int)DonationStatus.Listed}, " +
-                        "Updated = @Updated, StatusUpdated = @StatusUpdated " +
-                        "WHERE [Id] = @Id;";
-
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Id", donationId);
-                    command.Parameters.AddWithValue("@RecipientId", DBNull.Value);
-                    command.Parameters.AddWithValue("@Updated", DateTime.Now);
-                    command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
-                    command.ExecuteScalar();
                     command.Parameters.Clear();
                 }
             }

@@ -369,15 +369,14 @@ namespace OSL.MobileAppService.Controllers
                 return new NotFoundResult();
             }
 
-            //Verify that donation is owned by user
-            if (donation.DonorId != user.Id)
+            if (donation.RecipientId != user.Id)
             {
                 return new UnauthorizedResult();
             }
 
             if (donation.Status != DonationStatus.PendingPickup)
             {
-                return BadRequest("Donation must be accepted before it can be completed");
+                return BadRequest();
             }
 
             donationRepository.CompleteDonation(id);
@@ -413,7 +412,7 @@ namespace OSL.MobileAppService.Controllers
         //PUT api/donations/5/cancel
         [Authorize]
         [HttpPut("{Id}/cancel")]
-        public IActionResult RecipientRelist(int Id)
+        public IActionResult RecipientCancel(int Id)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
@@ -431,8 +430,20 @@ namespace OSL.MobileAppService.Controllers
             {
                 return new UnauthorizedResult();
             }
+
+            if (donation.Status != DonationStatus.PendingPickup)
+            {
+                return new BadRequestResult();
+            }
+
+            DonationStatus newStatus;
+            if (donation.Expiration < DateTime.Now) {
+                newStatus = DonationStatus.Wasted;
+            } else {
+                newStatus = DonationStatus.Listed;
+            }
             
-            donationRepository.RelistDonation(Id);
+            donationRepository.RemoveRecipient(Id, newStatus);
             return Ok();
         }
 

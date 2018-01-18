@@ -16,7 +16,6 @@ namespace OSL.ViewModels
         public Donation Item { get; set; }
 
         public Command OpenDialerCommand { get; }
-        public Command CompleteCommand { get; }
         public Command WasteCommand { get; }
         public Command EditCommand { get; }
         public Command RemoveCommand { get; }
@@ -28,7 +27,6 @@ namespace OSL.ViewModels
 
             donationRepository = new DonationRepository();
 
-            CompleteCommand = new Command(async () => await CompleteDonationAsync(item.Id), () => CanCompleteDonation);
             WasteCommand = new Command(async () => await WasteDonationAsync(item.Id), () => CanWasteDonation);
             EditCommand = new Command(async () => await EditDonationAsync(item), () => CanEditDonation);
             RemoveCommand = new Command(async () => await RemoveRecipientAsync(item.Id), () => CanRemoveRecipient);
@@ -39,7 +37,7 @@ namespace OSL.ViewModels
         public bool HasRecipient { get { return Item.Recipient != null; } }
         public bool HasNoRecipient { get { return Item.Recipient == null; }}
         public bool ShowRelistButton { get { return Item.Status == DonationStatus.Wasted; } }
-        public bool ShowEditButton 
+        public bool ShowWasteEditButtons 
         { 
             get 
             {
@@ -64,20 +62,6 @@ namespace OSL.ViewModels
                 UserDialogs.Instance.Alert("Unable to Make Calls");
         }
 
-        private async Task CompleteDonationAsync(int donationId)
-        {
-            var res = await donationRepository.CompleteDonationAsync(donationId);
-            if (res)
-            {
-                MessagingCenter.Send(this, "StatusChanged", Item);
-                await Page.Navigation.PopAsync();
-            }
-            else
-            {
-                ShowFailureDialog("Unable to Complete Donation");
-            }
-        }
-
         private async Task WasteDonationAsync(int donationId)
         {
             var res = await donationRepository.WasteDonationAsync(donationId);
@@ -98,7 +82,6 @@ namespace OSL.ViewModels
                 if (res)
                 {
                     MessagingCenter.Send(this, "StatusChanged", Item);
-                    //App.Current.MainPage = new RootPage() { Detail = new NavigationPage(new DonationTabPage()) };
                     await Page.Navigation.PopAsync();
                 }
                 else
@@ -133,7 +116,6 @@ namespace OSL.ViewModels
         }
 
         public bool CanRemoveRecipient { get { return Item.Status == DonationStatus.PendingPickup; }}
-        public bool CanCompleteDonation { get { return Item.Status == DonationStatus.PendingPickup; } }
         public bool CanEditDonation { get { return Item.Status != DonationStatus.Completed; } }
         public bool CanWasteDonation
         {
