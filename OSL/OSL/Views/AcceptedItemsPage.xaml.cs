@@ -21,7 +21,7 @@ namespace OSL.Views
             InitializeComponent();
             viewModel = new AcceptedItemsViewModel(status);
             this.BindingContext = viewModel;
-            MessagingCenter.Subscribe<AcceptedDetailViewModel, Donation>(this, "PickupCancelled", OnItemCancelled);
+            MessagingCenter.Subscribe<AcceptedDetailViewModel, Donation>(this, "StatusChanged", OnItemCancelled);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)

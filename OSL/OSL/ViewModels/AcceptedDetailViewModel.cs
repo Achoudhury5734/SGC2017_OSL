@@ -9,7 +9,10 @@ namespace OSL.ViewModels
 {
     public class AcceptedDetailViewModel: RecipientDetailBase
     {
-        public Command OptionsCommand { get; }
+        public Command OpenDialerCommand { get; }
+        public Command OpenMapsCommand { get; }
+        public Command CancelCommand { get; }
+        public Command CompleteCommand { get; }
         public Page Page { get; set; }
         public bool HasImage { get; set; }
 
@@ -21,7 +24,10 @@ namespace OSL.ViewModels
             Item = item;
 
             donationRep = new DonationRepository();
-            OptionsCommand = new Command(ExecuteOptionsCommand);
+            OpenMapsCommand = new Command(async () => await ExecuteOpenMaps());
+            OpenDialerCommand = new Command(ExecuteOpenDialer);
+            CompleteCommand = new Command(async () => await CompleteDonationAsync());
+            CancelCommand = new Command(async () => await ExecuteCancelCommand());
 
             if (String.IsNullOrWhiteSpace(item.PictureUrl) || String.Equals(item.PictureUrl, "Empty"))
             {
@@ -34,18 +40,6 @@ namespace OSL.ViewModels
             }
         }
 
-        void ExecuteOptionsCommand()
-        {
-            var actionConfig = new ActionSheetConfig();
-            actionConfig.Add("Contact Donor", ExecuteOpenDialer);
-            actionConfig.Add("View in Maps", async () => await ExecuteOpenMaps());
-            if (Item.Status != DonationStatus.Completed)
-                actionConfig.Add("Cancel Pickup", (async () => await ExecuteCancelCommand()));
-            actionConfig.SetCancel("Close");
-
-            UserDialogs.Instance.ActionSheet(actionConfig);
-        }
-
         private async Task ExecuteCancelCommand()
         {
             var res = await donationRep.CancelDonationAsync(Item.Id);
@@ -55,11 +49,25 @@ namespace OSL.ViewModels
             }
             else
             {
-                MessagingCenter.Send(this, "PickupCancelled", Item);
+                MessagingCenter.Send(this, "StatusChanged", Item);
                 await Page.Navigation.PopAsync();
             }
         }
 
-        private bool CanCancel() => Item.Status == DonationStatus.PendingPickup;
+        private async Task CompleteDonationAsync()
+        {
+            var res = await donationRep.CompleteDonationAsync(Item.Id);
+            if (res)
+            {
+                MessagingCenter.Send(this, "StatusChanged", Item);
+                await Page.Navigation.PopAsync();
+            }
+            else
+            {
+                ShowFailureDialog("Unable to Complete Donation");
+            }
+        }
+
+        public bool CanChangeStatus { get { return Item.Status == DonationStatus.PendingPickup; } }
     }
 }

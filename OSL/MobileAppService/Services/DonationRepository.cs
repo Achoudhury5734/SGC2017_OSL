@@ -103,7 +103,7 @@ namespace OSL.MobileAppService.Services
         {
             var query = "SELECT * FROM [Donation] WHERE [DonorId] = @DonorId " +
                         "AND [Status] = @Status AND [Title] != @UserEnteredWaste " +
-                        "ORDER BY [Created] DESC";
+                        "ORDER BY [Updated] DESC";
             var donations = new List<Donation>();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -123,7 +123,7 @@ namespace OSL.MobileAppService.Services
                     }
                 }
             }
-            return donations;   
+            return donations;
         }
 
         public IEnumerable<Donation> GetByRecipientId(int RecipientId)
@@ -318,7 +318,8 @@ namespace OSL.MobileAppService.Services
                         $"[Type] = @Type, " +
                         $"[Updated] = @Updated, " +
                         $"[Expiration] = @Expiration, " +
-                        $"[Amount] = @Amount " +
+                        $"[Amount] = @Amount, " +
+                        $"[PictureUrl] = @PictureUrl " +
                         $"WHERE [Id] = @Id";
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -331,6 +332,7 @@ namespace OSL.MobileAppService.Services
                     command.Parameters.AddWithValue("@Updated", DateTime.Now);
                     command.Parameters.AddWithValue("@Expiration", donation.Expiration);
                     command.Parameters.AddWithValue("@Amount", donation.Amount);
+                    command.Parameters.AddWithValue("@PictureUrl", donation.PictureUrl);
                     var res = command.ExecuteNonQuery();
                     command.Parameters.Clear();
                     return res == 1;
@@ -342,7 +344,7 @@ namespace OSL.MobileAppService.Services
         {
             var query = "UPDATE Donation " +
                         $"SET RecipientId = @RecipientId, Status = {(int)DonationStatus.PendingPickup}, " +
-                        "Updated = @Updated, StatusUpdated = @StatusUpdated " + 
+                        "Updated = @Updated, StatusUpdated = @StatusUpdated " +
                         "WHERE [Id] = @Id;";
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -408,13 +410,11 @@ namespace OSL.MobileAppService.Services
         }
 
 
-        public void RelistDonation(int donationId)
+        public void RemoveRecipient(int donationId, DonationStatus status)
         {
-            var query = "UPDATE Donation " +
-                        $"SET RecipientId = @RecipientId, Status = {(int)DonationStatus.Listed}, " +
+            var query = "UPDATE Donation SET RecipientId = @RecipientId, [Status] = @Status, " +
                         "Updated = @Updated, StatusUpdated = @StatusUpdated " +
-                        "WHERE [Id] = @Id;";
-
+                        "WHERE [Id] = @Id";
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
@@ -423,9 +423,10 @@ namespace OSL.MobileAppService.Services
                 {
                     command.Parameters.AddWithValue("@Id", donationId);
                     command.Parameters.AddWithValue("@RecipientId", DBNull.Value);
+                    command.Parameters.AddWithValue("@Status", (int)status);
                     command.Parameters.AddWithValue("@Updated", DateTime.Now);
                     command.Parameters.AddWithValue("@StatusUpdated", DateTime.Now);
-                    command.ExecuteScalar();
+                    command.ExecuteNonQuery();
                     command.Parameters.Clear();
                 }
             }
@@ -433,7 +434,7 @@ namespace OSL.MobileAppService.Services
 
         public bool RelistDonation(Donation donation)
         {
-            var query = "UPDATE [Donation] " + 
+            var query = "UPDATE [Donation] " +
                         "SET [RecipientId] = @RecipientId, " +
                         $"[Status] = {(int)DonationStatus.Listed}, " +
                         "[Title] = @Title, [Type] = @Type, [Updated] = @Updated, " +

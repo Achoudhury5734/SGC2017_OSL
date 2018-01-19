@@ -273,36 +273,51 @@ namespace OSL.MobileAppService.Controllers
         //PUT api/donations/5
         [Authorize]
         [HttpPut("{Id}")]
-        public IActionResult Update(int Id, [FromBody]Donation donation)
+        public async Task<IActionResult> Update(int Id, [FromBody]Donation edited)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
             {
                 return new UnauthorizedResult();
             }
+            var donation = donationRepository.GetById(Id);
+            if (donation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            if (donation.DonorId != user.Id)
+            {
+                return new UnauthorizedResult();
+            }
+
+            if (donation.Status == DonationStatus.Completed || donation.Status == DonationStatus.Wasted)
+                return new UnauthorizedResult();
+
+            donation.Amount = edited.Amount;
+            donation.Type = edited.Type;
+            donation.Title = edited.Title;
+            donation.Expiration = edited.Expiration;
+
+            String oldUrl = null;
+            if (edited.Image != null && edited.Image.Length > 0)
+            {
+                oldUrl = donation.PictureUrl;
+                donation.PictureUrl = await imageService.UploadImageAsync(edited.Image);
+            }
+
+            var updated = donationRepository.Update(donation);
+            if (updated)
+            {
+                if (!String.IsNullOrEmpty(oldUrl) && !String.Equals(oldUrl, "Empty"))
+                    await imageService.DeleteImageAsync(oldUrl);
+                return Ok();
+            }
             else
             {
-                var originalDonation = donationRepository.GetById(Id);
-                if (originalDonation == null)
-                {
-                    return new NotFoundResult();
-                }
-
-                if (donation.DonorId != user.Id)
-                {
-                    return new UnauthorizedResult();
-                }
-
-                donation.Updated = DateTime.Now;
-                var updated = donationRepository.Update(donation);
-                if (updated)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                if (!String.IsNullOrEmpty(donation.PictureUrl) && !String.Equals(donation.PictureUrl, "Empty") && oldUrl != null)
+                    await imageService.DeleteImageAsync(donation.PictureUrl);
+                return BadRequest();
             }
         }
 
@@ -354,15 +369,14 @@ namespace OSL.MobileAppService.Controllers
                 return new NotFoundResult();
             }
 
-            //Verify that donation is owned by user
-            if (donation.DonorId != user.Id)
+            if (donation.RecipientId != user.Id)
             {
                 return new UnauthorizedResult();
             }
 
             if (donation.Status != DonationStatus.PendingPickup)
             {
-                return BadRequest("Donation must be accepted before it can be completed");
+                return BadRequest();
             }
 
             donationRepository.CompleteDonation(id);
@@ -398,7 +412,7 @@ namespace OSL.MobileAppService.Controllers
         //PUT api/donations/5/cancel
         [Authorize]
         [HttpPut("{Id}/cancel")]
-        public IActionResult RecipientRelist(int Id)
+        public IActionResult RecipientCancel(int Id)
         {
             var user = userRepository.GetUserFromPrincipal(HttpContext.User);
             if (!userRepository.IsActiveUser(user))
@@ -416,8 +430,58 @@ namespace OSL.MobileAppService.Controllers
             {
                 return new UnauthorizedResult();
             }
+
+            if (donation.Status != DonationStatus.PendingPickup)
+            {
+                return new BadRequestResult();
+            }
+
+            DonationStatus newStatus;
+            if (donation.Expiration < DateTime.Now) {
+                newStatus = DonationStatus.Wasted;
+            } else {
+                newStatus = DonationStatus.Listed;
+            }
             
-            donationRepository.RelistDonation(Id);
+            donationRepository.RemoveRecipient(Id, newStatus);
+            return Ok();
+        }
+
+        //PUT api/donations/5/reset
+        [Authorize]
+        [HttpPut("{Id}/reset")]
+        public IActionResult RemoveRecipient(int Id)
+        {
+            var user = userRepository.GetUserFromPrincipal(HttpContext.User);
+            if (!userRepository.IsActiveUser(user))
+            {
+                return new UnauthorizedResult();
+            }
+
+            var donation = donationRepository.GetById(Id);
+            if (donation == null)
+            {
+                return new NotFoundResult();
+            }
+
+            if (user.Id != donation.DonorId)
+            {
+                return new UnauthorizedResult();
+            }
+
+            if (donation.Status != DonationStatus.PendingPickup)
+            {
+                return new BadRequestResult();
+            }
+
+            DonationStatus newStatus;
+            if (donation.Expiration < DateTime.Now) {
+                newStatus = DonationStatus.Wasted;
+            } else {
+                newStatus = DonationStatus.Listed;
+            }
+
+            donationRepository.RemoveRecipient(Id, newStatus);
             return Ok();
         }
 
@@ -448,16 +512,18 @@ namespace OSL.MobileAppService.Controllers
                 return BadRequest("Cannot relist completed donation");
             }
 
-            string oldUrl = originalDonation.PictureUrl;
-            if (donation.Image != null)
+            String oldUrl = null;
+            if (donation.Image != null && donation.Image.Length > 0)
             {
+                oldUrl = originalDonation.PictureUrl;
                 originalDonation.PictureUrl = await imageService.UploadImageAsync(donation.Image);
             }
 
+            originalDonation.Amount = donation.Amount;
             originalDonation.Type = donation.Type;
             originalDonation.Title = donation.Title;
             originalDonation.Expiration = donation.Expiration;
-            originalDonation.Amount = donation.Amount;
+
             var res = donationRepository.RelistDonation(originalDonation);
             if (res)
             {
@@ -468,7 +534,7 @@ namespace OSL.MobileAppService.Controllers
             else
             {
                 // If database update failed delete new image upload (if any), since reference will be to old
-                if (originalDonation.PictureUrl != null && donation.Image != null)
+                if (oldUrl != null && !String.IsNullOrEmpty(originalDonation.PictureUrl) && !String.Equals(originalDonation.PictureUrl, "Empty"))
                     await imageService.DeleteImageAsync(originalDonation.PictureUrl);
                 return BadRequest();
             }
