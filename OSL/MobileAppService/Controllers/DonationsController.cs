@@ -437,7 +437,7 @@ namespace OSL.MobileAppService.Controllers
             }
 
             DonationStatus newStatus;
-            if (donation.Expiration < DateTime.Now) {
+            if (donation.Expiration < DateTime.Today) {
                 newStatus = DonationStatus.Wasted;
             } else {
                 newStatus = DonationStatus.Listed;
@@ -475,7 +475,7 @@ namespace OSL.MobileAppService.Controllers
             }
 
             DonationStatus newStatus;
-            if (donation.Expiration < DateTime.Now) {
+            if (donation.Expiration < DateTime.Today) {
                 newStatus = DonationStatus.Wasted;
             } else {
                 newStatus = DonationStatus.Listed;

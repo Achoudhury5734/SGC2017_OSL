@@ -96,8 +96,9 @@ namespace OSL.ViewModels
             if (Item.Recipient != null) {
                 var confirmConfig = new ConfirmConfig();
                 confirmConfig.OkText = "Yes";
-                confirmConfig.Message = "Are you sure you want to remove them?";
-                confirmConfig.Title = $"This means {Item.Recipient.Person_Name} won't pick up your donation.";
+                confirmConfig.CancelText = "No";
+                confirmConfig.Title = "Are you sure?";
+                confirmConfig.Message = $"This means {Item.Recipient.Person_Name} won't pick up your donation.";
                 res = await UserDialogs.Instance.ConfirmAsync(confirmConfig);
             }
             return res;

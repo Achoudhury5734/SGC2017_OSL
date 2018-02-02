@@ -37,7 +37,7 @@ namespace OSL
             var res = await dataStore.AcceptPickupItemAsync(Item);
             if (res)
             {
-                await UserDialogs.Instance.AlertAsync($"Successfully accepted {Item.Title}.", "Item Accepted");
+                UserDialogs.Instance.Toast($"Successfully accepted {Item.Title}.");
                 await Page.Navigation.PopAsync();
                 MessagingCenter.Send(this, "ItemAccepted", Item);
             }

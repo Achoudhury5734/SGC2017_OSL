@@ -42,6 +42,7 @@ namespace OSL.Views
 
             try
             {
+                activityIndicator.IsRunning = true;
                 // Check to see if we have a User in the cache already.
                 UpdateButtonState(true);
                 AuthenticationResult ar = await App.PCA.AcquireTokenSilentAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.Authority, false);
@@ -60,6 +61,7 @@ namespace OSL.Views
             }
             catch (Exception ex)
             {
+                activityIndicator.IsRunning = false;
                 Console.WriteLine("Error loading user: " + ex.StackTrace);
                 UpdateButtonState(false);
             }
@@ -75,6 +77,7 @@ namespace OSL.Views
         {
             try
             {
+                activityIndicator.IsRunning = true;
                 UpdateButtonState(true);
                 loggingIn = true;
                 AuthenticationResult ar = await App.PCA.AcquireTokenAsync(App.Scopes, GetUserByPolicy(App.PCA.Users, App.PolicySignUpSignIn), App.UiParent);
@@ -93,6 +96,7 @@ namespace OSL.Views
             }
             catch (Exception ex)
             {
+                activityIndicator.IsRunning = false;
                 UpdateButtonState(false);
                 loggingIn = false;
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
