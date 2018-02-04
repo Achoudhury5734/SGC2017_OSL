@@ -99,8 +99,9 @@ namespace OSL
                 {
                     var searched = Text.ToLower();
                     var items = allItems.Where(item => item.Title.ToLower().Contains(searched) ||
-                                        item.Donor.Person_Name.ToLower().Contains(searched) ||
-                                        item.Donor.Organization_Name.ToLower().Contains(searched));
+                                           item.Type.ToString().ToLower().Contains(searched) ||
+                                           item.Donor.Person_Name.ToLower().Contains(searched) ||
+                                           item.Donor.Organization_Name.ToLower().Contains(searched));
 
                     foreach (var item in items)
                     {

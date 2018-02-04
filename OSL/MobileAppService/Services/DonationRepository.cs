@@ -186,7 +186,7 @@ namespace OSL.MobileAppService.Services
                              "FROM [User]) as T " +
                         "ON Donation.DonorId = T.Id AND T.Distance <= @Distance " +
                         $"WHERE Donation.Status = {(int)DonationStatus.Listed} " +
-                        "ORDER BY T.Distance;";
+                        "ORDER BY T.Distance, Donation.Created DESC;";
             var donations = new List<Donation>();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {

@@ -70,7 +70,6 @@ namespace OSL.Views
         private void UpdateButtonState(bool isSignedIn) {
             btnLogout.IsVisible = isSignedIn;
             btnLogin.IsVisible = !isSignedIn;
-            btnSignup.IsVisible = !isSignedIn;
         }
 
         async void OnClickSignup(object sender, EventArgs e)
@@ -101,7 +100,7 @@ namespace OSL.Views
                 loggingIn = false;
                 if (((ex as MsalException)?.ErrorCode != "authentication_canceled"))
                 {
-                    // Alert if any exception excludig user cancelling sign-in dialog
+                    // Alert if any exception excluding user cancelling sign-in dialog
                     await DisplayAlert($"Exception:", ex.ToString(), "Dismiss");
                 }
             }
@@ -112,7 +111,7 @@ namespace OSL.Views
             {
                 App.PCA.Remove(user);
             }
-
+            activityIndicator.IsRunning = false;
             UpdateButtonState(false);
         }
 

@@ -16,8 +16,9 @@ namespace OSL.Helpers
             if (value.GetType() == typeof(Donation))
             {
                 var donation = (Donation)value;
-                if (donation.Status == DonationStatus.Completed)
+                if (donation.Status == DonationStatus.Completed || !donation.Expiration.HasValue)
                     return Color.Default;
+                
                 expiration = donation.Expiration.Value;
             }
             else
